@@ -1,16 +1,18 @@
-{% extends '::base.html.twig' %}
+{% extends 'MyBundle::layout.html.twig' %}
 
-{% block body -%}
-    <h1>Job edit</h1>
+{% block content %}
+    {% block body -%}
+        <h1>Job edit</h1>
 
-    {{ form(edit_form) }}
+        {{ form(edit_form) }}
 
         <ul class="record_actions">
-    <li>
-        <a href="{{ path('ens_job') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+            <li>
+                <a href="{{ path('ens_job') }}">
+                    Back to the list
+                </a>
+            </li>
+            <li>{{ form(delete_form) }}</li>
+        </ul>
+    {% endblock %}
 {% endblock %}
