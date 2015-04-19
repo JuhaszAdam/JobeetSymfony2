@@ -1,5 +1,6 @@
 <?php
 
+use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -15,6 +16,8 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            //new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
+            new DoctrineFixturesBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
             new jobeet\MyBundle\MyBundle(),
