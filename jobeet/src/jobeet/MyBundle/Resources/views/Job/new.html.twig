@@ -1,15 +1,17 @@
-{% extends '::base.html.twig' %}
+{% extends 'MyBundle::layout.html.twig' %}
 
-{% block body -%}
-    <h1>Job creation</h1>
+{% block content %}
+    {% block body -%}
+        <h1>Job creation</h1>
 
-    {{ form(form) }}
+        {{ form(form) }}
 
         <ul class="record_actions">
-    <li>
-        <a href="{{ path('ens_job') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+            <li>
+                <a href="{{ path('ens_job') }}">
+                    Back to the list
+                </a>
+            </li>
+        </ul>
+    {% endblock %}
 {% endblock %}
