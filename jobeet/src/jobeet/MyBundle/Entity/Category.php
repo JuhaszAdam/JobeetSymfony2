@@ -68,7 +68,7 @@ class Category
         return $this->slug;
     }
     /**
-     * @ORM\prePersist
+     * @ORM\PrePersist
      */
     public function setSlugValue()
     {

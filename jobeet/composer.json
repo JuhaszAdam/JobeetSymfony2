@@ -24,11 +24,24 @@
     "sensio/framework-extra-bundle": "~3.0,>=3.0.2",
     "incenteev/composer-parameter-handler": "~2.0",
     "doctrine/doctrine-fixtures-bundle": "dev-master",
-    "doctrine/data-fixtures": "@dev"
+    "doctrine/data-fixtures": "@dev",
+    "sonata-project/core-bundle": "2.3.*@dev",
+    "sonata-project/admin-bundle": "2.4.*@dev",
+    "sonata-project/user-bundle": "2.3.*@dev",
+    "sonata-project/easy-extends-bundle": "2.1.*@dev",
+    "sonata-project/block-bundle": "2.3.*@dev",
+    "sonata-project/doctrine-orm-admin-bundle": "2.3.*@dev",
+    "sonata-project/cache-bundle": "~2.2@dev",
+    "sonata-project/seo-bundle": "2.0.*@dev",
+    "sonata-project/notification-bundle": "~2.3@dev",
+    "symfony-cmf/routing-bundle": "~1.4@dev",
+    "sonata-project/page-bundle": "2.4.*@dev",
+    "sonata-project/datagrid-bundle": "2.2.*@dev"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3",
-    "phpunit/phpunit": "4.6.*"
+    "phpunit/phpunit": "4.6.*",
+    "sonata-project/intl-bundle": "~2.1"
   },
   "scripts": {
     "post-root-package-install": [
