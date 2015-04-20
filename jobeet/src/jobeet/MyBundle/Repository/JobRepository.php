@@ -8,23 +8,26 @@ class JobRepository extends EntityRepository
 {
     /**
      * @param null $category_id
+     * @param null $offset
      * @param int $max
      * @return array
      */
-    public function getActiveJobs($category_id = null, $max = null)
+    public function getActiveJobs($category_id = null, $max = null, $offset = null)
     {
         $qb = $this->createQueryBuilder('j')
             ->where('j.expires_at > :date')
             ->setParameter('date', date('Y-m-d H:i:s', time()))
             ->orderBy('j.expires_at', 'DESC');
 
-        if($max)
-        {
+        if ($max) {
             $qb->setMaxResults($max);
         }
 
-        if($category_id)
-        {
+        if ($offset) {
+            $qb->setFirstResult($offset);
+        }
+
+        if ($category_id) {
             $qb->andWhere('j.category = :category_id')
                 ->setParameter('category_id', $category_id);
         }
@@ -56,5 +59,26 @@ class JobRepository extends EntityRepository
         }
 
         return $job;
+    }
+
+    /**
+     * @param null $category_id
+     * @return mixed
+     */
+    public function countActiveJobs($category_id = null)
+    {
+        $qb = $this->createQueryBuilder('j')
+            ->select('count(j.id)')
+            ->where('j.expires_at > :date')
+            ->setParameter('date', date('Y-m-d H:i:s', time()));
+
+        if ($category_id) {
+            $qb->andWhere('j.category = :category_id')
+                ->setParameter('category_id', $category_id);
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getSingleScalarResult();
     }
 }

@@ -3,12 +3,34 @@
 namespace jobeet\MyBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use jobeet\MyBundle\Utils\Jobeet;
 
 /**
  * Category
  */
 class Category
 {
+    /**
+     * @var Job[]
+     */
+    private $more_jobs;
+
+    /**
+     * @return Job[]
+     */
+    public function getMoreJobs()
+    {
+        return $this->more_jobs;
+    }
+
+    /**
+     * @param Job[] $more_jobs
+     */
+    public function setMoreJobs($more_jobs)
+    {
+        $this->more_jobs = $more_jobs;
+    }
+
     /**
      * @var Job[]
      */
@@ -20,6 +42,37 @@ class Category
     public function setActiveJobs($jobs)
     {
         $this->active_jobs = $jobs;
+    }
+
+    /**
+     * @var string $slug
+     */
+    private $slug;
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+    /**
+     * @ORM\prePersist
+     */
+    public function setSlugValue()
+    {
+        $this->slug = Jobeet::slugify($this->getName());
     }
 
     /**
