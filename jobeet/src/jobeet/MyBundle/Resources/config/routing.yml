@@ -17,3 +17,17 @@ EnsJobeetBundle_homepage:
 EnsJobeetBundle_category:
     pattern: /category/{slug}/{page}
     defaults: { _controller: MyBundle:Category:show, page: 1  }
+
+ens_job_edit:
+    pattern:  /{token}/edit
+    defaults: { _controller: "MyBundle:Job:edit" }
+
+ens_job_update:
+    pattern:  /{token}/update
+    defaults: { _controller: "MyBundle:Job:update" }
+    requirements: { _method: post }
+
+ens_job_delete:
+    pattern:  /{token}/delete
+    defaults: { _controller: "MyBundle:Job:delete" }
+    requirements: { _method: post }

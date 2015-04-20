@@ -6,13 +6,18 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('bundles/my/css/job.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ asset('bundles/my/css/job.css') }}" type="text/css" media="all"/>
 {% endblock %}
 
 {% block content %}
+    {% if app.request.get('token') %}
+        {% include 'MyBundle:Job:admin.html.twig' with {'job': entity} %}
+    {% endif %}
     <div id="job">
         <h1>{{ entity.company }}</h1>
+
         <h2>{{ entity.location }}</h2>
+
         <h3>
             {{ entity.position }}
             <small> - {{ entity.type }}</small>
@@ -22,7 +27,7 @@
             <div class="logo">
                 <a href="{{ entity.url }}">
                     <img src="/uploads/jobs/{{ entity.logo }}"
-                         alt="{{ entity.company }} logo" />
+                         alt="{{ entity.company }} logo"/>
                 </a>
             </div>
         {% endif %}
@@ -40,7 +45,7 @@
         </div>
 
         <div style="padding: 20px 0">
-            <a href="{{ path('ens_job_edit', { 'id': entity.id }) }}">
+            <a href="{{ path('ens_job_edit', { 'token': entity.token }) }}">
                 Edit
             </a>
         </div>

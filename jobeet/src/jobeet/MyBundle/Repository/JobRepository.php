@@ -3,13 +3,14 @@
 namespace jobeet\MyBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 class JobRepository extends EntityRepository
 {
     /**
      * @param null $category_id
+     * @param null $max
      * @param null $offset
-     * @param int $max
      * @return array
      */
     public function getActiveJobs($category_id = null, $max = null, $offset = null)
@@ -17,6 +18,8 @@ class JobRepository extends EntityRepository
         $qb = $this->createQueryBuilder('j')
             ->where('j.expires_at > :date')
             ->setParameter('date', date('Y-m-d H:i:s', time()))
+            ->andWhere('j.is_activated = :activated')
+            ->setParameter('activated', 1)
             ->orderBy('j.expires_at', 'DESC');
 
         if ($max) {
@@ -38,6 +41,29 @@ class JobRepository extends EntityRepository
     }
 
     /**
+     * @param null $category_id
+     * @return mixed
+     */
+    public function countActiveJobs($category_id = null)
+    {
+        $qb = $this->createQueryBuilder('j')
+            ->select('count(j.id)')
+            ->where('j.expires_at > :date')
+            ->setParameter('date', date('Y-m-d H:i:s', time()))
+            ->andWhere('j.is_activated = :activated')
+            ->setParameter('activated', 1);
+
+        if ($category_id) {
+            $qb->andWhere('j.category = :category_id')
+                ->setParameter('category_id', $category_id);
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getSingleScalarResult();
+    }
+
+    /**
      * @param $id
      * @return mixed|null
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -49,36 +75,17 @@ class JobRepository extends EntityRepository
             ->setParameter('id', $id)
             ->andWhere('j.expires_at > :date')
             ->setParameter('date', date('Y-m-d H:i:s', time()))
+            ->andWhere('j.is_activated = :activated')
+            ->setParameter('activated', 1)
             ->setMaxResults(1)
             ->getQuery();
 
         try {
             $job = $query->getSingleResult();
-        } catch (\Doctrine\Orm\NoResultException $e) {
+        } catch (NoResultException $e) {
             $job = null;
         }
 
         return $job;
-    }
-
-    /**
-     * @param null $category_id
-     * @return mixed
-     */
-    public function countActiveJobs($category_id = null)
-    {
-        $qb = $this->createQueryBuilder('j')
-            ->select('count(j.id)')
-            ->where('j.expires_at > :date')
-            ->setParameter('date', date('Y-m-d H:i:s', time()));
-
-        if ($category_id) {
-            $qb->andWhere('j.category = :category_id')
-                ->setParameter('category_id', $category_id);
-        }
-
-        $query = $qb->getQuery();
-
-        return $query->getSingleScalarResult();
     }
 }
