@@ -47,3 +47,8 @@ ens_job_publish:
     pattern:  /{token}/publish
     defaults: { _controller: "MyBundle:Job:publish" }
     requirements: { _method: post }
+
+ens_job_extend:
+    pattern:  /{token}/extend
+    defaults: { _controller: "MyBundle:Job:extend" }
+    requirements: { _method: post }

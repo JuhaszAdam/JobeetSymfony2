@@ -35,5 +35,11 @@
                 to manage this job in the future.]
             </li>
         {% endif %}
+        {% if job.expiresSoon %}
+            <form action="{{ path('ens_job_extend', { 'token': job.token }) }}" method="post">
+                {{ form_widget(extend_form) }}
+                <button type="submit">Extend</button> for another 30 days
+            </form>
+        {% endif %}
     </ul>
 </div>
