@@ -10,6 +10,27 @@ use Doctrine\ORM\Mapping as ORM;
 class Category
 {
     /**
+     * @var Job[]
+     */
+    private $active_jobs;
+
+    /**
+     * @param Job[] $jobs
+     */
+    public function setActiveJobs($jobs)
+    {
+        $this->active_jobs = $jobs;
+    }
+
+    /**
+     * @return Job[]
+     */
+    public function getActiveJobs()
+    {
+        return $this->active_jobs;
+    }
+
+    /**
      * @var integer
      */
     private $id;
@@ -41,7 +62,7 @@ class Category
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -64,7 +85,7 @@ class Category
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -97,7 +118,7 @@ class Category
     /**
      * Get jobs
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getJobs()
     {
@@ -130,7 +151,7 @@ class Category
     /**
      * Get category_affiliates
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCategoryAffiliates()
     {
