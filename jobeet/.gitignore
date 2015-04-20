@@ -4,7 +4,7 @@
 /app/config/parameters.yml
 /app/logs/*
 !app/logs/.gitkeep
-/app/phpunit.xml
+/jobeet/phpunit.xml
 /bin/
 /composer.phar
 /vendor/
