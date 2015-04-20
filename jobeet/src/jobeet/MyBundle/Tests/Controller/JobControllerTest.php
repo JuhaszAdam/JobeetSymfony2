@@ -178,7 +178,6 @@ class JobControllerTest extends WebTestCase
 
     public function testExtendJob()
     {
-
         $this->markTestIncomplete("Request not redirrected");
         // A job validity cannot be extended before the job expires soon
         $client = $this->createJob(array('job[position]' => 'FOO4'), true);
