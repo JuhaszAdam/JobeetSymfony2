@@ -1,6 +1,7 @@
 # src/Ens/JobeetBundle/Resources/config/doctrine/Job.orm.yml
 jobeet\MyBundle\Entity\Job:
   type: entity
+  repositoryClass: jobeet\MyBundle\Repository\JobRepository
   table: job
   id:
     id:
@@ -49,7 +50,6 @@ jobeet\MyBundle\Entity\Job:
       type: datetime
     created_at:
       type: datetime
-      nullable: true
     updated_at:
       type: datetime
       nullable: true
@@ -61,5 +61,5 @@ jobeet\MyBundle\Entity\Job:
         name: category_id
         referencedColumnName: id
   lifecycleCallbacks:
-    prePersist: [ setCreatedAtValue ]
+    prePersist: [ setCreatedAtValue, setExpiresAtValue ]
     preUpdate: [ setUpdatedAtValue ]
