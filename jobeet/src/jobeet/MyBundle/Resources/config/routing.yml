@@ -13,3 +13,7 @@ EnsJobeetBundle_job:
 EnsJobeetBundle_homepage:
     pattern:  /
     defaults: { _controller: MyBundle:Job:index }
+
+EnsJobeetBundle_category:
+    pattern: /category/{slug}/{page}
+    defaults: { _controller: MyBundle:Category:show, page: 1  }

@@ -25,6 +25,7 @@ class LoadJobData extends AbstractFixture implements OrderedFixtureInterface
         $job_sensio_labs->setToken('job_sensio_labs');
         $job_sensio_labs->setEmail('job@example.com');
         $job_sensio_labs->setExpiresAt(new \DateTime('2012-10-10'));
+        $job_sensio_labs->setCreatedAt(new \DateTime('2005-12-01'));
 
         $job_extreme_sensio = new Job();
         $job_extreme_sensio->setCategory($em->merge($this->getReference('category-design')));
@@ -41,6 +42,7 @@ class LoadJobData extends AbstractFixture implements OrderedFixtureInterface
         $job_extreme_sensio->setToken('job_extreme_sensio');
         $job_extreme_sensio->setEmail('job@example.com');
         $job_extreme_sensio->setExpiresAt(new \DateTime('2012-10-10'));
+        $job_extreme_sensio->setCreatedAt(new \DateTime('2005-12-01'));
 
         $job_expired = new Job();
         $job_expired->setCategory($em->merge($this->getReference('category-programming')));
@@ -77,6 +79,7 @@ class LoadJobData extends AbstractFixture implements OrderedFixtureInterface
             $job->setIsActivated(true);
             $job->setToken('job_' . $i);
             $job->setEmail('job@example.com');
+            $job->setCreatedAt(new \DateTime());
 
             $em->persist($job);
         }
