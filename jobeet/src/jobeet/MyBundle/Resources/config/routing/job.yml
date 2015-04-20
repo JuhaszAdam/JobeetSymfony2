@@ -30,3 +30,20 @@ ens_job_delete:
     path:     /{id}/delete
     defaults: { _controller: "MyBundle:Job:delete" }
     methods:  [POST, DELETE]
+
+ens_job_show:
+    pattern:  /{company}/{location}/{id}/{position}
+    defaults: { _controller: "MyBundle:Job:show" }
+    requirements:
+        id:  \d+
+
+ens_job_preview:
+    pattern:  /{company}/{location}/{token}/{position}
+    defaults: { _controller: "MyBundle:Job:preview" }
+    requirements:
+        token:  \w+
+
+ens_job_publish:
+    pattern:  /{token}/publish
+    defaults: { _controller: "MyBundle:Job:publish" }
+    requirements: { _method: post }

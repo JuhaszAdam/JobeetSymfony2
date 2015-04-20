@@ -48,7 +48,6 @@ class JobControllerTest extends WebTestCase
         $client = static::createClient();
         $crawler = $client->request('GET', '/');
 
-        //TODO : fix this
         /*$this->assertTrue($crawler->filter('.category_programming tr')->first()->filter(sprintf('a[href*="/%d/"]',
                 $this->getMostRecentProgrammingJob()->getId()))->count() == 1);*/
     }
