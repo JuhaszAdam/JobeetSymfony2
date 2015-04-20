@@ -3,8 +3,10 @@ ens_job:
     defaults: { _controller: "MyBundle:Job:index" }
 
 ens_job_show:
-    path:     /{id}/show
+    pattern:  /{company}/{location}/{id}/{position}
     defaults: { _controller: "MyBundle:Job:show" }
+    requirements:
+        id:  \d+
 
 ens_job_new:
     path:     /new

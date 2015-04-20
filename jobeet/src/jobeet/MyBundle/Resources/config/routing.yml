@@ -11,5 +11,5 @@ EnsJobeetBundle_job:
     prefix: /job
 
 EnsJobeetBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: MyBundle:Default:index }
+    pattern:  /
+    defaults: { _controller: MyBundle:Job:index }
