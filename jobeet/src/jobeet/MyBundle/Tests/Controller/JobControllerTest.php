@@ -6,6 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class JobControllerTest extends WebTestCase
 {
+    public function testFoo()
+    {
+        $this->assertTrue(true);
+    }
+
     /*
     public function testCompleteScenario()
     {
