@@ -31,3 +31,13 @@ ens_job_delete:
     pattern:  /{token}/delete
     defaults: { _controller: "MyBundle:Job:delete" }
     requirements: { _method: post }
+
+login:
+    pattern:   /login
+    defaults:  { _controller: MyBundle:Default:login }
+
+login_check:
+    pattern:   /login_check
+
+logout:
+    pattern:   /logout
