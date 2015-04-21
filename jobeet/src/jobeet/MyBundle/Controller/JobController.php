@@ -30,8 +30,12 @@ class JobController extends Controller
                 - $this->container->getParameter('max_jobs_on_homepage'));
         }
 
-        return $this->render('MyBundle:Job:index.html.twig', array(
-            'categories' => $categories
+        $format = $this->getRequest()->getRequestFormat();
+
+        return $this->render('MyBundle:Job:index.' . $format . '.twig', array(
+            'categories' => $categories,
+            'lastUpdated' => $em->getRepository('MyBundle:Job')->getLatestPost()->getCreatedAt()->format(DATE_ATOM),
+            'feedId' => sha1($this->get('router')->generate('ens_job', array('_format' => 'atom'), true)),
         ));
     }
 
