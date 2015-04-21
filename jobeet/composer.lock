@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cac63b3784e33cf29ee8320bf4ac02aa",
+    "hash": "3813355645f8db0eb72bb0ece6af0be3",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -67,6 +67,51 @@
                 "slugify"
             ],
             "time": "2015-03-18 08:21:30"
+        },
+        {
+            "name": "components/jquery",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/components/jquery.git",
+                "reference": "452a56b52b8f4a032256cdb8b6838f25f0bdb3d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/components/jquery/zipball/452a56b52b8f4a032256cdb8b6838f25f0bdb3d2",
+                "reference": "452a56b52b8f4a032256cdb8b6838f25f0bdb3d2",
+                "shasum": ""
+            },
+            "require": {
+                "robloach/component-installer": "*"
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "scripts": [
+                        "jquery.js"
+                    ],
+                    "files": [
+                        "jquery.min.js",
+                        "jquery-migrate.js",
+                        "jquery-migrate.min.js"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Resig",
+                    "email": "jeresig@gmail.com",
+                    "homepage": "http://ejohn.org/"
+                }
+            ],
+            "description": "jQuery JavaScript Library",
+            "homepage": "http://jquery.com",
+            "time": "2013-07-12 08:48:34"
         },
         {
             "name": "doctrine/annotations",
@@ -1881,6 +1926,50 @@
             "time": "2012-12-21 11:40:51"
         },
         {
+            "name": "robloach/component-installer",
+            "version": "0.0.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RobLoach/component-installer.git",
+                "reference": "1864f25db21fc173e02a359f646acd596c1b0460"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RobLoach/component-installer/zipball/1864f25db21fc173e02a359f646acd596c1b0460",
+                "reference": "1864f25db21fc173e02a359f646acd596c1b0460",
+                "shasum": ""
+            },
+            "require": {
+                "kriswallsmith/assetic": "1.*",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "composer/composer": "1.*"
+            },
+            "type": "composer-installer",
+            "extra": {
+                "class": "ComponentInstaller\\Installer"
+            },
+            "autoload": {
+                "psr-0": {
+                    "ComponentInstaller": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Loach",
+                    "email": "robloach@gmail.com",
+                    "homepage": "http://robloach.net"
+                }
+            ],
+            "description": "Allows installation of Components via Composer.",
+            "time": "2013-08-31 23:46:48"
+        },
+        {
             "name": "sensio/distribution-bundle",
             "version": "v3.0.21",
             "target-dir": "Sensio/Bundle/DistributionBundle",
@@ -2094,12 +2183,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "8e7832ff7bb109a6eca7629196b398f21866a9cb"
+                "reference": "a516465b0c0460ce815e98ce152e033fb86c6c98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/8e7832ff7bb109a6eca7629196b398f21866a9cb",
-                "reference": "8e7832ff7bb109a6eca7629196b398f21866a9cb",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/a516465b0c0460ce815e98ce152e033fb86c6c98",
+                "reference": "a516465b0c0460ce815e98ce152e033fb86c6c98",
                 "shasum": ""
             },
             "require": {
@@ -2170,7 +2259,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2015-04-20 12:47:37"
+            "time": "2015-04-21 13:49:29"
         },
         {
             "name": "sonata-project/block-bundle",

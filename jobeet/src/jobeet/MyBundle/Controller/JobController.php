@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use jobeet\MyBundle\Entity\Job;
 use jobeet\MyBundle\Form\JobType;
 use Zend\Http\PhpEnvironment\Request;
+use Zend\Http\PhpEnvironment\Response;
 
 /**
  * Job controller.
@@ -396,15 +397,25 @@ class JobController extends Controller
      */
     public function searchAction(Request $request=null)
     {
-
         $em = $this->getDoctrine()->getManager();
         $query = $this->getRequest()->get('query');
 
         if (!$query) {
-            return $this->redirect($this->generateUrl('ens_job'));
+            if (!$request->isXmlHttpRequest()) {
+                return $this->redirect($this->generateUrl('my_job'));
+            } else {
+                return new Response('No results.');
+            }
         }
 
         $jobs = $em->getRepository('MyBundle:Job')->getForLuceneQuery($query);
+
+        if ((!$request === null) && $request->isXmlHttpRequest()) {
+            if ('*' == $query || !$jobs || $query == '') {
+                return new Response('No results.');
+            }
+            return $this->render('MyBundle:Job:list.html.twig', array('jobs' => $jobs));
+        }
 
         return $this->render('MyBundle:Job:search.html.twig', array('jobs' => $jobs));
     }
