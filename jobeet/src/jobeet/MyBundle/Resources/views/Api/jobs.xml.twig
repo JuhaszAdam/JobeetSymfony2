@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jobs>
+    {% for url, job in jobs %}
+    <job url="{{ url }}">
+{% for key,value in job %}
+        <{{ key }}>{{ value }}</{{ key }}>
+{% endfor %}
+    </job>
+{% endfor %}
+</jobs>
