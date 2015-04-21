@@ -1,5 +1,5 @@
 <?php
-namespace Ens\JobeetBundle\DataFixtures\ORM;
+namespace jobeet\MyBundle\DataFixtures\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -85,6 +85,8 @@ class LoadJobData extends AbstractFixture implements OrderedFixtureInterface
         }
 
         $em->flush();
+
+
     }
 
     public function getOrder()

@@ -1,6 +1,6 @@
-# src/Ens/JobeetBundle/Resources/config/doctrine/Affiliate.orm.yml
 jobeet\MyBundle\Entity\Affiliate:
   type: entity
+  repositoryClass: jobeet\MyBundle\Repository\AffiliateRepository
   table: affiliate
   id:
     id:
@@ -19,9 +19,11 @@ jobeet\MyBundle\Entity\Affiliate:
       length: 255
     created_at:
       type: datetime
+    is_active:
+      type: boolean
   oneToMany:
     category_affiliates:
       targetEntity: CategoryAffiliate
       mappedBy: affiliate
   lifecycleCallbacks:
-    prePersist: [ setCreatedAtValue ]
+      prePersist: [ setCreatedAtValue, setTokenValue ]

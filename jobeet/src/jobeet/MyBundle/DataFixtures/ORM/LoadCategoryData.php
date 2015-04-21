@@ -1,6 +1,6 @@
 <?php
 
-namespace Ens\JobeetBundle\DataFixtures\ORM;
+namespace jobeet\MyBundle\DataFixtures\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;

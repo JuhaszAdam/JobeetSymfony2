@@ -40,6 +40,11 @@ class Affiliate
     private $category_affiliates;
 
     /**
+     * @var boolean
+     */
+    private $is_active;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -50,7 +55,7 @@ class Affiliate
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -73,7 +78,7 @@ class Affiliate
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -96,7 +101,7 @@ class Affiliate
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -104,22 +109,9 @@ class Affiliate
     }
 
     /**
-     * Set token
-     *
-     * @param string $token
-     * @return Affiliate
-     */
-    public function setToken($token)
-    {
-        $this->token = $token;
-
-        return $this;
-    }
-
-    /**
      * Get token
      *
-     * @return string 
+     * @return string
      */
     public function getToken()
     {
@@ -142,7 +134,7 @@ class Affiliate
     /**
      * Get created_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -175,17 +167,72 @@ class Affiliate
     /**
      * Get category_affiliates
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCategoryAffiliates()
     {
         return $this->category_affiliates;
     }
+
+    public function getCategories()
+    {
+        return $this->category_affiliates;
+    }
+
     /**
      * @ORM\PrePersist
      */
     public function setCreatedAtValue()
     {
         // Add your code here
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setTokenValue()
+    {
+        if (!$this->getToken()) {
+            $token = sha1($this->getEmail() . rand(11111, 99999));
+            $this->token = $token;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set token
+     *
+     * @param string $token
+     * @return Affiliate
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Get is_active
+     *
+     * @return boolean
+     */
+    public function getIsActive()
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * @param $a
+     */
+    public function setIsActive($a)
+    {
+        $this->is_active = $a;
+    }
+
+    public function setCategories($c)
+    {
+        $this->category_affiliates->add($c);
     }
 }

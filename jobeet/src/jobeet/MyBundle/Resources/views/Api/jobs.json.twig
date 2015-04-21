@@ -1,0 +1,9 @@
+{% for url, job in jobs %}
+    {% i = 0, count(jobs), ++i %}
+    [
+    "url":"{{ url }}",
+    {% for key, value in job %} {% j = 0, count(key), ++j %}
+        "{{ key }}":"{% if j == count(key)%} {{ json_encode(value) }}, {% else %} {{ json_encode(value) }}
+    {% endif %}"
+    {% endfor %}]
+{% endfor %}

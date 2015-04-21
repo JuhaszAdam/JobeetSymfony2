@@ -41,3 +41,13 @@ login_check:
 
 logout:
     pattern:   /logout
+
+ens_api:
+    pattern: /api/{token}/jobs.{_format}
+    defaults: {_controller: "MyBundle:Api:list"}
+    requirements:
+        _format: xml|json|yaml
+
+MyBundle_affiliate:
+    resource: "@MyBundle/Resources/config/routing/affiliate.yml"
+    prefix:   /affiliate
