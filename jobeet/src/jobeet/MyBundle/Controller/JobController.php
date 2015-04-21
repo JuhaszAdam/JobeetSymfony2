@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use jobeet\MyBundle\Entity\Job;
 use jobeet\MyBundle\Form\JobType;
+use Zend\Http\PhpEnvironment\Request;
 
 /**
  * Job controller.
@@ -387,5 +388,24 @@ class JobController extends Controller
         return $this->createFormBuilder(array('token' => $token))
             ->add('token', 'hidden')
             ->getForm();
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function searchAction(Request $request=null)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $query = $this->getRequest()->get('query');
+
+        if (!$query) {
+            return $this->redirect($this->generateUrl('ens_job'));
+        }
+
+        $jobs = $em->getRepository('MyBundle:Job')->getForLuceneQuery($query);
+
+        return $this->render('MyBundle:Job:search.html.twig', array('jobs' => $jobs));
     }
 }

@@ -51,3 +51,7 @@ ens_api:
 MyBundle_affiliate:
     resource: "@MyBundle/Resources/config/routing/affiliate.yml"
     prefix:   /affiliate
+
+my_job_search:
+    pattern: /search
+    defaults: {_controller "MyBundle:Job:search"}

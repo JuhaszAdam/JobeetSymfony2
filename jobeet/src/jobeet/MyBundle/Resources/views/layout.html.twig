@@ -12,7 +12,8 @@
     {% endblock %}
     {% block javascripts %}
     {% endblock %}
-    <link rel="alternate" type="application/atom+xml" title="Latest Jobs" href="{{ url('ens_job', {'_format': 'atom'}) }}" />
+    <link rel="alternate" type="application/atom+xml" title="Latest Jobs"
+          href="{{ url('ens_job', {'_format': 'atom'}) }}"/>
     <link rel="shortcut icon" href="{{ asset('bundles/my/images/favicon.ico') }}"/>
 </head>
 <body>
@@ -35,8 +36,8 @@
                 <div class="search">
                     <h2>Ask for a job</h2>
 
-                    <form action="" method="get">
-                        <input type="text" name="keywords" id="search_keywords"/>
+                    <form action={{ path('my_job_search') }} method="get">
+                        <input type="text" name="query" value='{{ app.request.get('query') }}' id="search_keywords" />
                         <input type="submit" value="search"/>
 
                         <div class="help">
@@ -67,7 +68,7 @@
         </div>
     </div>
 
-    {% for flashMessage in app.session.flashbag.all() %}
+    {% for flashMessage in app.session.flashbag.get('notice') %}
         {{ flashMessage }}
     {% endfor %}
 

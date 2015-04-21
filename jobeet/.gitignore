@@ -12,3 +12,5 @@
 /src/Acme
 /src/AppBundle
 .idea/
+web/data
+*.php~

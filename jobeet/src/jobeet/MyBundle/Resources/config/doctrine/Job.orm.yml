@@ -63,6 +63,6 @@ jobeet\MyBundle\Entity\Job:
   lifecycleCallbacks:
       prePersist: [ setTokenValue, preUpload, setCreatedAtValue, setExpiresAtValue ]
       preUpdate: [ preUpload, setUpdatedAtValue ]
-      postPersist: [ upload ]
-      postUpdate: [ upload ]
-      postRemove: [ removeUpload ]
+      postPersist: [ upload, updateLuceneIndex ]
+      postUpdate: [ upload, updateLuceneIndex ]
+      postRemove: [ removeUpload, deleteLuceneIndex ]

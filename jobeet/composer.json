@@ -36,7 +36,14 @@
     "sonata-project/notification-bundle": "~2.3@dev",
     "symfony-cmf/routing-bundle": "~1.4@dev",
     "sonata-project/page-bundle": "2.4.*@dev",
-    "sonata-project/datagrid-bundle": "2.2.*@dev"
+    "sonata-project/datagrid-bundle": "2.2.*@dev",
+    "zendframework/zend-config": "2.0.*",
+    "zendframework/zend-http": "2.0.*",
+    "zf1/zend-exception": "dev-master",
+    "zf1/zend-search": "dev-master",
+    "zf1/zend-xml": "dev-master",
+    "zf1/zend-loader": "dev-master",
+    "zf1/zend-search-lucene": "dev-master"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3",
