@@ -7,17 +7,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use jobeet\MyBundle\Entity\Job;
 use jobeet\MyBundle\Form\JobType;
 use Symfony\Component\HttpFoundation\Request;
-use Zend\Http\PhpEnvironment\Response;
+use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Job controller.
- *
- */
 class JobController extends Controller
 {
     /**
-     * Lists all Job entities.
-     *
+     * @return Response
      */
     public function indexAction()
     {
@@ -72,11 +67,9 @@ class JobController extends Controller
     }
 
     /**
-     * Creates a form to create a Job entity.
+     * @param Job $entity
      *
-     * @param Job $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
+     * @return \Symfony\Component\Form\Form
      */
     private function createCreateForm(Job $entity)
     {
@@ -91,8 +84,7 @@ class JobController extends Controller
     }
 
     /**
-     * Displays a form to create a new Job entity.
-     *
+     * @return Response
      */
     public function newAction()
     {
@@ -121,20 +113,13 @@ class JobController extends Controller
         }
 
         $session = $this->getRequest()->getSession();
-
-        // fetch jobs already stored in the job history
         $jobs = $session->get('job_history', array());
-
-        // store the job as an array so we can put it in the session and avoid entity serialize errors
         $job = array('id' => $entity->getId(), 'position' => $entity->getPosition(), 'company' => $entity->getCompany(),
             'companyslug' => $entity->getCompanySlug(), 'locationslug' => $entity->getLocationSlug(),
             'positionslug' => $entity->getPositionSlug());
 
         if (!in_array($job, $jobs)) {
-            // add the current job at the beginning of the array
             array_unshift($jobs, $job);
-
-            // store the new job history back into the session
             $session->set('job_history', array_slice($jobs, 0, 3));
         }
 
@@ -175,11 +160,9 @@ class JobController extends Controller
     }
 
     /**
-     * Creates a form to edit a Job entity.
+     * @param Job $entity
      *
-     * @param Job $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
+     * @return \Symfony\Component\Form\Form
      */
     private function createEditForm(Job $entity)
     {
@@ -402,7 +385,7 @@ class JobController extends Controller
 
         if (!$query) {
             if (!$request->isXmlHttpRequest()) {
-                return $this->redirect($this->generateUrl('my_job'));
+                return $this->redirect($this->generateUrl('ens_job'));
             } else {
                 return new Response('No results.');
             }

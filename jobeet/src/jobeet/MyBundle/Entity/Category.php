@@ -50,23 +50,21 @@ class Category
     private $slug;
 
     /**
-     * Set slug
-     *
      * @param string $slug
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
     }
+
     /**
-     * Get slug
-     *
      * @return string
      */
     public function getSlug()
     {
         return $this->slug;
     }
+
     /**
      * @ORM\PrePersist
      */
@@ -113,8 +111,6 @@ class Category
     }
 
     /**
-     * Get id
-     *
      * @return integer
      */
     public function getId()
@@ -123,8 +119,6 @@ class Category
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      * @return Category
      */
@@ -136,8 +130,6 @@ class Category
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -146,8 +138,6 @@ class Category
     }
 
     /**
-     * Add jobs
-     *
      * @param \jobeet\MyBundle\Entity\Job $jobs
      * @return Category
      */
@@ -169,8 +159,6 @@ class Category
     }
 
     /**
-     * Get jobs
-     *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getJobs()
@@ -179,8 +167,6 @@ class Category
     }
 
     /**
-     * Add category_affiliates
-     *
      * @param \jobeet\MyBundle\Entity\CategoryAffiliate $categoryAffiliates
      * @return Category
      */
@@ -192,8 +178,6 @@ class Category
     }
 
     /**
-     * Remove category_affiliates
-     *
      * @param \jobeet\MyBundle\Entity\CategoryAffiliate $categoryAffiliates
      */
     public function removeCategoryAffiliate(\jobeet\MyBundle\Entity\CategoryAffiliate $categoryAffiliates)
@@ -202,8 +186,6 @@ class Category
     }
 
     /**
-     * Get category_affiliates
-     *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getCategoryAffiliates()

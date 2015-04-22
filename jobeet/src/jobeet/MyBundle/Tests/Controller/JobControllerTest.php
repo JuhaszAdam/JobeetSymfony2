@@ -8,6 +8,8 @@ class JobControllerTest extends WebTestCase
 {
     public function testIndex()
     {
+        //TODO: This test should work perfectly. Fix. Clean-up after.
+
         // get the custom parameters from app config.yml
         $kernel = static::createKernel();
         $kernel->boot();

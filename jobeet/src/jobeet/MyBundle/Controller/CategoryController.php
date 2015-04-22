@@ -31,7 +31,8 @@ class CategoryController extends Controller
         $previous_page = $page > 1 ? $page - 1 : 1;
         $next_page = $page < $last_page ? $page + 1 : $last_page;
 
-        $category->setActiveJobs($em->getRepository('MyBundle:Job')->getActiveJobs($category->getId(), $jobs_per_page, ($page - 1) * $jobs_per_page));
+        $category->setActiveJobs($em->getRepository('MyBundle:Job')->getActiveJobs(
+            $category->getId(), $jobs_per_page, ($page - 1) * $jobs_per_page));
 
         $format = $this->getRequest()->getRequestFormat();
 
@@ -42,7 +43,8 @@ class CategoryController extends Controller
             'current_page' => $page,
             'next_page' => $next_page,
             'total_jobs' => $total_jobs,
-            'feedId' => sha1($this->get('router')->generate('EnsJobeetBundle_category', array('slug' => $category->getSlug(), '_format' => 'atom'), true)),
+            'feedId' => sha1($this->get('router')->generate('EnsJobeetBundle_category',
+                array('slug' => $category->getSlug(), '_format' => 'atom'), true)),
         ));
     }
 }

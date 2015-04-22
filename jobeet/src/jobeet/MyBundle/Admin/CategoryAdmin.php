@@ -1,4 +1,5 @@
 <?php
+
 namespace jobeet\MyBundle\Admin;
 
 use Sonata\AdminBundle\Admin\Admin;
@@ -9,12 +10,17 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 class CategoryAdmin extends Admin
 {
-    // setup the default sort column and order
+    /**
+     * @var array
+     */
     protected $datagridValues = array(
         '_sort_order' => 'ASC',
         '_sort_by' => 'name'
     );
 
+    /**
+     * @param FormMapper $formMapper
+     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -22,12 +28,18 @@ class CategoryAdmin extends Admin
             ->add('slug');
     }
 
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
             ->add('name');
     }
 
+    /**
+     * @param ListMapper $listMapper
+     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

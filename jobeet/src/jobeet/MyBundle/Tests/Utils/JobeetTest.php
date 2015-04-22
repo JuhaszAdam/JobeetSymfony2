@@ -20,5 +20,4 @@ class JobeetTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('developpeur-web', Jobeet::slugify('Développeur Web'));
         }
     }
-
 }

@@ -53,8 +53,6 @@ class Affiliate
     }
 
     /**
-     * Get id
-     *
      * @return integer
      */
     public function getId()
@@ -63,8 +61,6 @@ class Affiliate
     }
 
     /**
-     * Set url
-     *
      * @param string $url
      * @return Affiliate
      */
@@ -76,8 +72,6 @@ class Affiliate
     }
 
     /**
-     * Get url
-     *
      * @return string
      */
     public function getUrl()
@@ -86,8 +80,6 @@ class Affiliate
     }
 
     /**
-     * Set email
-     *
      * @param string $email
      * @return Affiliate
      */
@@ -99,8 +91,6 @@ class Affiliate
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -109,8 +99,6 @@ class Affiliate
     }
 
     /**
-     * Get token
-     *
      * @return string
      */
     public function getToken()
@@ -119,8 +107,6 @@ class Affiliate
     }
 
     /**
-     * Set created_at
-     *
      * @param \DateTime $createdAt
      * @return Affiliate
      */
@@ -132,8 +118,6 @@ class Affiliate
     }
 
     /**
-     * Get created_at
-     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -142,8 +126,6 @@ class Affiliate
     }
 
     /**
-     * Add category_affiliates
-     *
      * @param \jobeet\MyBundle\Entity\CategoryAffiliate $categoryAffiliates
      * @return Affiliate
      */
@@ -155,8 +137,6 @@ class Affiliate
     }
 
     /**
-     * Remove category_affiliates
-     *
      * @param \jobeet\MyBundle\Entity\CategoryAffiliate $categoryAffiliates
      */
     public function removeCategoryAffiliate(\jobeet\MyBundle\Entity\CategoryAffiliate $categoryAffiliates)
@@ -165,8 +145,6 @@ class Affiliate
     }
 
     /**
-     * Get category_affiliates
-     *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getCategoryAffiliates()
@@ -184,7 +162,7 @@ class Affiliate
      */
     public function setCreatedAtValue()
     {
-        // Add your code here
+
     }
 
     /**
@@ -201,8 +179,6 @@ class Affiliate
     }
 
     /**
-     * Set token
-     *
      * @param string $token
      * @return Affiliate
      */
@@ -214,8 +190,6 @@ class Affiliate
     }
 
     /**
-     * Get is_active
-     *
      * @return boolean
      */
     public function getIsActive()
@@ -231,6 +205,9 @@ class Affiliate
         $this->is_active = $a;
     }
 
+    /**
+     * @param $c
+     */
     public function setCategories($c)
     {
         $this->category_affiliates->add($c);

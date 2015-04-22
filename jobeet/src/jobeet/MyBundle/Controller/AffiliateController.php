@@ -5,8 +5,6 @@ namespace jobeet\MyBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use jobeet\MyBundle\Form\AffiliateType;
 use Symfony\Component\HttpFoundation\Request;
-
-use jobeet\MyBundle\Entity\Category;
 use jobeet\MyBundle\Entity\Affiliate;
 
 class AffiliateController extends Controller
@@ -27,7 +25,7 @@ class AffiliateController extends Controller
 
     /**
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse| \Symfony\Component\HttpFoundation\Response
      */
     public function createAction(Request $request)
     {
@@ -43,7 +41,9 @@ class AffiliateController extends Controller
             $affiliate->setEmail($formData['email']);
             $affiliate->setIsActive(false);
 
-           // $em->persist($affiliate);
+            // TODO: this persist crashes, something is wrong with the object we're trying to persist.
+            // $em->persist($affiliate);
+
             $em->flush();
 
             return $this->redirect($this->generateUrl('ens_affiliate_wait'));

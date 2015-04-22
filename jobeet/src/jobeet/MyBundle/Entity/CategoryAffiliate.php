@@ -26,8 +26,6 @@ class CategoryAffiliate
 
 
     /**
-     * Get id
-     *
      * @return integer 
      */
     public function getId()
@@ -36,8 +34,6 @@ class CategoryAffiliate
     }
 
     /**
-     * Set category
-     *
      * @param \jobeet\MyBundle\Entity\Category $category
      * @return CategoryAffiliate
      */
@@ -49,8 +45,6 @@ class CategoryAffiliate
     }
 
     /**
-     * Get category
-     *
      * @return \jobeet\MyBundle\Entity\Category 
      */
     public function getCategory()
@@ -59,8 +53,6 @@ class CategoryAffiliate
     }
 
     /**
-     * Set affiliate
-     *
      * @param \jobeet\MyBundle\Entity\Affiliate $affiliate
      * @return CategoryAffiliate
      */
@@ -72,8 +64,6 @@ class CategoryAffiliate
     }
 
     /**
-     * Get affiliate
-     *
      * @return \jobeet\MyBundle\Entity\Affiliate 
      */
     public function getAffiliate()

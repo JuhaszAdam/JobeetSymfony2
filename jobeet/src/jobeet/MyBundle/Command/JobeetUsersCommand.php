@@ -5,7 +5,6 @@ namespace jobeet\MyBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use jobeet\MyBundle\Entity\User as User;
 
@@ -20,6 +19,11 @@ class JobeetUsersCommand extends ContainerAwareCommand
             ->addArgument('password', InputArgument::REQUIRED, 'The password');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $username = $input->getArgument('username');
@@ -29,7 +33,6 @@ class JobeetUsersCommand extends ContainerAwareCommand
 
         $user = new User();
         $user->setUsername($username);
-        // encode the password
         $factory = $this->getContainer()->get('security.encoder_factory');
         $encoder = $factory->getEncoder($user);
         $encodedPassword = $encoder->encodePassword($password, $user->getSalt());

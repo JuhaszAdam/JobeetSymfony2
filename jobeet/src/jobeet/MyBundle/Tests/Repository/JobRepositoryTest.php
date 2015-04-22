@@ -2,6 +2,7 @@
 
 namespace jobeet\MyBundle\Tests\Repository;
 
+use Doctrine\ORM\EntityManager;
 use jobeet\MyBundle\Entity\Job;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
@@ -17,12 +18,16 @@ use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
 
 class JobRepositoryTest extends WebTestCase
 {
+    /**
+     * @var EntityManager $em
+     */
     private $em;
-    private $application;
 
     /**
-     * @throws \Exception
+     * @var Application $application
      */
+    private $application;
+
     public function setUp()
     {
         static::$kernel = static::createKernel();
@@ -30,7 +35,22 @@ class JobRepositoryTest extends WebTestCase
 
         $this->application = new Application(static::$kernel);
 
-        // drop the database
+        $this->dropDatabase();
+        $this->createDatabase();
+        $this->createSchema();
+
+        $this->em = static::$kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+
+        $this->loadFixtures();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function dropDatabase()
+    {
         $command = new DropDatabaseDoctrineCommand();
         $this->application->add($command);
         $input = new ArrayInput(array(
@@ -38,35 +58,41 @@ class JobRepositoryTest extends WebTestCase
             '--force' => true
         ));
         $command->run($input, new NullOutput());
-
-        // we have to close the connection after dropping the database so we don't get "No database selected" error
         $connection = $this->application->getKernel()->getContainer()->get('doctrine')->getConnection();
         if ($connection->isConnected()) {
             $connection->close();
         }
 
-        // create the database
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function createDatabase()
+    {
         $command = new CreateDatabaseDoctrineCommand();
         $this->application->add($command);
         $input = new ArrayInput(array(
             'command' => 'doctrine:database:create',
         ));
         $command->run($input, new NullOutput());
+    }
 
-        // create schema
+    /**
+     * @throws \Exception
+     */
+    private function createSchema()
+    {
         $command = new CreateSchemaDoctrineCommand();
         $this->application->add($command);
         $input = new ArrayInput(array(
             'command' => 'doctrine:schema:create',
         ));
         $command->run($input, new NullOutput());
+    }
 
-        // get the Entity Manager
-        $this->em = static::$kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
-
-        // load fixtures
+    private function loadFixtures()
+    {
         $client = static::createClient();
         $loader = new ContainerAwareLoader($client->getContainer());
         $loader->loadFromDirectory(static::$kernel->locateResource('@MyBundle/DataFixtures/ORM'));
@@ -77,17 +103,8 @@ class JobRepositoryTest extends WebTestCase
 
     public function testGetForLuceneQuery()
     {
-        $job = new Job();
-        $job->setType('part-time');
-        $job->setCompany('Sensio');
-        $job->setPosition('FOO6');
-        $job->setLocation('Paris');
-        $job->setDescription('WebDevelopment');
-        $job->setHowToApply('Send resumee');
-        $job->setEmail('jobeet[at]example.com');
-        $job->setUrl('http://sensio-labs.com');
+        $job = $this->createJob('FOO6');
         $job->setIsActivated(false);
-        $job->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
 
         $this->em->persist($job);
         $this->em->flush();
@@ -95,16 +112,7 @@ class JobRepositoryTest extends WebTestCase
         $jobs = $this->em->getRepository('MyBundle:Job')->getForLuceneQuery('FOO6');
         $this->assertEquals(count($jobs), 0);
 
-        $job = new Job();
-        $job->setType('part-time');
-        $job->setCompany('Sensio');
-        $job->setPosition('FOO7');
-        $job->setLocation('Paris');
-        $job->setDescription('WebDevelopment');
-        $job->setHowToApply('Send resumee');
-        $job->setEmail('jobeet[at]example.com');
-        $job->setUrl('http://sensio-labs.com');
-        $job->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
+        $job = $this->createJob('FOO7');
         $job->setIsActivated(true);
 
         $this->em->persist($job);
@@ -122,5 +130,25 @@ class JobRepositoryTest extends WebTestCase
         $jobs = $this->em->getRepository('MyBundle:Job')->getForLuceneQuery('position:FOO7');
 
         $this->assertEquals(count($jobs), 0);
+    }
+
+    /**
+     * @param $position
+     * @return Job
+     */
+    private function createJob($position)
+    {
+        $job = new Job();
+        $job->setType('part-time');
+        $job->setCompany('Sensio');
+        $job->setPosition($position);
+        $job->setLocation('Paris');
+        $job->setDescription('WebDevelopment');
+        $job->setHowToApply('Send resumee');
+        $job->setEmail('jobeet[at]example.com');
+        $job->setUrl('http://sensio-labs.com');
+        $job->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
+
+        return $job;
     }
 }

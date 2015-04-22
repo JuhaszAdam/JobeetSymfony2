@@ -4,6 +4,7 @@ namespace jobeet\MyBundle\Tests\Controller;
 
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -15,7 +16,14 @@ use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
 
 class AffiliateControllerTest extends WebTestCase
 {
+    /**
+     * @var EntityManager $em
+     */
     private $em;
+
+    /**
+     * @var Application $application
+     */
     private $application;
 
     public function setUp()
@@ -25,7 +33,22 @@ class AffiliateControllerTest extends WebTestCase
 
         $this->application = new Application(static::$kernel);
 
-        // drop the database
+        $this->dropDatabase();
+        $this->createDatabase();
+        $this->createSchema();
+
+        $this->em = static::$kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+
+        $this->loadFixtures();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function dropDatabase()
+    {
         $command = new DropDatabaseDoctrineCommand();
         $this->application->add($command);
         $input = new ArrayInput(array(
@@ -33,35 +56,41 @@ class AffiliateControllerTest extends WebTestCase
             '--force' => true
         ));
         $command->run($input, new NullOutput());
-
-        // we have to close the connection after dropping the database so we don't get "No database selected" error
         $connection = $this->application->getKernel()->getContainer()->get('doctrine')->getConnection();
         if ($connection->isConnected()) {
             $connection->close();
         }
 
-        // create the database
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function createDatabase()
+    {
         $command = new CreateDatabaseDoctrineCommand();
         $this->application->add($command);
         $input = new ArrayInput(array(
             'command' => 'doctrine:database:create',
         ));
         $command->run($input, new NullOutput());
+    }
 
-        // create schema
+    /**
+     * @throws \Exception
+     */
+    private function createSchema()
+    {
         $command = new CreateSchemaDoctrineCommand();
         $this->application->add($command);
         $input = new ArrayInput(array(
             'command' => 'doctrine:schema:create',
         ));
         $command->run($input, new NullOutput());
+    }
 
-        // get the Entity Manager
-        $this->em = static::$kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
-
-        // load fixtures
+    private function loadFixtures()
+    {
         $client = static::createClient();
         $loader = new ContainerAwareLoader($client->getContainer());
         $loader->loadFromDirectory(static::$kernel->locateResource('@MyBundle/DataFixtures/ORM'));

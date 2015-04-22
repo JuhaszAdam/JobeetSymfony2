@@ -37,7 +37,6 @@
 
                 <div class="search">
                     <h2>Ask for a job</h2>
-
                     <form action={{ path('my_job_search') }} method="get">
                         <input type="text" name="query" value='{{ app.request.get('query') }}' id="search_keywords"/>
                         <input type="submit" value="search"/>

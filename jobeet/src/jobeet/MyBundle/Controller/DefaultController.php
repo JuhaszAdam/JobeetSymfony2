@@ -24,7 +24,6 @@ class DefaultController extends Controller
         $request = $this->getRequest();
         $session = $request->getSession();
 
-        // get the login error if there is one
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {
@@ -33,7 +32,6 @@ class DefaultController extends Controller
         }
 
         return $this->render('MyBundle:Default:login.html.twig', array(
-            // last username entered by the user
             'last_username' => $session->get(SecurityContext::LAST_USERNAME),
             'error' => $error,
         ));

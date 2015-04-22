@@ -102,8 +102,6 @@ class Job
 
 
     /**
-     * Get id
-     *
      * @return integer
      */
     public function getId()
@@ -112,8 +110,6 @@ class Job
     }
 
     /**
-     * Set type
-     *
      * @param string $type
      * @return Job
      */
@@ -125,8 +121,6 @@ class Job
     }
 
     /**
-     * Get type
-     *
      * @return string
      */
     public function getType()
@@ -135,8 +129,6 @@ class Job
     }
 
     /**
-     * Set company
-     *
      * @param string $company
      * @return Job
      */
@@ -148,8 +140,6 @@ class Job
     }
 
     /**
-     * Get company
-     *
      * @return string
      */
     public function getCompany()
@@ -158,8 +148,6 @@ class Job
     }
 
     /**
-     * Set logo
-     *
      * @param string $logo
      * @return Job
      */
@@ -171,8 +159,6 @@ class Job
     }
 
     /**
-     * Get logo
-     *
      * @return string
      */
     public function getLogo()
@@ -181,8 +167,6 @@ class Job
     }
 
     /**
-     * Set url
-     *
      * @param string $url
      * @return Job
      */
@@ -194,8 +178,6 @@ class Job
     }
 
     /**
-     * Get url
-     *
      * @return string
      */
     public function getUrl()
@@ -204,8 +186,6 @@ class Job
     }
 
     /**
-     * Set position
-     *
      * @param string $position
      * @return Job
      */
@@ -217,8 +197,6 @@ class Job
     }
 
     /**
-     * Get position
-     *
      * @return string
      */
     public function getPosition()
@@ -227,8 +205,6 @@ class Job
     }
 
     /**
-     * Set location
-     *
      * @param string $location
      * @return Job
      */
@@ -240,8 +216,6 @@ class Job
     }
 
     /**
-     * Get location
-     *
      * @return string
      */
     public function getLocation()
@@ -250,8 +224,6 @@ class Job
     }
 
     /**
-     * Set description
-     *
      * @param string $description
      * @return Job
      */
@@ -263,8 +235,6 @@ class Job
     }
 
     /**
-     * Get description
-     *
      * @return string
      */
     public function getDescription()
@@ -273,8 +243,6 @@ class Job
     }
 
     /**
-     * Set how_to_apply
-     *
      * @param string $howToApply
      * @return Job
      */
@@ -286,8 +254,6 @@ class Job
     }
 
     /**
-     * Get how_to_apply
-     *
      * @return string
      */
     public function getHowToApply()
@@ -296,8 +262,6 @@ class Job
     }
 
     /**
-     * Set token
-     *
      * @param string $token
      * @return Job
      */
@@ -309,8 +273,6 @@ class Job
     }
 
     /**
-     * Get token
-     *
      * @return string
      */
     public function getToken()
@@ -319,8 +281,6 @@ class Job
     }
 
     /**
-     * Set is_public
-     *
      * @param boolean $isPublic
      * @return Job
      */
@@ -332,8 +292,6 @@ class Job
     }
 
     /**
-     * Get is_public
-     *
      * @return boolean
      */
     public function getIsPublic()
@@ -342,8 +300,6 @@ class Job
     }
 
     /**
-     * Set is_activated
-     *
      * @param boolean $isActivated
      * @return Job
      */
@@ -355,8 +311,6 @@ class Job
     }
 
     /**
-     * Get is_activated
-     *
      * @return boolean
      */
     public function getIsActivated()
@@ -365,8 +319,6 @@ class Job
     }
 
     /**
-     * Set email
-     *
      * @param string $email
      * @return Job
      */
@@ -378,8 +330,6 @@ class Job
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -388,8 +338,6 @@ class Job
     }
 
     /**
-     * Set expires_at
-     *
      * @param \DateTime $expiresAt
      * @return Job
      */
@@ -401,8 +349,6 @@ class Job
     }
 
     /**
-     * Get expires_at
-     *
      * @return \DateTime
      */
     public function getExpiresAt()
@@ -411,8 +357,6 @@ class Job
     }
 
     /**
-     * Set created_at
-     *
      * @param \DateTime $createdAt
      * @return Job
      */
@@ -424,8 +368,6 @@ class Job
     }
 
     /**
-     * Get created_at
-     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -434,8 +376,6 @@ class Job
     }
 
     /**
-     * Set updated_at
-     *
      * @param \DateTime $updatedAt
      * @return Job
      */
@@ -447,8 +387,6 @@ class Job
     }
 
     /**
-     * Get updated_at
-     *
      * @return \DateTime
      */
     public function getUpdatedAt()
@@ -457,8 +395,6 @@ class Job
     }
 
     /**
-     * Set category
-     *
      * @param \jobeet\MyBundle\Entity\Category $category
      * @return Job
      */
@@ -470,8 +406,6 @@ class Job
     }
 
     /**
-     * Get category
-     *
      * @return \jobeet\MyBundle\Entity\Category
      */
     public function getCategory()
@@ -484,7 +418,7 @@ class Job
      */
     public function setCreatedAtValue()
     {
-        // Add your code here
+
     }
 
     /**
@@ -492,7 +426,7 @@ class Job
      */
     public function setUpdatedAtValue()
     {
-        // Add your code here
+
     }
 
     public function getCompanySlug()
@@ -590,9 +524,6 @@ class Job
             return;
         }
 
-        // if there is an error when moving the file, an exception will
-        // be automatically thrown by move(). This will properly prevent
-        // the entity from being persisted to the database on error
         $this->file->move($this->getUploadRootDir(), $this->logo);
 
         unset($this->file);
@@ -705,28 +636,23 @@ class Job
     {
         $index = self::getLuceneIndex();
 
-        // remove existing entries
         foreach ($index->find('pk:' . $this->getId()) as $hit) {
             $index->delete($hit->id);
         }
 
-        // don't index expired and non-activated jobs
         if ($this->isExpired() || !$this->getIsActivated()) {
             return;
         }
 
         $doc = new \Zend_Search_Lucene_Document();
 
-        // store job primary key to identify it in the search results
         $doc->addField(\Zend_Search_Lucene_Field::Keyword('pk', $this->getId()));
 
-        // index job fields
         $doc->addField(\Zend_Search_Lucene_Field::UnStored('position', $this->getPosition(), 'utf-8'));
         $doc->addField(\Zend_Search_Lucene_Field::UnStored('company', $this->getCompany(), 'utf-8'));
         $doc->addField(\Zend_Search_Lucene_Field::UnStored('location', $this->getLocation(), 'utf-8'));
         $doc->addField(\Zend_Search_Lucene_Field::UnStored('description', $this->getDescription(), 'utf-8'));
 
-        // add job to the index
         $index->addDocument($doc);
         $index->commit();
     }

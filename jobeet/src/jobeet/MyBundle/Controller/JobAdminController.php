@@ -31,7 +31,8 @@ class JobAdminController extends Controller
             return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
         }
 
-        $this->get('session')->setFlash('sonata_flash_success', sprintf('The selected jobs validity has been extended until %s.', date('m/d/Y', time() + 86400 * 30)));
+        $this->get('session')->setFlash('sonata_flash_success',
+            sprintf('The selected jobs validity has been extended until %s.', date('m/d/Y', time() + 86400 * 30)));
 
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
@@ -57,7 +58,8 @@ class JobAdminController extends Controller
         $nb = $em->getRepository('MyBundle:Job')->cleanup(60);
 
         if ($nb) {
-            $this->get('session')->setFlash('sonata_flash_success', sprintf('%d never activated jobs have been deleted successfully.', $nb));
+            $this->get('session')->setFlash('sonata_flash_success',
+                sprintf('%d never activated jobs have been deleted successfully.', $nb));
         } else {
             $this->get('session')->setFlash('sonata_flash_info', 'No job to delete.');
         }

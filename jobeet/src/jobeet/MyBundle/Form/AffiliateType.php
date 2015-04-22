@@ -5,7 +5,6 @@ namespace jobeet\MyBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use jobeet\MyBundle\Entity\Affiliate;
 
 class AffiliateType extends AbstractType
 {
@@ -18,10 +17,12 @@ class AffiliateType extends AbstractType
         $builder
             ->add('url')
             ->add('email')
-            ->add('categories', null)
-        ;
+            ->add('categories', null);
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
@@ -30,6 +31,9 @@ class AffiliateType extends AbstractType
         ));
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'affiliate';

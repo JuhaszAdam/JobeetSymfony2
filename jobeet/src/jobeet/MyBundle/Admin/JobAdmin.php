@@ -10,7 +10,10 @@ use jobeet\MyBundle\Entity\Job;
 
 class JobAdmin extends Admin
 {
-// setup the defaut sort column and order
+
+    /**
+     * @var array
+     */
     protected $datagridValues = array(
         '_sort_order' => 'DESC',
         '_sort_by' => 'created_at'
@@ -102,19 +105,21 @@ class JobAdmin extends Admin
      */
     public function getBatchActions()
     {
-        // retrieve the default (currently only the delete action) actions
         $actions = parent::getBatchActions();
 
-        // check user permissions
-        if ($this->hasRoute('edit') && $this->isGranted('EDIT') && $this->hasRoute('delete') && $this->isGranted('DELETE')) {
+        if ($this->hasRoute('edit') &&
+            $this->isGranted('EDIT') &&
+            $this->hasRoute('delete') &&
+            $this->isGranted('DELETE')
+        ) {
             $actions['extend'] = array(
                 'label' => 'Extend',
-                'ask_confirmation' => true // If true, a confirmation will be asked before performing the action
+                'ask_confirmation' => true
             );
 
             $actions['deleteNeverActivated'] = array(
                 'label' => 'Delete never activated jobs',
-                'ask_confirmation' => true // If true, a confirmation will be asked before performing the action
+                'ask_confirmation' => true
             );
         }
 

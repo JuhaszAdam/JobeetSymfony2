@@ -2,6 +2,7 @@
 
 namespace jobeet\MyBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use jobeet\MyBundle\Repository\JobRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,12 +16,10 @@ class ApiController extends Controller
     public function listAction(Request $request, $token)
     {
         $em = $this->getDoctrine()->getManager();
-
         $jobs = array();
-
-        /** @var Affiliate $affiliate */
         /** @var AffiliateRepository $rep */
         $rep = $em->getRepository('MyBundle:Affiliate');
+        /** @var Affiliate $affiliate */
         $affiliate = $rep->getForToken($token);
 
         if (!$affiliate) {
