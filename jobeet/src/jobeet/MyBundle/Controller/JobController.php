@@ -417,6 +417,6 @@ class JobController extends Controller
             return $this->render('MyBundle:Job:list.html.twig', array('jobs' => $jobs));
         }
 
-        return $this->render('MyBundle:Job:search.html.twig', array('jobs' => $jobs));
+        return $this->render('MyBundle:Job:list.html.twig', array('jobs' => $jobs));
     }
 }
