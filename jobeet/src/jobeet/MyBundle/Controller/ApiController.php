@@ -2,7 +2,6 @@
 
 namespace jobeet\MyBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
 use jobeet\MyBundle\Repository\JobRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
