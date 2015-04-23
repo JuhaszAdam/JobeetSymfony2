@@ -5,6 +5,7 @@ namespace jobeet\MyBundle\Tests\Controller;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
+use jobeet\MyBundle\Manager\Manager;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -32,10 +33,17 @@ class AffiliateControllerTest extends WebTestCase
      */
     private $stopwatch;
 
+    /**
+     * @var Manager
+     */
+    private $manager;
+
     public function setUp()
     {
         $this->stopwatch = new Stopwatch();
         $event = $this->stopwatch->start('setUp');
+
+        $this->manager = $this->mockManager();
 
         static::$kernel = static::createKernel();
         static::$kernel->boot();
@@ -109,6 +117,16 @@ class AffiliateControllerTest extends WebTestCase
         $purger = new ORMPurger($this->em);
         $executor = new ORMExecutor($this->em, $purger);
         $executor->execute($loader->getFixtures());
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function mockManager(){
+        return $this
+            ->getMockBuilder(Manager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testAffiliateForm()

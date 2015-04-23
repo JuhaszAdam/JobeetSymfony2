@@ -2,15 +2,32 @@
 
 namespace jobeet\MyBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
+use jobeet\MyBundle\Manager\Manager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use jobeet\MyBundle\Form\AffiliateType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use jobeet\MyBundle\Entity\Affiliate;
 
 class AffiliateController extends Controller
 {
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @var  Manager
+     */
+    private $manager;
+
+    /**
+     * @param Manager $manager
+     */
+    public function __construct($manager)
+    {
+        $this->manager = $manager;
+    }
+
+    /**
+     * @return Response
      */
     public function newAction()
     {
@@ -25,14 +42,14 @@ class AffiliateController extends Controller
 
     /**
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse| \Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse | Response
      */
     public function createAction(Request $request)
     {
         $affiliate = new Affiliate();
         $form = $this->createForm(new AffiliateType(), $affiliate);
         $form->bind($request);
-        $em = $this->getDoctrine()->getManager();
+        //$em = $this->getDoctrine()->getManager();
 
         if ($form->isValid()) {
 
@@ -42,9 +59,11 @@ class AffiliateController extends Controller
             $affiliate->setIsActive(false);
 
             // TODO: this persist crashes, something is wrong with the object we're trying to persist.
-            // $em->persist($affiliate);
+            // $this-#manager->persist($affiliate);
 
-            $em->flush();
+            //$this->manager->flush();
+
+            $this->manager->pushToDatabase(array($affiliate));
 
             return $this->redirect($this->generateUrl('ens_affiliate_wait'));
         }

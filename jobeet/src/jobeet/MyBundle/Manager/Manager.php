@@ -73,7 +73,7 @@ class Manager implements ManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function pushToDatabase(array $saveList)
+    public function pushToDatabase(array $saveList )
     {
         $i = 0;
         $this->entityManager->getConnection()->beginTransaction();

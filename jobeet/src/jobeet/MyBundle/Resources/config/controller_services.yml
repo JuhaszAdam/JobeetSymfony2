@@ -10,7 +10,7 @@ parameters:
 services:
   jobeet.mybundle.controller.affiliate_controller:
     class: %jobeet.mybundle.controller.affiliate_controller.class%
-    arguments: [@jobeet.mybundle.provider.affiliate_provider]
+    arguments: [@jobeet.mybundle.manager.affiliate_manager]
 
   jobeet.mybundle.controller.api_controller:
     class: %jobeet.mybundle.controller.api_controller.class%
