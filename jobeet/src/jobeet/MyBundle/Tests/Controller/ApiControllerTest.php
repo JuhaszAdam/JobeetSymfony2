@@ -13,6 +13,7 @@ use Doctrine\Bundle\DoctrineBundle\Command\DropDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class ApiControllerTest extends WebTestCase
 {
@@ -26,8 +27,17 @@ class ApiControllerTest extends WebTestCase
      */
     private $application;
 
+    /**
+     * @var Stopwatch
+     */
+    private $stopwatch;
+
+
     public function setUp()
     {
+        $this->stopwatch = new Stopwatch();
+        $event = $this->stopwatch->start('setUp');
+
         static::$kernel = static::createKernel();
         static::$kernel->boot();
 
@@ -42,6 +52,9 @@ class ApiControllerTest extends WebTestCase
             ->getManager();
 
         $this->loadFixtures();
+
+        $event->stop();
+        echo "setUp : " . $event->getDuration() . " ms" . PHP_EOL;
     }
 
     /**
@@ -60,7 +73,6 @@ class ApiControllerTest extends WebTestCase
         if ($connection->isConnected()) {
             $connection->close();
         }
-
     }
 
     /**
@@ -101,6 +113,8 @@ class ApiControllerTest extends WebTestCase
 
     public function testList()
     {
+        $event = $this->stopwatch->start('testList');
+
         $client = static::createClient();
         $crawler = $client->request('GET', '/api/sensio-labs/jobs.xml');
 
@@ -120,5 +134,8 @@ class ApiControllerTest extends WebTestCase
         $this->assertEquals('jobeet\MyBundle\Controller\ApiController::listAction', $client->getRequest()->attributes->get('_controller'));
         $crawler = $client->request('GET', '/api/sensio-labs87/jobs.yaml');
         $this->assertTrue(404 === $client->getResponse()->getStatusCode());
+
+        $event->stop();
+        echo "testList : " . $event->getDuration() . " ms" . PHP_EOL;
     }
 }

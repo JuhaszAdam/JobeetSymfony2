@@ -612,7 +612,7 @@ class Job
     /**
      * @return mixed
      */
-    static public function getLuceneIndex()
+    public static function getLuceneIndex()
     {
         if (file_exists($index = self::getLuceneIndexFile())) {
             return \Zend_Search_Lucene::open($index);
@@ -624,7 +624,7 @@ class Job
     /**
      * @return string
      */
-    static public function getLuceneIndexFile()
+    public static function getLuceneIndexFile()
     {
         return __DIR__ . '/../../../../web/data/job.index';
     }
@@ -636,9 +636,7 @@ class Job
     {
         $index = self::getLuceneIndex();
 
-        foreach ($index->find('pk:' . $this->getId()) as $hit) {
-            $index->delete($hit->id);
-        }
+        $this->deleteLuceneIndex();
 
         if ($this->isExpired() || !$this->getIsActivated()) {
             return;

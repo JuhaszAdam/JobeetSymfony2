@@ -3,11 +3,20 @@
 namespace jobeet\MyBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class CategoryControllerTest extends WebTestCase
 {
+    /**
+     * @var Stopwatch
+     */
+    private $stopwatch;
+
     public function testShow()
     {
+        $this->stopwatch = new Stopwatch();
+        $event = $this->stopwatch->start('testShow');
+
         $kernel = static::createKernel();
         $kernel->boot();
         $max_jobs_on_homepage = $kernel->getContainer()->getParameter('max_jobs_on_homepage');
@@ -27,5 +36,8 @@ class CategoryControllerTest extends WebTestCase
         $crawler = $client->click($link);
         $this->assertEquals(2, $client->getRequest()->attributes->get('page'));
         $this->assertRegExp('/page 2\/2/', $crawler->filter('.pagination_desc')->text());
+
+        $event->stop();
+        echo "testShow : " . $event->getDuration() . " ms" . PHP_EOL;
     }
 }

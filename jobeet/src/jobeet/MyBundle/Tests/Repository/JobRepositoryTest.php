@@ -14,22 +14,32 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Doctrine\Bundle\DoctrineBundle\Command\DropDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 
 class JobRepositoryTest extends WebTestCase
 {
     /**
-     * @var EntityManager $em
+     * @var EntityManager
      */
     private $em;
 
     /**
-     * @var Application $application
+     * @var Application
      */
     private $application;
 
+    /**
+     * @var Stopwatch
+     */
+    private $stopwatch;
+
+
     public function setUp()
     {
+        $this->stopwatch = new Stopwatch();
+        $event = $this->stopwatch->start('setUp');
+
         static::$kernel = static::createKernel();
         static::$kernel->boot();
 
@@ -44,6 +54,9 @@ class JobRepositoryTest extends WebTestCase
             ->getManager();
 
         $this->loadFixtures();
+
+        $event->stop();
+        echo "setUp : " . $event->getDuration() . " ms" . PHP_EOL;
     }
 
     /**
@@ -103,6 +116,8 @@ class JobRepositoryTest extends WebTestCase
 
     public function testGetForLuceneQuery()
     {
+        $event = $this->stopwatch->start('testGetForLuceneQuery');
+
         $job = $this->createJob('FOO6');
         $job->setIsActivated(false);
 
@@ -130,6 +145,9 @@ class JobRepositoryTest extends WebTestCase
         $jobs = $this->em->getRepository('MyBundle:Job')->getForLuceneQuery('position:FOO7');
 
         $this->assertEquals(count($jobs), 0);
+
+        $event->stop();
+        echo "testGetForLuceneQuery : " . $event->getDuration() . " ms" . PHP_EOL;
     }
 
     /**

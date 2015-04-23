@@ -13,21 +13,30 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Doctrine\Bundle\DoctrineBundle\Command\DropDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class AffiliateControllerTest extends WebTestCase
 {
     /**
-     * @var EntityManager $em
+     * @var EntityManager
      */
     private $em;
 
     /**
-     * @var Application $application
+     * @var Application
      */
     private $application;
 
+    /**
+     * @var Stopwatch
+     */
+    private $stopwatch;
+
     public function setUp()
     {
+        $this->stopwatch = new Stopwatch();
+        $event = $this->stopwatch->start('setUp');
+
         static::$kernel = static::createKernel();
         static::$kernel->boot();
 
@@ -42,6 +51,9 @@ class AffiliateControllerTest extends WebTestCase
             ->getManager();
 
         $this->loadFixtures();
+
+        $event->stop();
+        echo "setUp : " . $event->getDuration() . " ms" . PHP_EOL;
     }
 
     /**
@@ -101,6 +113,8 @@ class AffiliateControllerTest extends WebTestCase
 
     public function testAffiliateForm()
     {
+        $event = $this->stopwatch->start('testAffilateForm');
+
         $client = static::createClient();
         $crawler = $client->request('GET', '/affiliate/new');
 
@@ -121,10 +135,15 @@ class AffiliateControllerTest extends WebTestCase
         $query = $em->createQuery('SELECT count(a.email) FROM MyBundle:Affiliate a WHERE a.email = :email');
         $query->setParameter('email', 'jobeet@example.com');
         $this->assertEquals(0, $query->getSingleScalarResult());
+
+        $event->stop();
+        echo "testAffilateForm : " . $event->getDuration() . " ms" . PHP_EOL;
     }
 
     public function testCreate()
     {
+        $event = $this->stopwatch->start('testCreate');
+
         $client = static::createClient();
         $crawler = $client->request('GET', '/affiliate/new');
         $form = $crawler->selectButton('Submit')->form(array(
@@ -137,14 +156,22 @@ class AffiliateControllerTest extends WebTestCase
 
         $this->assertEquals('jobeet\MyBundle\Controller\AffiliateController::waitAction', $client->getRequest()->attributes->get('_controller'));
 
+        $event->stop();
+        echo "testCreate : " . $event->getDuration() . " ms" . PHP_EOL;
+
         return $client;
     }
 
     public function testWait()
     {
+        $event = $this->stopwatch->start('testWait');
+
         $client = static::createClient();
         $crawler = $client->request('GET', '/affiliate/wait');
 
         $this->assertEquals('jobeet\MyBundle\Controller\AffiliateController::waitAction', $client->getRequest()->attributes->get('_controller'));
+
+        $event->stop();
+        echo "testWait : " . $event->getDuration() . " ms" . PHP_EOL;
     }
 }
