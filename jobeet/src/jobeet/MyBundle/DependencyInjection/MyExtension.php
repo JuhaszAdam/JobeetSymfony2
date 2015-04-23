@@ -24,5 +24,8 @@ class MyExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('manager_services.yml');
+        $loader->load('provider_services.yml');
+        $loader->load('cache_driver_services.yml');
     }
 }

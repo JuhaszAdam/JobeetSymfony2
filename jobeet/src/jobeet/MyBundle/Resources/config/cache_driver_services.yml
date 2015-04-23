@@ -1,0 +1,14 @@
+parameters:
+  jobeet.mybundle.cache_driver.driver.class: jobeet\MyBundle\CacheDriver\CacheDriverRedis
+  jobeet.mybundle.cache_driver.cache.class: Redis
+  jobeet.mybundle.cache_driver.driver.config:
+    host: localhost
+    port: 11211
+
+services:
+    jobeet.mybundle.cache_driver.cache:
+        class: %jobeet.mybundle.cache_driver.cache.class%
+
+    jobeet.mybundle.cache_driver.driver:
+        class: %jobeet.mybundle.cache_driver.driver.class%
+        arguments: [ @jobeet.mybundle.cache_driver.cache , %jobeet.mybundle.cache_driver.driver.config% ]

@@ -1,0 +1,16 @@
+parameters:
+  jobeet.mybundle.provider.provider.class: jobeet\MyBundle\Provider\Provider
+
+
+services:
+  jobeet.mybundle.provider.job_provider:
+    class: %jobeet.mybundle.provider.provider.class%
+    arguments: [@jobeet.mybundle.manager.job_manager]
+
+  jobeet.mybundle.provider.affiliate_provider:
+    class: %jobeet.mybundle.provider.provider.class%
+    arguments: [@jobeet.mybundle.manager.affiliate_manager]
+
+  jobeet.mybundle.provider.category_provider:
+    class: %jobeet.mybundle.provider.provider.class%
+    arguments: [@jobeet.mybundle.manager.category_manager]
