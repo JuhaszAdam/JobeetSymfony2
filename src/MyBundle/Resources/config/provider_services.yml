@@ -1,0 +1,18 @@
+parameters:
+  mybundle.provider.provider.class: MyBundle\Provider\Provider
+
+services:
+  mybundle.provider.job_provider:
+    class: %mybundle.provider.provider.class%
+    arguments:
+      - @mybundle.manager.jobManager
+
+  mybundle.provider.affiliate_provider:
+    class: %mybundle.provider.provider.class%
+    arguments:
+      - @mybundle.manager.affiliate_manager
+
+  mybundle.provider.categoryProvider:
+    class: %mybundle.provider.provider.class%
+    arguments:
+      - @mybundle.manager.categoryProvider

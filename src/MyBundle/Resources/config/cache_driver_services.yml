@@ -1,0 +1,16 @@
+parameters:
+  mybundle.cache_driver.driver.class: MyBundle\CacheDriver\CacheDriverRedis
+  mybundle.cache_driver.cache.class: Redis
+  mybundle.cache_driver.driver.config:
+    host: localhost
+    port: 6379
+
+services:
+    mybundle.cache_driver.cache:
+        class: %mybundle.cache_driver.cache.class%
+
+    mybundle.cache_driver.driver:
+        class: %mybundle.cache_driver.driver.class%
+        arguments:
+          - @mybundle.cache_driver.cache
+          - %mybundle.cache_driver.driver.config%
