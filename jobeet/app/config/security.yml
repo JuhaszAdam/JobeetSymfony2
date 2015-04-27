@@ -15,7 +15,7 @@ security:
 
     providers:
         main:
-            entity: { class: jobeet\MyBundle\Entity\User, property: username }
+            entity: { class: MyBundle\Entity\User, property: username }
 
     encoders:
-        jobeet\MyBundle\Entity\User: sha512
+        MyBundle\Entity\User: sha512

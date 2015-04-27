@@ -2183,12 +2183,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "a516465b0c0460ce815e98ce152e033fb86c6c98"
+                "reference": "b98f7273972886e7b89e5cbc7943ed2317839825"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/a516465b0c0460ce815e98ce152e033fb86c6c98",
-                "reference": "a516465b0c0460ce815e98ce152e033fb86c6c98",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/b98f7273972886e7b89e5cbc7943ed2317839825",
+                "reference": "b98f7273972886e7b89e5cbc7943ed2317839825",
                 "shasum": ""
             },
             "require": {
@@ -2259,7 +2259,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2015-04-21 13:49:29"
+            "time": "2015-04-24 11:45:19"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -2935,12 +2935,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataPageBundle.git",
-                "reference": "5d5663bbc36c1b6cfb45cc18cf734a3ac8360f7f"
+                "reference": "7204c522c1f189fc251e488b6bf6d0ee832dd74d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataPageBundle/zipball/5d5663bbc36c1b6cfb45cc18cf734a3ac8360f7f",
-                "reference": "5d5663bbc36c1b6cfb45cc18cf734a3ac8360f7f",
+                "url": "https://api.github.com/repos/sonata-project/SonataPageBundle/zipball/7204c522c1f189fc251e488b6bf6d0ee832dd74d",
+                "reference": "7204c522c1f189fc251e488b6bf6d0ee832dd74d",
                 "shasum": ""
             },
             "require": {
@@ -2999,7 +2999,7 @@
                 "page",
                 "sonata"
             ],
-            "time": "2015-04-21 12:01:14"
+            "time": "2015-04-24 11:45:06"
         },
         {
             "name": "sonata-project/seo-bundle",
@@ -3255,12 +3255,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony-cmf/RoutingBundle.git",
-                "reference": "87634cb5378787e00179688d2f3e6afac607e7ec"
+                "reference": "c8a505228becd18533f98383662b1f05bd001f17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony-cmf/RoutingBundle/zipball/87634cb5378787e00179688d2f3e6afac607e7ec",
-                "reference": "87634cb5378787e00179688d2f3e6afac607e7ec",
+                "url": "https://api.github.com/repos/symfony-cmf/RoutingBundle/zipball/c8a505228becd18533f98383662b1f05bd001f17",
+                "reference": "c8a505228becd18533f98383662b1f05bd001f17",
                 "shasum": ""
             },
             "require": {
@@ -3312,7 +3312,7 @@
                 "database",
                 "routing"
             ],
-            "time": "2015-04-05 16:11:40"
+            "time": "2015-04-26 19:27:46"
         },
         {
             "name": "symfony/assetic-bundle",

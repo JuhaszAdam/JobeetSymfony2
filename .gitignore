@@ -38,6 +38,6 @@
 # Composer PHAR
 /composer.phar
 
-src/jobeet/MyBundle/Entity/*.php~
+jobeet/src/MyBundle/Entity/*.php~
 
 .idea
