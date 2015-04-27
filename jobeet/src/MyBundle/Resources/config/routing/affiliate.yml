@@ -1,0 +1,12 @@
+ens_affiliate_new:
+    pattern:  /new
+    defaults: { _controller: "mybundle.controller.affiliate_controller:newAction" }
+
+ens_affiliate_create:
+    pattern: /create
+    defaults: { _controller: "mybundle.controller.affiliate_controller:createAction" }
+    requirements: { _method: post }
+
+ens_affiliate_wait:
+    pattern: /wait
+    defaults: { _controller: "mybundle.controller.affiliate_controller:waitAction" }

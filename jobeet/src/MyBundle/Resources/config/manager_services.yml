@@ -1,0 +1,33 @@
+parameters:
+  mybundle.manager.manager.class: MyBundle\Manager\Manager
+  mybundle.manager.job.class: MyBundle\Entity\Job
+  mybundle.manager.job_repository.path: MyBundle:Job
+  mybundle.manager.affiliate.class: MyBundle\Entity\Affiliate
+  mybundle.manager.affiliate_repository.path: MyBundle:Affiliate
+  mybundle.manager.category.class: MyBundle\Entity\Category
+  mybundle.manager.category_repository.path: MyBundle:Category
+
+services:
+  mybundle.manager.job_manager:
+    class: %mybundle.manager.manager.class%
+    arguments:
+      - @doctrine.orm.entity_manager
+      - @mybundle.cache_driver.driver
+      - %mybundle.manager.job.class%
+      - %mybundle.manager.job_repository.path%
+
+  mybundle.manager.affiliate_manager:
+    class: %mybundle.manager.manager.class%
+    arguments:
+      - @doctrine.orm.entity_manager
+      - @mybundle.cache_driver.driver
+      - %mybundle.manager.affiliate.class%
+      - %mybundle.manager.affiliate_repository.path%
+
+  mybundle.manager.category_manager:
+    class: %mybundle.manager.manager.class%
+    arguments:
+      - @doctrine.orm.entity_manager
+      - @mybundle.cache_driver.driver
+      - %mybundle.manager.category.class%
+      - %mybundle.manager.category_repository.path%

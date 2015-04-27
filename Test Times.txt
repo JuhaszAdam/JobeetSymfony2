@@ -1,0 +1,23 @@
+AffiliateControllerTest.php
+
+    setUp : 3444 ms
+    testAffilateForm : 298 ms
+    setUp : 3174 ms
+    testCreate : 217 ms
+    setUp : 3396 ms
+    testWait : 51 ms
+
+ApiControllerTest.php
+
+    setUp : 3287 ms
+    testList : 797 ms
+
+CategoryControllerTest.php
+
+    testShow : 442 ms
+
+JobRepositoryTest.php
+
+    setUp : 3487 ms
+    testGetForLuceneQuery : 485 ms
+
