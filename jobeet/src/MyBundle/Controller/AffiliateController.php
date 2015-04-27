@@ -59,7 +59,7 @@ class AffiliateController extends Controller
             $affiliate->setIsActive(false);
 
             // TODO: this persist crashes, something is wrong with the object we're trying to persist.
-            // $this->manager->pushToDatabase(array($affiliate));
+            // $this->manager->saveList(array($affiliate));
 
             return $this->redirect($this->generateUrl('ens_affiliate_wait'));
         }

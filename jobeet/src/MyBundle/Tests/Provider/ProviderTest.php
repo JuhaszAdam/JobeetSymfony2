@@ -54,7 +54,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
         $databaseManager = $this->getMockedDatabaseManager();
 
         $databaseManager->expects($this->once())
-            ->method('findFromDatabase')
+            ->method('findAll')
             ->will($this->returnValue($genericJobs));
 
         /** @var Manager $databaseManager */

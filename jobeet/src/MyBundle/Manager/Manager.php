@@ -51,7 +51,7 @@ class Manager implements ManagerInterface
         $this->repository = $entityManager->getRepository($repositoryPath);
         $this->entityClassPath = $classPath;
         $this->cacheDriver = $cacheDriver;
-       // $this->entityClassName = array_pop(explode("\\", $classPath));
+        // $this->entityClassName = array_pop(explode("\\", $classPath));
     }
 
     /**
@@ -73,7 +73,7 @@ class Manager implements ManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function pushToDatabase(array $saveList )
+    public function saveList(array $saveList)
     {
         $i = 0;
         $this->entityManager->getConnection()->beginTransaction();
@@ -96,12 +96,15 @@ class Manager implements ManagerInterface
         }
     }
 
-    private function save($entityToSave)
+    /**
+     * {@inheritdoc}
+     */
+    public function save($entity)
     {
         $this->entityManager->getConnection()->beginTransaction();
 
         try {
-            $this->entityManager->persist($entityToSave);
+            $this->entityManager->persist($entity);
             $this->entityManager->getConnection()->commit();
         } catch (\Exception $e) {
             $this->entityManager->getConnection()->rollBack();
@@ -114,7 +117,7 @@ class Manager implements ManagerInterface
      * @param int $ttl
      * @throws \Exception
      */
-    public function toCacheMultiple($saveList, $ttl = 600)
+    private function toCacheMultiple($saveList, $ttl = 600)
     {
         try {
             foreach ($saveList as $entityToSave) {
@@ -131,7 +134,7 @@ class Manager implements ManagerInterface
      * @param int $ttl
      * @throws \Exception
      */
-    public function toCache($saveEntity, $ttl = 600)
+    private function toCache($saveEntity, $ttl = 600)
     {
         try {
             /**@var Entity $saveEntity */
@@ -147,7 +150,7 @@ class Manager implements ManagerInterface
      * @return null|Entity
      * @throws \Exception
      */
-    public function fromCache($id)
+    private function fromCache($id)
     {
         $result = null;
         try {
@@ -163,7 +166,7 @@ class Manager implements ManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function findFromDatabase()
+    public function findAll()
     {
         return $this->repository->findAll();
     }
@@ -173,7 +176,6 @@ class Manager implements ManagerInterface
      */
     public function findBy($criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-
         if (is_int($criteria) && $this->cacheDriver->exists($criteria)) {
             $result = $this->cacheDriver->get($criteria);
         } else {
@@ -205,6 +207,6 @@ class Manager implements ManagerInterface
      */
     private function generateKey($className, $entityId)
     {
-        return ($className . '/' . $entityId);
+        return ($className . '/' . $entityId . PHP_EOL);
     }
 }

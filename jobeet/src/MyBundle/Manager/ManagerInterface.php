@@ -9,12 +9,12 @@ interface ManagerInterface
     /**
      * @param Entity[] $saveList
      */
-    public function pushToDatabase(array $saveList);
+    public function saveList(array $saveList);
 
     /**
      * @return Entity[]
      */
-    public function findFromDatabase();
+    public function findAll();
 
     /**
      * @param array $criteria
@@ -26,4 +26,9 @@ interface ManagerInterface
      * @return Entity
      */
     public function createNew();
+
+    /**
+     * @param Entity $entity
+     */
+    public function save($entity);
 }

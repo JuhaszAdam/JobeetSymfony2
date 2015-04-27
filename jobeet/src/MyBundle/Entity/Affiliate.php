@@ -200,9 +200,9 @@ class Affiliate
     /**
      * @param $a
      */
-    public function setIsActive($a)
+    public function setIsActive($isActive)
     {
-        $this->is_active = $a;
+        $this->is_active = $isActive;
     }
 
     /**

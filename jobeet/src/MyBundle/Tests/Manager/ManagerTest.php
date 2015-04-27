@@ -116,7 +116,7 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
             Job::class,
             JobRepository::class);
 
-        $findFromDatabaseResults = $databaseManager->findFromDatabase();
+        $findFromDatabaseResults = $databaseManager->findAll();
         for ($i = 0; $i < count($expectedJobs); $i++) {
             $this->assertEquals($expectedJobs[$i], $findFromDatabaseResults[$i]);
         }
@@ -143,7 +143,7 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
         $manager->setFlushInterval(3);
         $jobs = iterator_to_array($this->getGenericJobs());
         try {
-            $manager->pushToDatabase($jobs);
+            $manager->saveList($jobs);
         } catch (\Exception $e) {
             $this->markTestSkipped($e->getMessage());
         }
@@ -169,7 +169,7 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
             Job::class,
             JobRepository::class);
         $jobs = iterator_to_array($this->getGenericJobs());
-        $manager->pushToDatabase($jobs);
+        $manager->saveList($jobs);
     }
 
     public function testGettingAndSettingFlushInterval()

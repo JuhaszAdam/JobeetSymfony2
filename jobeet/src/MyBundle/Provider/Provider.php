@@ -24,7 +24,7 @@ class Provider implements ProviderInterface
      */
     public function provide()
     {
-        $jobs = $this->manager->findFromDatabase();
+        $jobs = $this->manager->findAll();
 
         foreach ($jobs as $job) {
             yield $job;
