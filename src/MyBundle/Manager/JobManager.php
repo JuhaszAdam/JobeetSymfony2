@@ -61,4 +61,13 @@ class JobManager extends Manager implements ManagerInterface
     {
         return $this->repository->getForLuceneQuery($query);
     }
+
+    /**
+     * @param $days
+     * @return mixed
+     */
+    public function cleanup($days)
+    {
+        return $this->repository->cleanup($days);
+    }
 }

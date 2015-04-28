@@ -3,17 +3,39 @@
 namespace MyBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Templating\EngineInterface;
 
 class DefaultController extends Controller
 {
+    /**
+     * @var EngineInterface
+     */
+    private $templating;
+
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
+     * @param EngineInterface $templating
+     * @param RequestStack $requestStack
+     */
+    public function __construct($templating, $requestStack)
+    {
+        $this->templating = $templating;
+        $this->requestStack = $requestStack;
+    }
+
     /**
      * @param $name
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction($name)
     {
-        return $this->render('MyBundle:Default:index.html.twig', array('name' => $name));
+        return new Response($this->templating->render('MyBundle:Default:index.html.twig', array('name' => $name)));
     }
 
     /**
@@ -21,7 +43,7 @@ class DefaultController extends Controller
      */
     public function loginAction()
     {
-        $request = $this->getRequest();
+        $request = $this->requestStack->getCurrentRequest();
         $session = $request->getSession();
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {

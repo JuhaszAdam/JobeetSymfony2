@@ -394,12 +394,11 @@ class JobController extends Controller
      */
     public function searchAction(Request $request)
     {
-        //$query = $this->getRequest()->get('query');
         $query = $this->requestStack->getCurrentRequest()->get('query');
 
         if (!$query) {
             if (!$request->isXmlHttpRequest()) {
-                return $this->redirect($this->generateUrl('ens_job'));
+                return $this->redirect($this->router->generate('ens_job'));
             } else {
                 return new Response('No results.');
             }
@@ -411,10 +410,8 @@ class JobController extends Controller
             if ('*' == $query || !$jobs || $query == '') {
                 return new Response('No results.');
             }
-            //return $this->render('MyBundle:Job:list.html.twig', array('jobs' => $jobs));
             return new Response($this->templating->render('MyBundle:Job:list.html.twig', array('jobs' => $jobs)));
         }
-        // return $this->render('MyBundle:Job:search.html.twig', array('jobs' => $jobs));
         return new Response($this->templating->render('MyBundle:Job:search.html.twig', array('jobs' => $jobs)));
     }
 }

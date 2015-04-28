@@ -1,15 +1,15 @@
 <?php
 
-namespace MyBundle\Provider;
+namespace MyBundle\Manager;
 
-class CategoryAffiliateProvider extends AbstractProvider implements ProviderInterface
+class CategoryAffiliateManager extends Manager implements ManagerInterface
 {
     /**
      * @return array
      */
     public function getWithJobs()
     {
-        return $this->manager->getWithJobs();
+        return $this->repository->getWithJobs();
     }
 
     /**
@@ -20,6 +20,6 @@ class CategoryAffiliateProvider extends AbstractProvider implements ProviderInte
      */
     public function getForToken($token)
     {
-        return $this->manager->getForToken($token);
+        return $this->repository->getForToken($token);
     }
 }

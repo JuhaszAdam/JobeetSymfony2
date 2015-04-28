@@ -16,7 +16,7 @@ EnsJobeetBundle_homepage:
 
 EnsJobeetBundle_category:
     pattern: /category/{slug}/{page}
-    defaults: { _controller: MyBundle:Category:show, page: 1  }
+    defaults: { _controller: mybundle.controller.category_controller:showAction, page: 1  }
 
 ens_job_edit:
     pattern:  /{token}/edit
@@ -54,4 +54,4 @@ MyBundle_affiliate:
 
 my_job_search:
     pattern: /search
-    defaults: {_controller MyBundle:Job:search}
+    defaults: {_controller mybundle.controller.job_controller:searchAction}

@@ -93,7 +93,6 @@ class JobControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testIndex()
     {
-        //TODO : Service Containert akar a kecseg
         $this->categoryProvider->expects($this->once())
             ->method('provide')
             ->will($this->returnValue($this->getCategories()));

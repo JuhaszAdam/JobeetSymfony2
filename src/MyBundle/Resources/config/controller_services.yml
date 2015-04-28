@@ -2,9 +2,7 @@ parameters:
   mybundle.controller.affiliate_controller.class: MyBundle\Controller\AffiliateController
   mybundle.controller.api_controller.class: MyBundle\Controller\ApiController
   mybundle.controller.category_controller.class: MyBundle\Controller\CategoryController
-  mybundle.controller.category_admin_controller.class: MyBundle\Controller\CategoryAdminController
   mybundle.controller.default_controller.class: MyBundle\Controller\DefaultController
-  mybundle.controller.job_admin_controller.class: MyBundle\Controller\JobAdminController
   mybundle.controller.job_controller.class: MyBundle\Controller\JobController
 
 services:
@@ -25,19 +23,19 @@ services:
   mybundle.controller.category_controller:
     class: %mybundle.controller.category_controller.class%
     arguments:
-      - @mybundle.provider.affiliate_provider
+      - @templating
+      - @request_stack
       - @mybundle.provider.job_provider
-
-  mybundle.controller.category_admin_controller:
-    class: %mybundle.controller.category_admin_controller.class%
+      - @mybundle.provider.category_provider
+      - @router
+      - %max_jobs_on_category%
 
   mybundle.controller.default_controller:
     class: %mybundle.controller.default_controller.class%
-
-  mybundle.controller.job_admin_controller:
-    class: %mybundle.controller.job_admin_controller.class%
     arguments:
-      - @mybundle.provider.job_provider
+      - @templating
+      - @request_stack
+      - %max_jobs_on_category%
 
   mybundle.controller.job_controller:
     class: %mybundle.controller.job_controller.class%

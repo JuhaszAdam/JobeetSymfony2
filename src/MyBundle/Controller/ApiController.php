@@ -2,55 +2,72 @@
 
 namespace MyBundle\Controller;
 
+use MyBundle\Provider\CategoryAffiliateProvider;
+use MyBundle\Provider\JobProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use MyBundle\Entity\Affiliate;
 use MyBundle\Entity\Job;
-use MyBundle\Repository\AffiliateRepository;
 use MyBundle\Provider\Provider;
 use MyBundle\Repository\JobRepository;
 
 class ApiController extends Controller
 {
     /**
-     * @var Provider
+     * @var CategoryAffiliateProvider
      */
-    private $affiliate_provider;
+    private $affiliateProvider;
 
     /**
-     * @var  Provider
+     * @var JobProvider
      */
-    private $job_provider;
+    private $jobProvider;
 
     /**
-     * @param Provider $affiliate_provider
-     * @param Provider $job_provider
+     * @var Router
      */
-    public function __construct($affiliate_provider = NULL, $job_provider = NULL)
+    private $router;
+
+    /**
+     * @var EngineInterface
+     */
+    private $templating;
+
+    /**
+     * @param CategoryAffiliateProvider $affiliateProvider
+     * @param JobProvider $jobProvider
+     * @param Router $router
+     * @param EngineInterface $templating
+     */
+    public function __construct($affiliateProvider, $jobProvider, $router, $templating)
     {
-        $this->affiliate_provider = $affiliate_provider;
-        $this->job_provider = $job_provider;
+        $this->affiliateProvider = $affiliateProvider;
+        $this->jobProvider = $jobProvider;
+        $this->router = $router;
+        $this->templating = $templating;
     }
 
+    /**
+     * @param Request $request
+     * @param $token
+     * @return Response
+     */
     public function listAction(Request $request, $token)
     {
-        //TODO: What should the provider provide in this scenario?
-        $em = $this->getDoctrine()->getManager();
         $jobs = array();
-        /** @var Affiliate $affiliate */
-        /** @var AffiliateRepository $rep */
-        $rep = $em->getRepository('MyBundle:Affiliate');
-        $affiliate = $rep->getForToken($token);
+
+        $affiliate = $this->affiliateProvider->getForToken($token);
         if (!$affiliate) {
             throw $this->createNotFoundException('This affiliate account does not exist!');
         }
         /** @var JobRepository $rep */
-        $rep = $em->getRepository('MyBundle:Job');
-        $active_jobs = $rep->getActiveJobs(null, null, null, $affiliate->getId());
+
+        $active_jobs = $this->jobProvider->getActiveJobs(null, null, null, $affiliate->getId());
         /** @var Job $job */
         foreach ($active_jobs as $job) {
-            $jobs[$this->get('router')->generate('ens_job_show',
+            $jobs[$this->router->generate('ens_job_show',
                 array('company' => $job->getCompanySlug(),
                     'location' => $job->getLocationSlug(),
                     'id' => $job->getId(),
@@ -64,6 +81,8 @@ class ApiController extends Controller
             $response = new Response($jsonData, 200, $headers);
             return $response;
         }
-        return $this->render('MyBundle:Api:jobs.' . $format . '.twig', array('jobs' => $jobs));
+
+        return new Response($this->templating->render(
+            'MyBundle:Api:jobs.' . $format . '.twig', array('jobs' => $jobs)));
     }
 }
