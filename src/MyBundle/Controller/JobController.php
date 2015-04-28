@@ -3,34 +3,97 @@
 namespace MyBundle\Controller;
 
 use MyBundle\Entity\Category;
-use MyBundle\Manager\Manager;
+use MyBundle\Manager\JobManager;
 use MyBundle\Provider\CategoryProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\Form\FormFactory;
 use MyBundle\Entity\Job;
 use MyBundle\Form\JobType;
 
 class JobController extends Controller
 {
     /**
-     * @var  Manager
+     * @var  JobManager
      */
     private $jobManager;
 
     /**
-     * @var Manager
+     * @var CategoryProvider
      */
     private $categoryProvider;
 
     /**
-     * @param Manager $jobManager
-     * @param CategoryProvider $categoryProvider
+     * @var FormFactory
      */
-    public function __construct($jobManager, $categoryProvider)
+    private $formFactory;
+
+    /**
+     * @var EngineInterface;
+     */
+    private $templating;
+
+    /**
+     * @var \Symfony\Bundle\FrameworkBundle\Routing\Router
+     */
+    private $router;
+
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
+     * @var Session
+     */
+    private $session;
+
+    /**
+     * @var int
+     */
+    private $maxJobsOnPage;
+
+    /**
+     * @var int
+     */
+    private $maxCategoriesOnPage;
+
+    /**
+     * @param JobManager $jobManager
+     * @param CategoryProvider $categoryProvider
+     * @param FormFactory $formFactory
+     * @param EngineInterface $templating
+     * @param Router $router
+     * @param RequestStack $requestStack
+     * @param Session $session
+     * @param int $maxJobsOnPage
+     * @param int $maxCategoriesOnPage
+     */
+    public function __construct(
+        $jobManager,
+        $categoryProvider,
+        $formFactory,
+        $templating,
+        $router,
+        $requestStack,
+        $session,
+        $maxJobsOnPage,
+        $maxCategoriesOnPage
+    )
     {
         $this->jobManager = $jobManager;
         $this->categoryProvider = $categoryProvider;
+        $this->formFactory = $formFactory;
+        $this->templating = $templating;
+        $this->router = $router;
+        $this->requestStack = $requestStack;
+        $this->session = $session;
+        $this->maxJobsOnPage = $maxJobsOnPage;
+        $this->maxCategoriesOnPage = $maxCategoriesOnPage;
     }
 
     /**
@@ -38,25 +101,22 @@ class JobController extends Controller
      */
     public function indexAction()
     {
-        $categories = iterator_to_array($this->categoryProvider->provide());
+        $categories = $this->categoryProvider->getWithJobs();
 
-        /**@var Category category */
+        /**@var Category $category */
         foreach ($categories as $category) {
-            $activeJobs = $this->jobManager->findBy(array("category" => $category->getId()), null, $this->container->getParameter('max_jobs_on_homepage'));
-            //$category->setActiveJobs($em->getRepository('MyBundle:Job')->getActiveJobs($category->getId(), $this->container->getParameter('max_jobs_on_homepage')));
-            $category->setActiveJobs($activeJobs);
-
-           /*  $category->setMoreJobs($em->getRepository('MyBundle:Job')->countActiveJobs($category->getId())
-                 - $this->container->getParameter('max_jobs_on_homepage'));*/
+            $category->setActiveJobs($this->jobManager->getActiveJobs($category->getId(), $this->maxJobsOnPage));
+            $category->setMoreJobs($this->jobManager->countActiveJobs($category->getId())
+                - $this->maxJobsOnPage);
         }
 
-        $format = $this->getRequest()->getRequestFormat();
+        $format = $this->requestStack->getCurrentRequest()->getRequestFormat();
 
-        return $this->render('MyBundle:Job:index.' . $format . '.twig', array(
+        return new Response($this->templating->render('MyBundle:Job:index.' . $format . '.twig', array(
             'categories' => $categories,
-            // 'lastUpdated' => $em->getRepository('MyBundle:Job')->getLatestPost()->getCreatedAt()->format(DATE_ATOM),
-            'feedId' => sha1($this->get('router')->generate('ens_job', array('_format' => 'atom'), true)),
-        ));
+            'lastUpdated' => $this->jobManager->getLatestPost()->getCreatedAt()->format(DATE_ATOM),
+            'feedId' => sha1($this->router->generate('ens_job', array('_format' => 'atom'), true)),
+        )));
     }
 
     /**
@@ -65,17 +125,15 @@ class JobController extends Controller
     public function createAction()
     {
         $entity = new Job();
-        $request = $this->getRequest();
-        $form = $this->createForm(new JobType(), $entity);
-        $form->bind($request);
+        $request = $this->requestStack->getCurrentRequest();
+        $form = $this->formFactory->create(new JobType(), $entity);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('ens_job_preview', array(
+            /** @var \Doctrine\Entity $entity */
+            $this->jobManager->save($entity);
+            /** @var Job $entity */
+            return $this->redirect($this->router->generate('ens_job_preview', array(
                 'company' => $entity->getCompanySlug(),
                 'location' => $entity->getLocationSlug(),
                 'token' => $entity->getToken(),
@@ -83,27 +141,10 @@ class JobController extends Controller
             )));
         }
 
-        return $this->render('MyBundle:Job:new.html.twig', array(
+        return new Response($this->templating->render('MyBundle:Job:new.html.twig', array(
             'entity' => $entity,
             'form' => $form->createView()
-        ));
-    }
-
-    /**
-     * @param Job $entity
-     *
-     * @return \Symfony\Component\Form\Form
-     */
-    private function createCreateForm(Job $entity)
-    {
-        $form = $this->createForm(new JobType(), $entity, array(
-            'action' => $this->generateUrl('ens_job_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
+        )));
     }
 
     /**
@@ -113,12 +154,12 @@ class JobController extends Controller
     {
         $entity = new Job();
         $entity->setType('full-time');
-        $form = $this->createForm(new JobType(), $entity);
+        $form = $this->formFactory->create(new JobType(), $entity);
 
-        return $this->render('MyBundle:Job:new.html.twig', array(
+        return new Response($this->templating->render('MyBundle:Job:new.html.twig', array(
             'entity' => $entity,
             'form' => $form->createView()
-        ));
+        )));
     }
 
     /**
@@ -127,15 +168,14 @@ class JobController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('MyBundle:Job')->getActiveJob($id);
+        $entity = $this->jobManager->getActiveJob($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Job entity.');
         }
 
-        $session = $this->getRequest()->getSession();
+        $session = $this->requestStack->getCurrentRequest()->getSession();
         $jobs = $session->get('job_history', array());
         $job = array('id' => $entity->getId(), 'position' => $entity->getPosition(), 'company' => $entity->getCompany(),
             'companyslug' => $entity->getCompanySlug(), 'locationslug' => $entity->getLocationSlug(),
@@ -146,12 +186,12 @@ class JobController extends Controller
             $session->set('job_history', array_slice($jobs, 0, 3));
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createGenericForm($id);
 
-        return $this->render('MyBundle:Job:show.html.twig', array(
+        return new Response($this->templating->render('MyBundle:Job:show.html.twig', array(
             'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
-        ));
+        )));
     }
 
     /**
@@ -160,43 +200,26 @@ class JobController extends Controller
      */
     public function editAction($token)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('MyBundle:Job')->findOneByToken($token);
+        /** @var Job $entity */
+        $entity = $this->jobManager->findOneByToken($token);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Job entity.');
         }
 
+
         if ($entity->getIsActivated()) {
             throw $this->createNotFoundException('Job is activated and cannot be edited.');
         }
 
-        $editForm = $this->createForm(new JobType(), $entity);
-        $deleteForm = $this->createDeleteForm($token);
+        $editForm = $this->formFactory->create(new JobType(), $entity);
+        $deleteForm = $this->createGenericForm($token);
 
-        return $this->render('MyBundle:Job:edit.html.twig', array(
+        return new Response($this->templating->render('MyBundle:Job:edit.html.twig', array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
-     * @param Job $entity
-     *
-     * @return \Symfony\Component\Form\Form
-     */
-    private function createEditForm(Job $entity)
-    {
-        $form = $this->createForm(new JobType(), $entity, array(
-            'action' => $this->generateUrl('ens_job_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
-        return $form;
+        )));
     }
 
     /**
@@ -205,26 +228,23 @@ class JobController extends Controller
      */
     public function updateAction($token)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('MyBundle:Job')->findOneByToken($token);
+        /** @var Job $entity */
+        $entity = $this->jobManager->findOneByToken($token);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Job entity.');
         }
 
-        $editForm = $this->createForm(new JobType(), $entity);
-        $deleteForm = $this->createDeleteForm($token);
+        $editForm = $this->formFactory->create(new JobType(), $entity);
+        $request = $this->requestStack->getCurrentRequest();
 
-        $request = $this->getRequest();
-
-        $editForm->bind($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('ens_job_preview', array(
+            /** @var \Doctrine\Entity $entity */
+            $this->jobManager->save($entity);
+            /** @var Job $entity */
+            return $this->redirect($this->router->generate('ens_job_preview', array(
                 'company' => $entity->getCompanySlug(),
                 'location' => $entity->getLocationSlug(),
                 'token' => $entity->getToken(),
@@ -232,7 +252,7 @@ class JobController extends Controller
             )));
         }
 
-        return $this->redirect($this->generateUrl('ens_job_preview', array(
+        return $this->redirect($this->router->generate('ens_job_preview', array(
             'company' => $entity->getCompanySlug(),
             'location' => $entity->getLocationSlug(),
             'token' => $entity->getToken(),
@@ -246,35 +266,31 @@ class JobController extends Controller
      */
     public function deleteAction($token)
     {
-        $form = $this->createDeleteForm($token);
-        $request = $this->getRequest();
-
-        $form->bind($request);
+        $form = $this->createGenericForm($token);
+        $request = $this->requestStack->getCurrentRequest();
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('MyBundle:Job')->findOneByToken($token);
+            $entity = $this->jobManager->findOneByToken($token);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Job entity.');
             }
 
-            $em->remove($entity);
-            $em->flush();
+            $this->jobManager->remove($entity);
         }
 
-        return $this->redirect($this->generateUrl('ens_job'));
+        return $this->redirect($this->router->generate('ens_job'));
     }
 
     /**
      * @param $token
      * @return \Symfony\Component\Form\Form
      */
-    private function createDeleteForm($token)
+    private function createGenericForm($token)
     {
-        return $this->createFormBuilder(array('token' => $token))
-            ->add('token', 'hidden')
-            ->getForm();
+        return $this->formFactory->create('form', array('token' => $token))
+            ->add('token', 'hidden');
     }
 
     /**
@@ -283,24 +299,23 @@ class JobController extends Controller
      */
     public function previewAction($token)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('MyBundle:Job')->findOneByToken($token);
+        /** @var Job $entity */
+        $entity = $this->jobManager->findOneByToken($token);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Job entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($entity->getId());
-        $publishForm = $this->createPublishForm($entity->getToken());
-        $extendForm = $this->createExtendForm($entity->getToken());
+        $deleteForm = $this->createGenericForm($entity->getId());
+        $publishForm = $this->createGenericForm($entity->getToken());
+        $extendForm = $this->createGenericForm($entity->getToken());
 
-        return $this->render('MyBundle:Job:show.html.twig', array(
+        return new Response($this->templating->render('MyBundle:Job:show.html.twig', array(
             'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
             'publish_form' => $publishForm->createView(),
             'extend_form' => $extendForm->createView(),
-        ));
+        )));
     }
 
     /**
@@ -309,43 +324,32 @@ class JobController extends Controller
      */
     public function publishAction($token)
     {
-        $form = $this->createPublishForm($token);
-        $request = $this->getRequest();
+        /** @var Job $entity */
 
-        $form->bind($request);
+        $form = $this->createGenericForm($token);
+        $request = $this->requestStack->getCurrentRequest();
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('MyBundle:Job')->findOneByToken($token);
+            $entity = $this->jobManager->findOneByToken($token);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Job entity.');
             }
 
             $entity->publish();
-            $em->persist($entity);
-            $em->flush();
+            /** @var \Doctrine\Entity $entity */
+            $this->jobManager->save($entity);
 
-            $this->get('session')->getFlashBag()->add('notice', 'Your job is now online for 30 days.');
+            $this->session->getFlashBag()->add('notice', 'Your job is now online for 30 days.');
         }
 
-        return $this->redirect($this->generateUrl('ens_job_preview', array(
+        return $this->redirect($this->router->generate('ens_job_preview', array(
             'company' => $entity->getCompanySlug(),
             'location' => $entity->getLocationSlug(),
             'token' => $entity->getToken(),
             'position' => $entity->getPositionSlug()
         )));
-    }
-
-    /**
-     * @param $token
-     * @return \Symfony\Component\Form\Form
-     */
-    private function createPublishForm($token)
-    {
-        return $this->createFormBuilder(array('token' => $token))
-            ->add('token', 'hidden')
-            ->getForm();
     }
 
     /**
@@ -354,14 +358,13 @@ class JobController extends Controller
      */
     public function extendAction($token)
     {
-        $form = $this->createExtendForm($token);
-        $request = $this->getRequest();
-
-        $form->bind($request);
+        $form = $this->createGenericForm($token);
+        $request = $this->requestStack->getCurrentRequest();
+        $form->handleRequest($request);
+        /** @var Job $entity */
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('MyBundle:Job')->findOneByToken($token);
+            $entity = $this->jobManager->findOneByToken($token);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Job entity.');
@@ -370,15 +373,14 @@ class JobController extends Controller
             if (!$entity->extend()) {
                 throw $this->createNotFoundException('Unable to find extend the Job.');
             }
-
-            $em->persist($entity);
-            $em->flush();
-
-            $this->get('session')->getFlashBag()->add('notice', sprintf('Your job validity has been extended until %s.',
+            /** @var \Doctrine\Entity $entity */
+            $this->jobManager->save($entity);
+            /** @var Job $entity */
+            $this->session->getFlashBag()->add('notice', sprintf('Your job validity has been extended until %s.',
                 $entity->getExpiresAt()->format('m/d/Y')));
         }
-
-        return $this->redirect($this->generateUrl('ens_job_preview', array(
+        $entity = null;
+        return $this->redirect($this->router->generate('ens_job_preview', array(
             'company' => $entity->getCompanySlug(),
             'location' => $entity->getLocationSlug(),
             'token' => $entity->getToken(),
@@ -387,24 +389,13 @@ class JobController extends Controller
     }
 
     /**
-     * @param $token
-     * @return \Symfony\Component\Form\Form
-     */
-    private function createExtendForm($token)
-    {
-        return $this->createFormBuilder(array('token' => $token))
-            ->add('token', 'hidden')
-            ->getForm();
-    }
-
-    /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function searchAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $query = $this->getRequest()->get('query');
+        //$query = $this->getRequest()->get('query');
+        $query = $this->requestStack->getCurrentRequest()->get('query');
 
         if (!$query) {
             if (!$request->isXmlHttpRequest()) {
@@ -414,14 +405,16 @@ class JobController extends Controller
             }
         }
 
-        $jobs = $em->getRepository('MyBundle:Job')->getForLuceneQuery($query);
+        $jobs = $this->jobManager->getForLuceneQuery($query);
 
         if ($request->isXmlHttpRequest()) {
             if ('*' == $query || !$jobs || $query == '') {
                 return new Response('No results.');
             }
-            return $this->render('MyBundle:Job:list.html.twig', array('jobs' => $jobs));
+            //return $this->render('MyBundle:Job:list.html.twig', array('jobs' => $jobs));
+            return new Response($this->templating->render('MyBundle:Job:list.html.twig', array('jobs' => $jobs)));
         }
-        return $this->render('MyBundle:Job:search.html.twig', array('jobs' => $jobs));
+        // return $this->render('MyBundle:Job:search.html.twig', array('jobs' => $jobs));
+        return new Response($this->templating->render('MyBundle:Job:search.html.twig', array('jobs' => $jobs)));
     }
 }

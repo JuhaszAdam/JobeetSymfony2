@@ -7,14 +7,14 @@ services:
   mybundle.provider.job_provider:
     class: %mybundle.provider.job_provider.class%
     arguments:
-      - @mybundle.manager.jobManager
+      - @mybundle.manager.job_manager
 
   mybundle.provider.affiliate_provider:
     class: %mybundle.provider.affiliate_provider.class%
     arguments:
       - @mybundle.manager.affiliate_manager
 
-  mybundle.provider.categoryProvider:
+  mybundle.provider.category_provider:
     class: %mybundle.provider.category_provider.class%
     arguments:
-      - @mybundle.manager.categoryProvider
+      - @mybundle.manager.category_manager

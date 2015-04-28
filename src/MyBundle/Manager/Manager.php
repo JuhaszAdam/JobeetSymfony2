@@ -22,7 +22,7 @@ class Manager implements ManagerInterface
     /**
      * @var EntityRepository
      */
-    private $repository;
+    protected $repository;
 
     /**
      * @var int
@@ -105,6 +105,7 @@ class Manager implements ManagerInterface
 
         try {
             $this->entityManager->persist($entity);
+            $this->entityManager->flush();
             $this->entityManager->getConnection()->commit();
         } catch (\Exception $e) {
             $this->entityManager->getConnection()->rollBack();
@@ -208,5 +209,34 @@ class Manager implements ManagerInterface
     private function generateKey($className, $entityId)
     {
         return ($className . '/' . $entityId);
+    }
+
+    /**
+     * @param $entity
+     * @throws \Doctrine\DBAL\ConnectionException
+     * @throws \Exception
+     */
+    public function remove($entity)
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+
+        try {
+            $this->entityManager->remove($entity);
+            $this->entityManager->flush();
+            $this->entityManager->getConnection()->commit();
+
+            $this->removeFromCache($entity);
+        } catch (\Exception $e) {
+            $this->entityManager->getConnection()->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * @param $entity
+     */
+    private function removeFromCache($entity)
+    {
+        $this->cacheDriver->delete($this->generateKey($this->entityClassName, $entity->getId()));
     }
 }

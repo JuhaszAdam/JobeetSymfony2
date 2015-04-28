@@ -1,8 +1,8 @@
 <?php
 
-namespace MyBundle\Provider;
+namespace MyBundle\Manager;
 
-class JobProvider extends AbstractProvider implements ProviderInterface
+class JobManager extends Manager implements ManagerInterface
 {
     /**
      * @param null $category_id
@@ -13,7 +13,7 @@ class JobProvider extends AbstractProvider implements ProviderInterface
      */
     public function getActiveJobs($category_id = null, $max = null, $offset = null, $affiliate_id = null)
     {
-        return $this->manager->getActiveJobs($category_id, $max, $offset, $affiliate_id);
+        return $this->repository->getActiveJobs($category_id, $max, $offset, $affiliate_id);
     }
 
     /**
@@ -22,7 +22,7 @@ class JobProvider extends AbstractProvider implements ProviderInterface
      */
     public function countActiveJobs($category_id = null)
     {
-        return $this->manager->countActiveJobs($category_id);
+        return $this->repository->countActiveJobs($category_id);
     }
 
     /**
@@ -32,7 +32,7 @@ class JobProvider extends AbstractProvider implements ProviderInterface
      */
     public function getActiveJob($id)
     {
-        return $this->manager->getActiveJob($id);
+        return $this->repository->getActiveJob($id);
     }
 
     /**
@@ -41,6 +41,24 @@ class JobProvider extends AbstractProvider implements ProviderInterface
      */
     public function getLatestPost()
     {
-        return $this->manager->getLatestPost();
+        return $this->repository->getLatestPost();
+    }
+
+    /**
+     * @param $token
+     * @return Job
+     */
+    public function findOneByToken($token)
+    {
+        return $this->repository->findOneByToken($token);
+    }
+
+    /**
+     * @param $query
+     * @return array
+     */
+    public function getForLuceneQuery($query)
+    {
+        return $this->repository->getForLuceneQuery($query);
     }
 }

@@ -42,7 +42,12 @@ services:
   mybundle.controller.job_controller:
     class: %mybundle.controller.job_controller.class%
     arguments:
-      - @mybundle.manager.jobManager
-      - @mybundle.provider.categoryProvider
-    calls:
-      - [setContainer, ['@service_container']]
+      - @mybundle.manager.job_manager
+      - @mybundle.provider.category_provider
+      - @form.factory
+      - @templating
+      - @router
+      - @request_stack
+      - @session
+      - %max_jobs_on_homepage%
+      - %max_jobs_on_category%

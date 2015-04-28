@@ -9,7 +9,7 @@ abstract class AbstractProvider implements ProviderInterface
     /**
      * @var Manager
      */
-    private $manager;
+    protected $manager;
 
     /**
      * @param Manager $manager
