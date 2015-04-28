@@ -12,8 +12,9 @@ services:
     class: %mybundle.controller.affiliate_controller.class%
     arguments:
       - @mybundle.manager.affiliate_manager
-    calls:
-      - [setContainer, ['@service_container']]
+      - @form.factory
+      - @templating
+      - @router
 
   mybundle.controller.api_controller:
     class: %mybundle.controller.api_controller.class%

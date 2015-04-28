@@ -13,7 +13,10 @@ interface ProviderInterface
 
     /**
      * @param array $criteria
-     * @return Entity
+     * @param array|null $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     * @return Entity[]
      */
-    public function provideBy($criteria);
+    public function provideBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 }

@@ -18,9 +18,12 @@ interface ManagerInterface
 
     /**
      * @param array $criteria
-     * @return Entity
+     * @param array|null $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     * @return Entity[]
      */
-    public function findBy($criteria);
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 
     /**
      * @return Entity

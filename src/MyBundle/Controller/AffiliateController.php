@@ -2,8 +2,8 @@
 
 namespace MyBundle\Controller;
 
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use MyBundle\Entity\Affiliate;
 use MyBundle\Form\AffiliateType;
 use MyBundle\Manager\Manager;
+use Symfony\Component\Routing\Router;
+use Symfony\Component\Templating\EngineInterface;
 
 class AffiliateController extends Controller
 {
@@ -20,11 +22,32 @@ class AffiliateController extends Controller
     private $manager;
 
     /**
-     * @param Manager $manager
+     * @var FormFactory
      */
-    public function __construct($manager)
+    private $formFactory;
+
+    /**
+     * @var EngineInterface;
+     */
+    private $templating;
+
+    /**
+     * @var \Symfony\Bundle\FrameworkBundle\Routing\Router
+     */
+    private $router;
+
+    /**
+     * @param Manager $manager
+     * @param FormFactory $formFactory
+     * @param EngineInterface $templating
+     * @param Router $router
+     */
+    public function __construct($manager, $formFactory, $templating, $router)
     {
         $this->manager = $manager;
+        $this->formFactory = $formFactory;
+        $this->templating = $templating;
+        $this->router = $router;
     }
 
     /**
@@ -33,12 +56,12 @@ class AffiliateController extends Controller
     public function newAction()
     {
         $entity = new Affiliate();
-        $form = $this->createForm(new AffiliateType(), $entity);
+        $form = $this->formFactory->create(new AffiliateType(), $entity);
 
-        return $this->render('MyBundle:Affiliate:affiliate_new.html.twig', array(
+        return new Response($this->templating->render('MyBundle:Affiliate:affiliate_new.html.twig', array(
             'entity' => $entity,
             'form' => $form->createView(),
-        ));
+        )));
     }
 
     /**
@@ -48,26 +71,22 @@ class AffiliateController extends Controller
     public function createAction(Request $request)
     {
         $affiliate = new Affiliate();
-        $form = $this->createForm(new AffiliateType(), $affiliate);
+        $form = $this->formFactory->create(new AffiliateType(), $affiliate);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-
             $formData = $request->get('affiliate');
             $affiliate->setUrl($formData['url']);
             $affiliate->setEmail($formData['email']);
             $affiliate->setIsActive(false);
 
-            // TODO: this persist crashes, something is wrong with the object we're trying to persist.
-            // $this->manager->saveList(array($affiliate));
-
-            return $this->redirect($this->generateUrl('ens_affiliate_wait'));
+            return $this->redirect($this->router->generate('ens_affiliate_wait'));
         }
 
-        return $this->render('MyBundle:Affiliate:affiliate_new.html.twig', array(
+        return new Response($this->templating->render('MyBundle:Affiliate:affiliate_new.html.twig', array(
             'entity' => $affiliate,
             'form' => $form->createView(),
-        ));
+        )));
     }
 
     /**
@@ -75,6 +94,6 @@ class AffiliateController extends Controller
      */
     public function waitAction()
     {
-        return $this->render('MyBundle:Affiliate:wait.html.twig');
+        return new Response($this->templating->render('MyBundle:Affiliate:wait.html.twig'));
     }
 }

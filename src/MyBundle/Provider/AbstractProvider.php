@@ -4,7 +4,7 @@ namespace MyBundle\Provider;
 
 use MyBundle\Manager\Manager;
 
-class Provider implements ProviderInterface
+abstract class AbstractProvider implements ProviderInterface
 {
     /**
      * @var Manager
@@ -34,8 +34,8 @@ class Provider implements ProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideBy($criteria, array $orderBy = null, $limit = null, $offset = null)
+    public function provideBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        return $this->manager->findBy($criteria, $orderBy , $limit, $offset);
+        return $this->manager->findBy($criteria, $orderBy, $limit, $offset);
     }
 }

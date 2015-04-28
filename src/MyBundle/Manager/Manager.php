@@ -174,7 +174,7 @@ class Manager implements ManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function findBy($criteria, array $orderBy = null, $limit = null, $offset = null)
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         if (is_int($criteria) && $this->cacheDriver->exists($criteria)) {
             $result = $this->cacheDriver->get($criteria);
@@ -207,6 +207,6 @@ class Manager implements ManagerInterface
      */
     private function generateKey($className, $entityId)
     {
-        return ($className . '/' . $entityId . PHP_EOL);
+        return ($className . '/' . $entityId);
     }
 }

@@ -4,7 +4,7 @@ namespace MyBundle\Controller;
 
 use MyBundle\Entity\Category;
 use MyBundle\Manager\Manager;
-use MyBundle\Provider\Provider;
+use MyBundle\Provider\CategoryProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +25,7 @@ class JobController extends Controller
 
     /**
      * @param Manager $jobManager
-     * @param Provider $categoryProvider
+     * @param CategoryProvider $categoryProvider
      */
     public function __construct($jobManager, $categoryProvider)
     {
