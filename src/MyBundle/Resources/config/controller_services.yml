@@ -1,0 +1,51 @@
+parameters:
+  mybundle.controller.affiliate_controller.class: MyBundle\Controller\AffiliateController
+  mybundle.controller.api_controller.class: MyBundle\Controller\ApiController
+  mybundle.controller.category_controller.class: MyBundle\Controller\CategoryController
+  mybundle.controller.default_controller.class: MyBundle\Controller\DefaultController
+  mybundle.controller.job_controller.class: MyBundle\Controller\JobController
+
+services:
+  mybundle.controller.affiliate_controller:
+    class: %mybundle.controller.affiliate_controller.class%
+    arguments:
+      - @mybundle.manager.affiliate_manager
+      - @form.factory
+      - @templating
+      - @router
+
+  mybundle.controller.api_controller:
+    class: %mybundle.controller.api_controller.class%
+    arguments:
+      - @mybundle.provider.affiliate_provider
+      - @mybundle.provider.job_provider
+
+  mybundle.controller.category_controller:
+    class: %mybundle.controller.category_controller.class%
+    arguments:
+      - @templating
+      - @request_stack
+      - @mybundle.provider.job_provider
+      - @mybundle.provider.category_provider
+      - @router
+      - %max_jobs_on_category%
+
+  mybundle.controller.default_controller:
+    class: %mybundle.controller.default_controller.class%
+    arguments:
+      - @templating
+      - @request_stack
+      - %max_jobs_on_category%
+
+  mybundle.controller.job_controller:
+    class: %mybundle.controller.job_controller.class%
+    arguments:
+      - @mybundle.manager.job_manager
+      - @mybundle.provider.category_provider
+      - @form.factory
+      - @templating
+      - @router
+      - @request_stack
+      - @session
+      - %max_jobs_on_homepage%
+      - %max_jobs_on_category%

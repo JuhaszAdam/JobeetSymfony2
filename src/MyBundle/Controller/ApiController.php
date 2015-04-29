@@ -1,0 +1,88 @@
+<?php
+
+namespace MyBundle\Controller;
+
+use MyBundle\Provider\CategoryAffiliateProvider;
+use MyBundle\Provider\JobProvider;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use MyBundle\Entity\Job;
+use MyBundle\Provider\Provider;
+use MyBundle\Repository\JobRepository;
+
+class ApiController extends Controller
+{
+    /**
+     * @var CategoryAffiliateProvider
+     */
+    private $affiliateProvider;
+
+    /**
+     * @var JobProvider
+     */
+    private $jobProvider;
+
+    /**
+     * @var Router
+     */
+    private $router;
+
+    /**
+     * @var EngineInterface
+     */
+    private $templating;
+
+    /**
+     * @param CategoryAffiliateProvider $affiliateProvider
+     * @param JobProvider $jobProvider
+     * @param Router $router
+     * @param EngineInterface $templating
+     */
+    public function __construct($affiliateProvider, $jobProvider, $router, $templating)
+    {
+        $this->affiliateProvider = $affiliateProvider;
+        $this->jobProvider = $jobProvider;
+        $this->router = $router;
+        $this->templating = $templating;
+    }
+
+    /**
+     * @param Request $request
+     * @param $token
+     * @return Response
+     */
+    public function listAction(Request $request, $token)
+    {
+        $jobs = array();
+
+        $affiliate = $this->affiliateProvider->getForToken($token);
+        if (!$affiliate) {
+            throw $this->createNotFoundException('This affiliate account does not exist!');
+        }
+        /** @var JobRepository $rep */
+
+        $active_jobs = $this->jobProvider->getActiveJobs(null, null, null, $affiliate->getId());
+        /** @var Job $job */
+        foreach ($active_jobs as $job) {
+            $jobs[$this->router->generate('ens_job_show',
+                array('company' => $job->getCompanySlug(),
+                    'location' => $job->getLocationSlug(),
+                    'id' => $job->getId(),
+                    'position' => $job->getPositionSlug()),
+                true)] = $job->asArray($request->getHost());
+        }
+        $format = $request->getRequestFormat();
+        $jsonData = json_encode($jobs);
+        if ($format == "json") {
+            $headers = array('Content-Type' => 'application/json');
+            $response = new Response($jsonData, 200, $headers);
+            return $response;
+        }
+
+        return new Response($this->templating->render(
+            'MyBundle:Api:jobs.' . $format . '.twig', array('jobs' => $jobs)));
+    }
+}

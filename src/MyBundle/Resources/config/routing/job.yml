@@ -1,0 +1,54 @@
+ens_job:
+    path:     /
+    defaults: { _controller: mybundle.controller.job_controller:indexAction }
+
+ens_job_show:
+    pattern:  /{company}/{location}/{id}/{position}
+    defaults: { _controller: mybundle.controller.job_controller:showAction }
+    requirements:
+        id:  \d+
+
+ens_job_new:
+    path:     /new
+    defaults: { _controller: mybundle.controller.job_controller:newAction }
+
+ens_job_create:
+    path:     /create
+    defaults: { _controller: mybundle.controller.job_controller:createAction }
+    methods:  POST
+
+ens_job_edit:
+    path:     /{id}/edit
+    defaults: { _controller: mybundle.controller.job_controller:editAction }
+
+ens_job_update:
+    path:     /{id}/update
+    defaults: { _controller: mybundle.controller.job_controller:updateAction }
+    methods:  [POST, PUT]
+
+ens_job_delete:
+    path:     /{id}/delete
+    defaults: { _controller: mybundle.controller.job_controller:deleteAction }
+    methods:  [POST, DELETE]
+
+ens_job_show:
+    pattern:  /{company}/{location}/{id}/{position}
+    defaults: { _controller: mybundle.controller.job_controller:showAction }
+    requirements:
+        id:  \d+
+
+ens_job_preview:
+    pattern:  /{company}/{location}/{token}/{position}
+    defaults: { _controller: mybundle.controller.job_controller:previewAction }
+    requirements:
+        token:  \w+
+
+ens_job_publish:
+    pattern:  /{token}/publish
+    defaults: { _controller: mybundle.controller.job_controller:publishAction }
+    requirements: { _method: post }
+
+ens_job_extend:
+    pattern:  /{token}/extend
+    defaults: { _controller: mybundle.controller.job_controller:extendAction }
+    requirements: { _method: post }
