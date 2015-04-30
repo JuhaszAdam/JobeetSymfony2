@@ -28,5 +28,6 @@ class MyExtension extends Extension
         $loader->load('provider_services.yml');
         $loader->load('cache_driver_services.yml');
         $loader->load('controller_services.yml');
+        $loader->load('event_listener_services.yml');
     }
 }

@@ -48,11 +48,6 @@ class JobController extends Controller
     private $requestStack;
 
     /**
-     * @var Session
-     */
-    private $session;
-
-    /**
      * @var int
      */
     private $maxJobsOnPage;
@@ -69,7 +64,6 @@ class JobController extends Controller
      * @param EngineInterface $templating
      * @param Router $router
      * @param RequestStack $requestStack
-     * @param Session $session
      * @param int $maxJobsOnPage
      * @param int $maxCategoriesOnPage
      */
@@ -80,7 +74,6 @@ class JobController extends Controller
         $templating,
         $router,
         $requestStack,
-        $session,
         $maxJobsOnPage,
         $maxCategoriesOnPage
     )
@@ -91,7 +84,6 @@ class JobController extends Controller
         $this->templating = $templating;
         $this->router = $router;
         $this->requestStack = $requestStack;
-        $this->session = $session;
         $this->maxJobsOnPage = $maxJobsOnPage;
         $this->maxCategoriesOnPage = $maxCategoriesOnPage;
     }
@@ -183,6 +175,7 @@ class JobController extends Controller
 
         if (!in_array($job, $jobs)) {
             array_unshift($jobs, $job);
+
             $session->set('job_history', array_slice($jobs, 0, 3));
         }
 
@@ -340,8 +333,6 @@ class JobController extends Controller
             $entity->publish();
             /** @var \Doctrine\Entity $entity */
             $this->jobManager->save($entity);
-
-            $this->session->getFlashBag()->add('notice', 'Your job is now online for 30 days.');
         }
 
         return $this->redirect($this->router->generate('ens_job_preview', array(
@@ -376,8 +367,6 @@ class JobController extends Controller
             /** @var \Doctrine\Entity $entity */
             $this->jobManager->save($entity);
             /** @var Job $entity */
-            $this->session->getFlashBag()->add('notice', sprintf('Your job validity has been extended until %s.',
-                $entity->getExpiresAt()->format('m/d/Y')));
         }
         $entity = null;
         return $this->redirect($this->router->generate('ens_job_preview', array(
