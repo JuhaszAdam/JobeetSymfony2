@@ -2,7 +2,10 @@
 
 namespace MyBundle\Controller;
 
+use Monolog\Handler\ElasticSearchHandler;
 use MyBundle\Entity\Category;
+use MyBundle\Form\JobSearchType;
+use MyBundle\Model\ElasticJobSearch;
 use MyBundle\Manager\JobManager;
 use MyBundle\Provider\CategoryProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -362,7 +365,7 @@ class JobController extends Controller
             }
 
             if (!$entity->extend()) {
-                throw $this->createNotFoundException('Unable to find extend the Job.');
+                throw $this->createNotFoundException('Unable to extend the Job.');
             }
             /** @var \Doctrine\Entity $entity */
             $this->jobManager->save($entity);
@@ -383,24 +386,34 @@ class JobController extends Controller
      */
     public function searchAction(Request $request)
     {
+        $jobSearch = new ElasticJobSearch;
         $query = $this->requestStack->getCurrentRequest()->get('query');
 
-        if (!$query) {
-            if (!$request->isXmlHttpRequest()) {
-                return $this->redirect($this->router->generate('ens_job'));
-            } else {
-                return new Response('No results.');
-            }
-        }
+        $jobSearchForm = $this->formFactory
+            ->createNamed(
+                '',
+                new JobSearchType(),
+                $jobSearch,
+                array(
+                    'action' => $this->router->generate('my_job_search'),
+                    'method' => 'GET'
+                )
+            );
+        $jobSearchForm->handleRequest($request);
+        $jobSearch = $jobSearchForm->getData();
 
-        $jobs = $this->jobManager->getForLuceneQuery($query);
+        //TODO: returns void result.
+        //var_dump($jobSearch);
 
-        if ($request->isXmlHttpRequest()) {
-            if ('*' == $query || !$jobs || $query == '') {
-                return new Response('No results.');
-            }
-            return new Response($this->templating->render('MyBundle:Job:list.html.twig', array('jobs' => $jobs)));
+        /** @var ElasticJobSearch $jobSearch */
+        $jobs = $this->jobManager->findBy(array(
+            "company" => $jobSearch->getCompany(),
+            "is_activated" => $jobSearch->isActivated()
+        ));
+
+        if ('*' == $query || !$jobs || $query == '') {
+            return new Response('No results.');
         }
-        return new Response($this->templating->render('MyBundle:Job:search.html.twig', array('jobs' => $jobs)));
+        return new Response($this->templating->render('MyBundle:Job:list.html.twig', array('jobs' => $jobs)));
     }
 }

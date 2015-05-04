@@ -7,7 +7,7 @@ use MyBundle\Utils;
 use MyBundle\Utils\Jobeet;
 
 /**
- * Job
+ * @Search(repositoryClass="MyBundle\Repository\JobRepository")
  */
 class Job
 {
