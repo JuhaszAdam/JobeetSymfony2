@@ -22,7 +22,7 @@ class NoticePagerListener
         if ($event->getRequest()->get("_controller") === "mybundle.controller.job_controller:extendAction") {
             $session = $event->getRequest()->getSession();
             /** @var Session $session */
-            $session->getFlashBag()->add('notice', 'Your job is now extender by 30 days.');
+            $session->getFlashBag()->add('notice', 'Your job is now extended by 30 days.');
         }
     }
 }

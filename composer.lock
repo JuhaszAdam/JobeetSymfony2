@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3813355645f8db0eb72bb0ece6af0be3",
+    "hash": "515c3c3213fa1b2a04f5540bf74b8cdf",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -67,51 +67,6 @@
                 "slugify"
             ],
             "time": "2015-03-18 08:21:30"
-        },
-        {
-            "name": "components/jquery",
-            "version": "2.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/components/jquery.git",
-                "reference": "452a56b52b8f4a032256cdb8b6838f25f0bdb3d2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/components/jquery/zipball/452a56b52b8f4a032256cdb8b6838f25f0bdb3d2",
-                "reference": "452a56b52b8f4a032256cdb8b6838f25f0bdb3d2",
-                "shasum": ""
-            },
-            "require": {
-                "robloach/component-installer": "*"
-            },
-            "type": "component",
-            "extra": {
-                "component": {
-                    "scripts": [
-                        "jquery.js"
-                    ],
-                    "files": [
-                        "jquery.min.js",
-                        "jquery-migrate.js",
-                        "jquery-migrate.min.js"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "John Resig",
-                    "email": "jeresig@gmail.com",
-                    "homepage": "http://ejohn.org/"
-                }
-            ],
-            "description": "jQuery JavaScript Library",
-            "homepage": "http://jquery.com",
-            "time": "2013-07-12 08:48:34"
         },
         {
             "name": "doctrine/annotations",
@@ -922,6 +877,95 @@
                 "orm"
             ],
             "time": "2014-12-16 13:45:01"
+        },
+        {
+            "name": "friendsofsymfony/elastica-bundle",
+            "version": "3.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfSymfony/FOSElasticaBundle.git",
+                "reference": "5a45392687ec828c1f93f1904afb1ea7e0267fba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSElasticaBundle/zipball/5a45392687ec828c1f93f1904afb1ea7e0267fba",
+                "reference": "5a45392687ec828c1f93f1904afb1ea7e0267fba",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "psr/log": "~1.0",
+                "ruflin/elastica": ">=0.90.10.0, <1.5-dev",
+                "symfony/console": "~2.1",
+                "symfony/form": "~2.1",
+                "symfony/framework-bundle": "~2.3",
+                "symfony/property-access": "~2.2"
+            },
+            "require-dev": {
+                "doctrine/doctrine-bundle": "~1.2@beta",
+                "doctrine/orm": "~2.2",
+                "jms/serializer-bundle": "@stable",
+                "knplabs/knp-components": "~1.2",
+                "knplabs/knp-paginator-bundle": "~2.4",
+                "pagerfanta/pagerfanta": "1.0.*@dev",
+                "phpunit/phpunit": "~4.1",
+                "propel/propel1": "1.6.*",
+                "symfony/browser-kit": "~2.3",
+                "symfony/expression-language": "~2.4",
+                "symfony/twig-bundle": "~2.3"
+            },
+            "suggest": {
+                "doctrine/mongodb-odm": "1.0.*@dev",
+                "doctrine/orm": "~2.2",
+                "knplabs/knp-components": "~1.2",
+                "pagerfanta/pagerfanta": "1.0.*@dev",
+                "propel/propel1": "1.6.*",
+                "symfony/expression-language": "~2.4"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "FOS\\ElasticaBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tim Nagel",
+                    "email": "tim@nagel.com.au"
+                },
+                {
+                    "name": "Richard Miller",
+                    "email": "richard.miller@limethinking.co.uk"
+                },
+                {
+                    "name": "FriendsOfSymfony Community",
+                    "homepage": "https://github.com/FriendsOfSymfony/FOSElasticaBundle/contributors"
+                },
+                {
+                    "name": "Jeremy Mikola",
+                    "email": "jmikola@gmail.com"
+                }
+            ],
+            "description": "Elasticsearch PHP integration for your Symfony2 project using Elastica",
+            "homepage": "https://github.com/FriendsOfSymfony/FOSElasticaBundle",
+            "keywords": [
+                "doctrine2",
+                "elastica",
+                "elasticsearch",
+                "mongodb",
+                "propel",
+                "search"
+            ],
+            "time": "2015-04-06 01:33:56"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
@@ -1926,33 +1970,44 @@
             "time": "2012-12-21 11:40:51"
         },
         {
-            "name": "robloach/component-installer",
-            "version": "0.0.12",
+            "name": "ruflin/elastica",
+            "version": "v1.4.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/RobLoach/component-installer.git",
-                "reference": "1864f25db21fc173e02a359f646acd596c1b0460"
+                "url": "https://github.com/ruflin/Elastica.git",
+                "reference": "bfa9363bf2aa62af5907135863661c6c78a68ee4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RobLoach/component-installer/zipball/1864f25db21fc173e02a359f646acd596c1b0460",
-                "reference": "1864f25db21fc173e02a359f646acd596c1b0460",
+                "url": "https://api.github.com/repos/ruflin/Elastica/zipball/bfa9363bf2aa62af5907135863661c6c78a68ee4",
+                "reference": "bfa9363bf2aa62af5907135863661c6c78a68ee4",
                 "shasum": ""
             },
             "require": {
-                "kriswallsmith/assetic": "1.*",
-                "php": ">=5.3.2"
+                "php": ">=5.3.3",
+                "psr/log": "~1.0"
             },
             "require-dev": {
-                "composer/composer": "1.*"
+                "fabpot/php-cs-fixer": "~1.4",
+                "munkie/elasticsearch-thrift-php": "1.4.*",
+                "phpunit/phpunit": "4.1.*"
             },
-            "type": "composer-installer",
+            "suggest": {
+                "egeloen/http-adapter": "Allow using httpadapter transport",
+                "guzzlehttp/guzzle": "Allow using guzzle 4.x as the http transport (Requires php 5.4)",
+                "monolog/monolog": "Logging request",
+                "munkie/elasticsearch-thrift-php": "Allow using thrift transport"
+            },
+            "type": "library",
             "extra": {
-                "class": "ComponentInstaller\\Installer"
+                "branch-alias": {
+                    "dev-master": "1.4.x-dev"
+                }
             },
             "autoload": {
-                "psr-0": {
-                    "ComponentInstaller": "src/"
+                "psr-4": {
+                    "Elastica\\": "lib/Elastica/",
+                    "Elastica\\Test\\": "test/lib/Elastica/Test/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1961,27 +2016,31 @@
             ],
             "authors": [
                 {
-                    "name": "Rob Loach",
-                    "email": "robloach@gmail.com",
-                    "homepage": "http://robloach.net"
+                    "name": "Nicolas Ruflin",
+                    "homepage": "http://ruflin.com/"
                 }
             ],
-            "description": "Allows installation of Components via Composer.",
-            "time": "2013-08-31 23:46:48"
+            "description": "Elasticsearch Client",
+            "homepage": "http://elastica.io/",
+            "keywords": [
+                "client",
+                "search"
+            ],
+            "time": "2015-02-17 19:57:36"
         },
         {
             "name": "sensio/distribution-bundle",
-            "version": "v3.0.21",
+            "version": "v3.0.22",
             "target-dir": "Sensio/Bundle/DistributionBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
-                "reference": "da23c78093676a823a1ff43a214987ea3fbf83c8"
+                "reference": "0fe4ec86db57c232becb694e01cdabe3c4d9af7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/da23c78093676a823a1ff43a214987ea3fbf83c8",
-                "reference": "da23c78093676a823a1ff43a214987ea3fbf83c8",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/0fe4ec86db57c232becb694e01cdabe3c4d9af7c",
+                "reference": "0fe4ec86db57c232becb694e01cdabe3c4d9af7c",
                 "shasum": ""
             },
             "require": {
@@ -2027,7 +2086,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2015-04-10 06:20:46"
+            "time": "2015-05-02 16:23:08"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -2183,12 +2242,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "b98f7273972886e7b89e5cbc7943ed2317839825"
+                "reference": "dd1ef418b845b6dd169a95c712f643f7b656abeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/b98f7273972886e7b89e5cbc7943ed2317839825",
-                "reference": "b98f7273972886e7b89e5cbc7943ed2317839825",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/dd1ef418b845b6dd169a95c712f643f7b656abeb",
+                "reference": "dd1ef418b845b6dd169a95c712f643f7b656abeb",
                 "shasum": ""
             },
             "require": {
@@ -2259,7 +2318,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2015-04-24 11:45:19"
+            "time": "2015-05-03 09:16:21"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -3073,12 +3132,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataUserBundle.git",
-                "reference": "34a9a7f1020daba1b292ceab2379a762ef167b46"
+                "reference": "65558a80d0b8268d27bc811b40fa2c2cbd315d99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataUserBundle/zipball/34a9a7f1020daba1b292ceab2379a762ef167b46",
-                "reference": "34a9a7f1020daba1b292ceab2379a762ef167b46",
+                "url": "https://api.github.com/repos/sonata-project/SonataUserBundle/zipball/65558a80d0b8268d27bc811b40fa2c2cbd315d99",
+                "reference": "65558a80d0b8268d27bc811b40fa2c2cbd315d99",
                 "shasum": ""
             },
             "require": {
@@ -3138,7 +3197,7 @@
                 "sonata",
                 "user"
             ],
-            "time": "2015-04-20 21:23:21"
+            "time": "2015-04-27 14:57:54"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4198,12 +4257,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zf1/zend-exception.git",
-                "reference": "ee61f139d1ad7070c1ff4d0f4bd7ccd441172f11"
+                "reference": "ca30959d3e2f522f481a3d1459386acf1aa4ca74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zf1/zend-exception/zipball/ee61f139d1ad7070c1ff4d0f4bd7ccd441172f11",
-                "reference": "ee61f139d1ad7070c1ff4d0f4bd7ccd441172f11",
+                "url": "https://api.github.com/repos/zf1/zend-exception/zipball/ca30959d3e2f522f481a3d1459386acf1aa4ca74",
+                "reference": "ca30959d3e2f522f481a3d1459386acf1aa4ca74",
                 "shasum": ""
             },
             "require": {
@@ -4227,7 +4286,7 @@
                 "framework",
                 "zend"
             ],
-            "time": "2014-05-21 15:17:51"
+            "time": "2015-04-30 11:10:20"
         },
         {
             "name": "zf1/zend-loader",
@@ -4235,12 +4294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zf1/zend-loader.git",
-                "reference": "433adcc69b7c6517495d137f7733983bb2399301"
+                "reference": "42c49c862bf095bdd64e9f1728cb04051c2c2abe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zf1/zend-loader/zipball/433adcc69b7c6517495d137f7733983bb2399301",
-                "reference": "433adcc69b7c6517495d137f7733983bb2399301",
+                "url": "https://api.github.com/repos/zf1/zend-loader/zipball/42c49c862bf095bdd64e9f1728cb04051c2c2abe",
+                "reference": "42c49c862bf095bdd64e9f1728cb04051c2c2abe",
                 "shasum": ""
             },
             "require": {
@@ -4265,7 +4324,7 @@
                 "loader",
                 "zend"
             ],
-            "time": "2014-05-21 16:06:11"
+            "time": "2015-04-30 11:07:31"
         },
         {
             "name": "zf1/zend-search",
@@ -4273,12 +4332,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zf1/zend-search.git",
-                "reference": "0a9f471d0611694ccc82a6d8c963bcf58aef9842"
+                "reference": "c966e380667e02f83bf0806132e9cf392831930b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zf1/zend-search/zipball/0a9f471d0611694ccc82a6d8c963bcf58aef9842",
-                "reference": "0a9f471d0611694ccc82a6d8c963bcf58aef9842",
+                "url": "https://api.github.com/repos/zf1/zend-search/zipball/c966e380667e02f83bf0806132e9cf392831930b",
+                "reference": "c966e380667e02f83bf0806132e9cf392831930b",
                 "shasum": ""
             },
             "require": {
@@ -4303,7 +4362,7 @@
                 "search",
                 "zend"
             ],
-            "time": "2014-05-21 15:17:49"
+            "time": "2015-04-30 11:08:53"
         },
         {
             "name": "zf1/zend-search-lucene",
@@ -4311,12 +4370,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zf1/zend-search-lucene.git",
-                "reference": "aceee80a4b7c197f7fa573a77e84cd55e7f30a43"
+                "reference": "6427a633388186ae855b2e6f41d5d0fbf4454dab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zf1/zend-search-lucene/zipball/aceee80a4b7c197f7fa573a77e84cd55e7f30a43",
-                "reference": "aceee80a4b7c197f7fa573a77e84cd55e7f30a43",
+                "url": "https://api.github.com/repos/zf1/zend-search-lucene/zipball/6427a633388186ae855b2e6f41d5d0fbf4454dab",
+                "reference": "6427a633388186ae855b2e6f41d5d0fbf4454dab",
                 "shasum": ""
             },
             "require": {
@@ -4344,7 +4403,7 @@
                 "search",
                 "zend"
             ],
-            "time": "2014-05-21 15:17:49"
+            "time": "2015-04-30 11:08:58"
         },
         {
             "name": "zf1/zend-xml",
@@ -4352,12 +4411,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zf1/zend-xml.git",
-                "reference": "3e8f39d963283ee1e97455a26f3736856095a9b5"
+                "reference": "330ca342f69ad446b874158acc9b90dc43d9bbaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zf1/zend-xml/zipball/3e8f39d963283ee1e97455a26f3736856095a9b5",
-                "reference": "3e8f39d963283ee1e97455a26f3736856095a9b5",
+                "url": "https://api.github.com/repos/zf1/zend-xml/zipball/330ca342f69ad446b874158acc9b90dc43d9bbaa",
+                "reference": "330ca342f69ad446b874158acc9b90dc43d9bbaa",
                 "shasum": ""
             },
             "require": {
@@ -4382,7 +4441,7 @@
                 "xml",
                 "zend"
             ],
-            "time": "2014-08-27 14:35:56"
+            "time": "2015-04-30 11:12:33"
         }
     ],
     "packages-dev": [
@@ -4491,16 +4550,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "1.4.0",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "8724cd239f8ef4c046f55a3b18b4d91cc7f3e4c5"
+                "reference": "3132b1f44c7bf2ec4c7eb2d3cb78fdeca760d373"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/8724cd239f8ef4c046f55a3b18b4d91cc7f3e4c5",
-                "reference": "8724cd239f8ef4c046f55a3b18b4d91cc7f3e4c5",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/3132b1f44c7bf2ec4c7eb2d3cb78fdeca760d373",
+                "reference": "3132b1f44c7bf2ec4c7eb2d3cb78fdeca760d373",
                 "shasum": ""
             },
             "require": {
@@ -4547,7 +4606,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2015-03-27 19:31:25"
+            "time": "2015-04-27 22:15:08"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -4797,16 +4856,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.6.4",
+            "version": "4.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "163232991e652e6efed2f8470326fffa61e848e2"
+                "reference": "3afe303d873a4d64c62ef84de491b97b006fbdac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/163232991e652e6efed2f8470326fffa61e848e2",
-                "reference": "163232991e652e6efed2f8470326fffa61e848e2",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3afe303d873a4d64c62ef84de491b97b006fbdac",
+                "reference": "3afe303d873a4d64c62ef84de491b97b006fbdac",
                 "shasum": ""
             },
             "require": {
@@ -4865,7 +4924,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-04-11 05:23:21"
+            "time": "2015-04-29 15:18:52"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -5377,7 +5436,8 @@
         "zf1/zend-search": 20,
         "zf1/zend-xml": 20,
         "zf1/zend-loader": 20,
-        "zf1/zend-search-lucene": 20
+        "zf1/zend-search-lucene": 20,
+        "friendsofsymfony/elastica-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
