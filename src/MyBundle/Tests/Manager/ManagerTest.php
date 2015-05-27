@@ -18,6 +18,16 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
     private $redis;
 
     /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function mockRedis()
+    {
+        return $this->getMockBuilder(\Redis::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
      * @return \Redis
      */
     private function getRedis()
@@ -64,7 +74,7 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockedRepository()
+    private function mockRepository()
     {
         return $this
             ->getMockBuilder(JobRepository::class)
@@ -75,7 +85,7 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockedEntityManager()
+    private function mockEntityManager()
     {
         return $this
             ->getMockBuilder(EntityManager::class)
@@ -86,7 +96,7 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockedConnection()
+    private function mockConnection()
     {
         return $this
             ->getMockBuilder(Connection::class)
@@ -99,8 +109,8 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
         $genericJobs = iterator_to_array($this->getGenericJobs());
         $expectedJobs = $genericJobs;
 
-        $jobRepository = $this->getMockedRepository();
-        $entityManager = $this->getMockedEntityManager();
+        $jobRepository = $this->mockRepository();
+        $entityManager = $this->mockEntityManager();
 
         $jobRepository->expects($this->once())
             ->method('findAll')
@@ -110,9 +120,19 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getRepository')
             ->will($this->returnValue($jobRepository));
 
+        /*
+         // TODO: WTF?
+        $redis = $this->mockRedis();
+        $redis->expects($this->any())
+            ->method('set');
+        $redis->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue(""));
+        */
+
         /** @var EntityManager $entityManager */
         $databaseManager = new Manager($entityManager,
-            new CacheDriverRedis($this->getRedis(), ['host' => 'localhost', 'port' => '11211']),
+            new CacheDriverRedis($this->getRedis(), ['host' => 'localhost', 'port' => '6379']),
             Job::class,
             JobRepository::class);
 
@@ -124,20 +144,20 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testPushToDatabaseMethod()
     {
-        $entityManager = $this->getMockedEntityManager();
-        $connection = $this->getMockedConnection();
+        $entityManager = $this->mockEntityManager();
+        $connection = $this->mockConnection();
 
         $entityManager->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($connection));
         $entityManager->expects($this->exactly(10))
             ->method('persist');
-        $entityManager->expects($this->exactly(4))
+        $entityManager->expects($this->exactly(14))
             ->method('flush');
 
         /** @var EntityManager $entityManager */
         $manager = new Manager($entityManager,
-            new CacheDriverRedis($this->getRedis(), ['host' => 'localhost', 'port' => '11211']),
+            new CacheDriverRedis($this->getRedis(), ['host' => 'localhost', 'port' => '6379']),
             Job::class,
             JobRepository::class);
         $manager->setFlushInterval(3);
@@ -152,8 +172,8 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
     public function testPushToDatabaseMethodThrowsException()
     {
         $this->setExpectedException("Exception");
-        $connection = $this->getMockedConnection();
-        $entityManager = $this->getMockedEntityManager();
+        $connection = $this->mockConnection();
+        $entityManager = $this->mockEntityManager();
 
         $connection->expects($this->once())
             ->method('commit')
@@ -165,7 +185,7 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
 
         /** @var EntityManager $entityManager */
         $manager = new Manager($entityManager,
-            new CacheDriverRedis($this->getRedis(), ['host' => 'localhost', 'port' => '11211']),
+            new CacheDriverRedis($this->getRedis(), ['host' => 'localhost', 'port' => '6379']),
             Job::class,
             JobRepository::class);
         $jobs = iterator_to_array($this->getGenericJobs());
@@ -174,10 +194,11 @@ class DatabaseManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGettingAndSettingFlushInterval()
     {
-        $entityManager = $this->getMockedEntityManager();
+        $entityManager = $this->mockEntityManager();
         /** @var EntityManager $entityManager */
+
         $manager = new Manager($entityManager,
-            new CacheDriverRedis($this->getRedis(), ['host' => 'localhost', 'port' => '11211']),
+            new CacheDriverRedis($this->getRedis(), ['host' => 'localhost', 'port' => '6379']),
             Job::class,
             JobRepository::class);
 

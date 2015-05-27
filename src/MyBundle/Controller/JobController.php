@@ -2,6 +2,7 @@
 
 namespace MyBundle\Controller;
 
+use Doctrine\Entity;
 use Monolog\Handler\ElasticSearchHandler;
 use MyBundle\Entity\Category;
 use MyBundle\Form\JobSearchType;
@@ -9,6 +10,9 @@ use MyBundle\Model\ElasticJobSearch;
 use MyBundle\Manager\JobManager;
 use MyBundle\Provider\CategoryProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +45,7 @@ class JobController extends Controller
     private $templating;
 
     /**
-     * @var \Symfony\Bundle\FrameworkBundle\Routing\Router
+     * @var Router
      */
     private $router;
 
@@ -115,7 +119,7 @@ class JobController extends Controller
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function createAction()
     {
@@ -125,7 +129,7 @@ class JobController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            /** @var \Doctrine\Entity $entity */
+            /** @var Entity $entity */
             $this->jobManager->save($entity);
             /** @var Job $entity */
             return $this->redirect($this->router->generate('ens_job_preview', array(
@@ -159,7 +163,7 @@ class JobController extends Controller
 
     /**
      * @param $id
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function showAction($id)
     {
@@ -192,7 +196,7 @@ class JobController extends Controller
 
     /**
      * @param Token $token
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function editAction($token)
     {
@@ -220,7 +224,7 @@ class JobController extends Controller
 
     /**
      * @param $token
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function updateAction($token)
     {
@@ -237,7 +241,7 @@ class JobController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            /** @var \Doctrine\Entity $entity */
+            /** @var Entity $entity */
             $this->jobManager->save($entity);
             /** @var Job $entity */
             return $this->redirect($this->router->generate('ens_job_preview', array(
@@ -258,7 +262,7 @@ class JobController extends Controller
 
     /**
      * @param $token
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function deleteAction($token)
     {
@@ -281,7 +285,7 @@ class JobController extends Controller
 
     /**
      * @param $token
-     * @return \Symfony\Component\Form\Form
+     * @return Form
      */
     private function createGenericForm($token)
     {
@@ -291,7 +295,7 @@ class JobController extends Controller
 
     /**
      * @param $token
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function previewAction($token)
     {
@@ -316,7 +320,7 @@ class JobController extends Controller
 
     /**
      * @param $token
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function publishAction($token)
     {
@@ -334,7 +338,7 @@ class JobController extends Controller
             }
 
             $entity->publish();
-            /** @var \Doctrine\Entity $entity */
+            /** @var Entity $entity */
             $this->jobManager->save($entity);
         }
 
@@ -348,7 +352,7 @@ class JobController extends Controller
 
     /**
      * @param $token
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function extendAction($token)
     {
@@ -367,7 +371,7 @@ class JobController extends Controller
             if (!$entity->extend()) {
                 throw $this->createNotFoundException('Unable to extend the Job.');
             }
-            /** @var \Doctrine\Entity $entity */
+            /** @var Entity $entity */
             $this->jobManager->save($entity);
             /** @var Job $entity */
         }
@@ -382,7 +386,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function searchAction(Request $request)
     {
