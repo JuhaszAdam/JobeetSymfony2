@@ -191,7 +191,7 @@ class JobController extends Controller
     }
 
     /**
-     * @param Token $token
+     * @param string $token
      * @return Response
      */
     public function editAction($token)
@@ -220,7 +220,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @param Token   $token
+     * @param string  $token
      * @return RedirectResponse|Response
      * @throws \Exception
      */
@@ -261,7 +261,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @param Token   $token
+     * @param string  $token
      * @return RedirectResponse
      * @throws \Exception
      */
@@ -277,6 +277,7 @@ class JobController extends Controller
                 throw $this->createNotFoundException('Unable to find Job entity.');
             }
 
+            /** @var Entity $entity */
             $this->jobManager->remove($entity);
         }
 
@@ -284,7 +285,7 @@ class JobController extends Controller
     }
 
     /**
-     * @param Token $token
+     * @param string $token
      * @return Form
      */
     private function createGenericForm($token)
@@ -294,7 +295,7 @@ class JobController extends Controller
     }
 
     /**
-     * @param Token $token
+     * @param string $token
      * @return Response
      */
     public function previewAction($token)
@@ -320,7 +321,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @param Token   $token
+     * @param string  $token
      * @return RedirectResponse
      * @throws \Exception
      */
@@ -353,7 +354,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @param Token   $token
+     * @param string  $token
      * @return RedirectResponse
      * @throws \Exception
      */
