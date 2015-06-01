@@ -3,7 +3,7 @@
 namespace MyBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Templating\EngineInterface;
@@ -16,27 +16,19 @@ class DefaultController extends Controller
     private $templating;
 
     /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
      * @var int
      */
     private $jobsPerCategory;
 
     /**
      * @param EngineInterface $templating
-     * @param RequestStack    $requestStack
      * @param int             $jobsPerCategory
      */
     public function __construct(
         EngineInterface $templating,
-        RequestStack $requestStack,
         $jobsPerCategory)
     {
         $this->templating = $templating;
-        $this->requestStack = $requestStack;
         $this->jobsPerCategory = $jobsPerCategory;
     }
 
@@ -50,11 +42,11 @@ class DefaultController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return Response
      */
-    public function loginAction()
+    public function loginAction(Request $request)
     {
-        $request = $this->requestStack->getCurrentRequest();
         $session = $request->getSession();
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
@@ -66,7 +58,7 @@ class DefaultController extends Controller
 
         return $this->render('MyBundle:Default:login.html.twig', [
             'last_username' => $session->get(SecurityContext::LAST_USERNAME),
-            'error'         => $error,
+            'error' => $error,
         ]);
     }
 }

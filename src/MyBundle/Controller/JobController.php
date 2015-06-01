@@ -14,7 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Templating\EngineInterface;
@@ -50,11 +49,6 @@ class JobController extends Controller
     private $router;
 
     /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
      * @var int
      */
     private $maxJobsOnPage;
@@ -70,7 +64,6 @@ class JobController extends Controller
      * @param FormFactory      $formFactory
      * @param EngineInterface  $templating
      * @param Router           $router
-     * @param RequestStack     $requestStack
      * @param int              $maxJobsOnPage
      * @param int              $maxCategoriesOnPage
      */
@@ -80,7 +73,6 @@ class JobController extends Controller
         FormFactory $formFactory,
         EngineInterface $templating,
         Router $router,
-        RequestStack $requestStack,
         $maxJobsOnPage,
         $maxCategoriesOnPage
     )
@@ -90,15 +82,15 @@ class JobController extends Controller
         $this->formFactory = $formFactory;
         $this->templating = $templating;
         $this->router = $router;
-        $this->requestStack = $requestStack;
         $this->maxJobsOnPage = $maxJobsOnPage;
         $this->maxCategoriesOnPage = $maxCategoriesOnPage;
     }
 
     /**
+     * @param Request $request
      * @return Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $categories = $this->categoryProvider->getWithJobs();
 
@@ -109,22 +101,23 @@ class JobController extends Controller
                 - $this->maxJobsOnPage);
         }
 
-        $format = $this->requestStack->getCurrentRequest()->getRequestFormat();
+        $format = $request->getRequestFormat();
 
         return new Response($this->templating->render('MyBundle:Job:index.' . $format . '.twig', [
-            'categories'  => $categories,
+            'categories' => $categories,
             'lastUpdated' => $this->jobManager->getLatestPost()->getCreatedAt()->format(DATE_ATOM),
-            'feedId'      => sha1($this->router->generate('ens_job', ['_format' => 'atom'], true)),
+            'feedId' => sha1($this->router->generate('ens_job', ['_format' => 'atom'], true)),
         ]));
     }
 
     /**
+     * @param Request $request
      * @return RedirectResponse|Response
+     * @throws \Exception
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $entity = new Job();
-        $request = $this->requestStack->getCurrentRequest();
         $form = $this->formFactory->create(new JobType(), $entity);
         $form->handleRequest($request);
 
@@ -135,16 +128,16 @@ class JobController extends Controller
             /** @var Job $entity */
 
             return $this->redirect($this->router->generate('ens_job_preview', [
-                'company'  => $entity->getCompanySlug(),
+                'company' => $entity->getCompanySlug(),
                 'location' => $entity->getLocationSlug(),
-                'token'    => $entity->getToken(),
+                'token' => $entity->getToken(),
                 'position' => $entity->getPositionSlug()
             ]));
         }
 
         return new Response($this->templating->render('MyBundle:Job:new.html.twig', [
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         ]));
     }
 
@@ -159,15 +152,16 @@ class JobController extends Controller
 
         return new Response($this->templating->render('MyBundle:Job:new.html.twig', [
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         ]));
     }
 
     /**
+     * @param Request    $request
      * @param int|string $id
      * @return Response
      */
-    public function showAction($id)
+    public function showAction($id, Request $request)
     {
 
         $entity = $this->jobManager->getActiveJob($id);
@@ -176,11 +170,11 @@ class JobController extends Controller
             throw $this->createNotFoundException('Unable to find Job entity.');
         }
 
-        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $session = $request->getSession();
         $jobs = $session->get('job_history', []);
-        $job = ['id'           => $entity->getId(), 'position' => $entity->getPosition(), 'company' => $entity->getCompany(),
-                'companyslug'  => $entity->getCompanySlug(), 'locationslug' => $entity->getLocationSlug(),
-                'positionslug' => $entity->getPositionSlug()];
+        $job = ['id' => $entity->getId(), 'position' => $entity->getPosition(), 'company' => $entity->getCompany(),
+            'companyslug' => $entity->getCompanySlug(), 'locationslug' => $entity->getLocationSlug(),
+            'positionslug' => $entity->getPositionSlug()];
 
         if (!in_array($job, $jobs)) {
             array_unshift($jobs, $job);
@@ -191,7 +185,7 @@ class JobController extends Controller
         $deleteForm = $this->createGenericForm($id);
 
         return new Response($this->templating->render('MyBundle:Job:show.html.twig', [
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         ]));
     }
@@ -200,7 +194,7 @@ class JobController extends Controller
      * @param Token $token
      * @return Response
      */
-    public function editAction(Token $token)
+    public function editAction($token)
     {
         /** @var Job $entity */
         $entity = $this->jobManager->findOneByToken($token);
@@ -218,17 +212,19 @@ class JobController extends Controller
         $deleteForm = $this->createGenericForm($token);
 
         return new Response($this->templating->render('MyBundle:Job:edit.html.twig', [
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ]));
     }
 
     /**
-     * @param $token
+     * @param Request $request
+     * @param Token   $token
      * @return RedirectResponse|Response
+     * @throws \Exception
      */
-    public function updateAction(Token $token)
+    public function updateAction($token, Request $request)
     {
         /** @var Job $entity */
         $entity = $this->jobManager->findOneByToken($token);
@@ -238,7 +234,6 @@ class JobController extends Controller
         }
 
         $editForm = $this->formFactory->create(new JobType(), $entity);
-        $request = $this->requestStack->getCurrentRequest();
 
         $editForm->handleRequest($request);
 
@@ -249,29 +244,30 @@ class JobController extends Controller
             /** @var Job $entity */
 
             return $this->redirect($this->router->generate('ens_job_preview', [
-                'company'  => $entity->getCompanySlug(),
+                'company' => $entity->getCompanySlug(),
                 'location' => $entity->getLocationSlug(),
-                'token'    => $entity->getToken(),
+                'token' => $entity->getToken(),
                 'position' => $entity->getPositionSlug()
             ]));
         }
 
         return $this->redirect($this->router->generate('ens_job_preview', [
-            'company'  => $entity->getCompanySlug(),
+            'company' => $entity->getCompanySlug(),
             'location' => $entity->getLocationSlug(),
-            'token'    => $entity->getToken(),
+            'token' => $entity->getToken(),
             'position' => $entity->getPositionSlug()
         ]));
     }
 
     /**
-     * @param $token
+     * @param Request $request
+     * @param Token   $token
      * @return RedirectResponse
+     * @throws \Exception
      */
-    public function deleteAction(Token $token)
+    public function deleteAction($token, Request $request)
     {
         $form = $this->createGenericForm($token);
-        $request = $this->requestStack->getCurrentRequest();
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -288,20 +284,20 @@ class JobController extends Controller
     }
 
     /**
-     * @param $token
+     * @param Token $token
      * @return Form
      */
-    private function createGenericForm(Token $token)
+    private function createGenericForm($token)
     {
         return $this->formFactory->create('form', ['token' => $token])
             ->add('token', 'hidden');
     }
 
     /**
-     * @param $token
+     * @param Token $token
      * @return Response
      */
-    public function previewAction(Token $token)
+    public function previewAction($token)
     {
         /** @var Job $entity */
         $entity = $this->jobManager->findOneByToken($token);
@@ -315,23 +311,24 @@ class JobController extends Controller
         $extendForm = $this->createGenericForm($entity->getToken());
 
         return new Response($this->templating->render('MyBundle:Job:show.html.twig', [
-            'entity'       => $entity,
-            'delete_form'  => $deleteForm->createView(),
+            'entity' => $entity,
+            'delete_form' => $deleteForm->createView(),
             'publish_form' => $publishForm->createView(),
-            'extend_form'  => $extendForm->createView(),
+            'extend_form' => $extendForm->createView(),
         ]));
     }
 
     /**
-     * @param $token
+     * @param Request $request
+     * @param Token   $token
      * @return RedirectResponse
+     * @throws \Exception
      */
-    public function publishAction(Token $token)
+    public function publishAction($token, Request $request)
     {
         /** @var Job $entity */
 
         $form = $this->createGenericForm($token);
-        $request = $this->requestStack->getCurrentRequest();
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -347,21 +344,22 @@ class JobController extends Controller
         }
 
         return $this->redirect($this->router->generate('ens_job_preview', [
-            'company'  => $entity->getCompanySlug(),
+            'company' => $entity->getCompanySlug(),
             'location' => $entity->getLocationSlug(),
-            'token'    => $entity->getToken(),
+            'token' => $entity->getToken(),
             'position' => $entity->getPositionSlug()
         ]));
     }
 
     /**
-     * @param $token
+     * @param Request $request
+     * @param Token   $token
      * @return RedirectResponse
+     * @throws \Exception
      */
-    public function extendAction(Token $token)
+    public function extendAction($token, Request $request)
     {
         $form = $this->createGenericForm($token);
-        $request = $this->requestStack->getCurrentRequest();
         $form->handleRequest($request);
         /** @var Job $entity */
 
@@ -382,9 +380,9 @@ class JobController extends Controller
         $entity = null;
 
         return $this->redirect($this->router->generate('ens_job_preview', [
-            'company'  => $entity->getCompanySlug(),
+            'company' => $entity->getCompanySlug(),
             'location' => $entity->getLocationSlug(),
-            'token'    => $entity->getToken(),
+            'token' => $entity->getToken(),
             'position' => $entity->getPositionSlug()
         ]));
     }
@@ -393,10 +391,10 @@ class JobController extends Controller
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function searchAction(Request $request)
+    public function searchAction(Request $request, Request $request)
     {
         $jobSearch = new ElasticJobSearch;
-        $query = $this->requestStack->getCurrentRequest()->get('query');
+        $query = $request->get('query');
 
         $jobSearchForm = $this->formFactory
             ->createNamed(
@@ -416,7 +414,7 @@ class JobController extends Controller
 
         /** @var ElasticJobSearch $jobSearch */
         $jobs = $this->jobManager->findBy([
-            "company"      => $jobSearch->getCompany(),
+            "company" => $jobSearch->getCompany(),
             "is_activated" => $jobSearch->isActivated()
         ]);
 

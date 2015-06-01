@@ -17,6 +17,7 @@ EnsJobeetBundle_homepage:
 EnsJobeetBundle_category:
     pattern: /category/{slug}/{page}
     defaults: { _controller: mybundle.controller.category_controller:showAction, page: 1  }
+    requirements: { _method: get }
 
 ens_job_edit:
     pattern:  /{token}/edit

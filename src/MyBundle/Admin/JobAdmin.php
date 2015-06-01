@@ -17,7 +17,7 @@ class JobAdmin extends Admin
      */
     protected $datagridValues = [
         '_sort_order' => 'DESC',
-        '_sort_by'    => 'created_at'
+        '_sort_by' => 'created_at'
     ];
 
     /**
@@ -72,8 +72,8 @@ class JobAdmin extends Admin
             ->add('expires_at')
             ->add('_action', 'actions', [
                 'actions' => [
-                    'view'   => [],
-                    'edit'   => [],
+                    'view' => [],
+                    'edit' => [],
                     'delete' => [],
                 ]
             ]);
@@ -114,12 +114,12 @@ class JobAdmin extends Admin
             $this->isGranted('DELETE')
         ) {
             $actions['extend'] = [
-                'label'            => 'Extend',
+                'label' => 'Extend',
                 'ask_confirmation' => true
             ];
 
             $actions['deleteNeverActivated'] = [
-                'label'            => 'Delete never activated jobs',
+                'label' => 'Delete never activated jobs',
                 'ask_confirmation' => true
             ];
         }

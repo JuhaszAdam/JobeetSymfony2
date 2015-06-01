@@ -6,6 +6,7 @@ use MyBundle\Provider\CategoryProvider;
 use MyBundle\Provider\JobProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +17,6 @@ class CategoryController extends Controller
      * @var EngineInterface
      */
     private $templating;
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
 
     /**
      * @var JobProvider $jobProvider
@@ -44,7 +40,6 @@ class CategoryController extends Controller
 
     /**
      * @param EngineInterface  $templating
-     * @param RequestStack     $requestStack
      * @param JobProvider      $jobProvider
      * @param CategoryProvider $categoryProvider
      * @param Router           $router
@@ -52,14 +47,12 @@ class CategoryController extends Controller
      */
     public function __construct(
         EngineInterface $templating,
-        RequestStack $requestStack,
         JobProvider $jobProvider,
         CategoryProvider $categoryProvider,
         Router $router,
         $jobsPerCategory)
     {
         $this->templating = $templating;
-        $this->requestStack = $requestStack;
         $this->jobProvider = $jobProvider;
         $this->categoryProvider = $categoryProvider;
         $this->router = $router;
@@ -67,11 +60,12 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param string $slug
-     * @param int    $page
+     * @param Request $request
+     * @param string  $slug
+     * @param int     $page
      * @return Response
      */
-    public function showAction($slug, $page)
+    public function showAction(Request $request, $slug, $page)
     {
         $category = $this->categoryProvider->findOneBySlug($slug);
 
@@ -88,16 +82,16 @@ class CategoryController extends Controller
         $category->setActiveJobs($this->jobProvider->getActiveJobs(
             $category->getId(), $jobs_per_page, ($page - 1) * $jobs_per_page));
 
-        $format = $this->requestStack->getCurrentRequest()->getRequestFormat();
+        $format = $request->getRequestFormat();
 
         return new Response($this->templating->render('MyBundle:Category:show.' . $format . '.twig', [
-            'category'      => $category,
-            'last_page'     => $last_page,
+            'category' => $category,
+            'last_page' => $last_page,
             'previous_page' => $previous_page,
-            'current_page'  => $page,
-            'next_page'     => $next_page,
-            'total_jobs'    => $total_jobs,
-            'feedId'        => sha1($this->router->generate('EnsJobeetBundle_category',
+            'current_page' => $page,
+            'next_page' => $next_page,
+            'total_jobs' => $total_jobs,
+            'feedId' => sha1($this->router->generate('EnsJobeetBundle_category',
                 ['slug' => $category->getSlug(), '_format' => 'atom'], true)),
         ]));
     }

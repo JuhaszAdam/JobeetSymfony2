@@ -72,10 +72,10 @@ class ApiController extends Controller
         /** @var Job $job */
         foreach ($active_jobs as $job) {
             $jobs[$this->router->generate('ens_job_show',
-                ['company'  => $job->getCompanySlug(),
-                 'location' => $job->getLocationSlug(),
-                 'id'       => $job->getId(),
-                 'position' => $job->getPositionSlug()],
+                ['company' => $job->getCompanySlug(),
+                    'location' => $job->getLocationSlug(),
+                    'id' => $job->getId(),
+                    'position' => $job->getPositionSlug()],
                 true)] = $job->asArray($request->getHost());
         }
         $format = $request->getRequestFormat();

@@ -21,14 +21,14 @@ class JobSearchType extends AbstractType
             ])
             ->add('dateFrom', 'date', [
                 'required' => false,
-                'widget'   => 'single_text',
+                'widget' => 'single_text',
             ])
             ->add('dateTo', 'date', [
                 'required' => false,
-                'widget'   => 'single_text',
+                'widget' => 'single_text',
             ])
             ->add('is_activated', 'choice', [
-                'choices'  => ['false' => 'no', 'true' => 'yes'],
+                'choices' => ['false' => 'no', 'true' => 'yes'],
                 'required' => false,
             ])
             ->add('search', 'submit');
@@ -42,7 +42,7 @@ class JobSearchType extends AbstractType
         parent::setDefaultOptions($resolver);
         $resolver->setDefaults([
             'csrf_protection' => false,
-            'data_class'      => 'MyBundle\Model\ElasticJobSearch'
+            'data_class' => 'MyBundle\Model\ElasticJobSearch'
         ]);
     }
 

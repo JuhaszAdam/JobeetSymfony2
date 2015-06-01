@@ -64,7 +64,7 @@ class AffiliateController extends Controller
 
         return new Response($this->templating->render('MyBundle:Affiliate:affiliate_new.html.twig', [
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         ]));
     }
 
@@ -89,7 +89,7 @@ class AffiliateController extends Controller
 
         return new Response($this->templating->render('MyBundle:Affiliate:affiliate_new.html.twig', [
             'entity' => $affiliate,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         ]));
     }
 
