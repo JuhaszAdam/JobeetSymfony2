@@ -11,26 +11,26 @@ class JobSearchType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('company', null, array(
+            ->add('company', null, [
                 'required' => false,
-            ))
-            ->add('dateFrom', 'date', array(
+            ])
+            ->add('dateFrom', 'date', [
                 'required' => false,
-                'widget' => 'single_text',
-            ))
-            ->add('dateTo', 'date', array(
+                'widget'   => 'single_text',
+            ])
+            ->add('dateTo', 'date', [
                 'required' => false,
-                'widget' => 'single_text',
-            ))
-            ->add('is_activated', 'choice', array(
-                'choices' => array('false' => 'no', 'true' => 'yes'),
+                'widget'   => 'single_text',
+            ])
+            ->add('is_activated', 'choice', [
+                'choices'  => ['false' => 'no', 'true' => 'yes'],
                 'required' => false,
-            ))
+            ])
             ->add('search', 'submit');
     }
 
@@ -40,10 +40,10 @@ class JobSearchType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         parent::setDefaultOptions($resolver);
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'csrf_protection' => false,
-            'data_class' => 'MyBundle\Model\ElasticJobSearch'
-        ));
+            'data_class'      => 'MyBundle\Model\ElasticJobSearch'
+        ]);
     }
 
     /**

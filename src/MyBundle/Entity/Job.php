@@ -2,9 +2,13 @@
 
 namespace MyBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use MyBundle\Utils;
 use MyBundle\Utils\Jobeet;
+
+use FOS\ElasticaBundle\Configuration\Search;
+use Zend_Search_Lucene_Field;
 
 /**
  * @Search(repositoryClass="MyBundle\Repository\JobRepository")
@@ -82,25 +86,24 @@ class Job
     private $email;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     private $expires_at;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     private $created_at;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     private $updated_at;
 
     /**
-     * @var \MyBundle\Entity\Category
+     * @var Category
      */
     private $category;
-
 
     /**
      * @return integer
@@ -339,7 +342,7 @@ class Job
     }
 
     /**
-     * @param \DateTime $expiresAt
+     * @param DateTime $expiresAt
      * @return Job
      */
     public function setExpiresAt($expiresAt)
@@ -350,7 +353,7 @@ class Job
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getExpiresAt()
     {
@@ -358,7 +361,7 @@ class Job
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      * @return Job
      */
     public function setCreatedAt($createdAt)
@@ -369,7 +372,7 @@ class Job
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -377,7 +380,7 @@ class Job
     }
 
     /**
-     * @param \DateTime $updatedAt
+     * @param DateTime $updatedAt
      * @return Job
      */
     public function setUpdatedAt($updatedAt)
@@ -388,7 +391,7 @@ class Job
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
@@ -396,7 +399,7 @@ class Job
     }
 
     /**
-     * @param \MyBundle\Entity\Category $category
+     * @param Category $category
      * @return Job
      */
     public function setCategory(Category $category = null)
@@ -407,7 +410,7 @@ class Job
     }
 
     /**
-     * @return \MyBundle\Entity\Category
+     * @return Category
      */
     public function getCategory()
     {
@@ -452,7 +455,7 @@ class Job
     {
         if (!$this->getExpiresAt()) {
             $now = $this->getCreatedAt() ? $this->getCreatedAt()->format('U') : time();
-            $this->expires_at = new \DateTime(date('Y-m-d H:i:s', $now + 86400 * 30));
+            $this->expires_at = new DateTime(date('Y-m-d H:i:s', $now + 86400 * 30));
         }
     }
 
@@ -461,7 +464,7 @@ class Job
      */
     public static function getTypes()
     {
-        return array('full-time' => 'Full time', 'part-time' => 'Part time', 'freelance' => 'Freelance');
+        return ['full-time' => 'Full time', 'part-time' => 'Part time', 'freelance' => 'Freelance'];
     }
 
     /**
@@ -510,7 +513,7 @@ class Job
     public function preUpload()
     {
         if (null !== $this->file) {
-            $this->created_at = new \DateTime(date('Y-m-d H:i:s'));
+            $this->created_at = new DateTime(date('Y-m-d H:i:s'));
 
             $this->logo = uniqid() . '.' . $this->file->guessExtension();
         }
@@ -585,7 +588,7 @@ class Job
             return false;
         }
 
-        $this->expires_at = new \DateTime(date('Y-m-d H:i:s', time() + 86400 * 30));
+        $this->expires_at = new DateTime(date('Y-m-d H:i:s', time() + 86400 * 30));
 
         return true;
     }
@@ -596,18 +599,18 @@ class Job
      */
     public function asArray($host)
     {
-        return array(
-            'category' => $this->getCategory()->getName(),
-            'type' => $this->getType(),
-            'company' => $this->getCompany(),
-            'logo' => $this->getLogo() ? 'http://' . $host . '/uploads/jobs/' . $this->getLogo() : null,
-            'url' => $this->getUrl(),
-            'position' => $this->getPosition(),
-            'location' => $this->getLocation(),
-            'description' => $this->getDescription(),
+        return [
+            'category'     => $this->getCategory()->getName(),
+            'type'         => $this->getType(),
+            'company'      => $this->getCompany(),
+            'logo'         => $this->getLogo() ? 'http://' . $host . '/uploads/jobs/' . $this->getLogo() : null,
+            'url'          => $this->getUrl(),
+            'position'     => $this->getPosition(),
+            'location'     => $this->getLocation(),
+            'description'  => $this->getDescription(),
             'how_to_apply' => $this->getHowToApply(),
-            'expires_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-        );
+            'expires_at'   => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+        ];
     }
 
     /**
@@ -645,12 +648,12 @@ class Job
 
         $doc = new \Zend_Search_Lucene_Document();
 
-        $doc->addField(\Zend_Search_Lucene_Field::Keyword('pk', $this->getId()));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', $this->getId()));
 
-        $doc->addField(\Zend_Search_Lucene_Field::UnStored('position', $this->getPosition(), 'utf-8'));
-        $doc->addField(\Zend_Search_Lucene_Field::UnStored('company', $this->getCompany(), 'utf-8'));
-        $doc->addField(\Zend_Search_Lucene_Field::UnStored('location', $this->getLocation(), 'utf-8'));
-        $doc->addField(\Zend_Search_Lucene_Field::UnStored('description', $this->getDescription(), 'utf-8'));
+        $doc->addField(Zend_Search_Lucene_Field::UnStored('position', $this->getPosition(), 'utf-8'));
+        $doc->addField(Zend_Search_Lucene_Field::UnStored('company', $this->getCompany(), 'utf-8'));
+        $doc->addField(Zend_Search_Lucene_Field::UnStored('location', $this->getLocation(), 'utf-8'));
+        $doc->addField(Zend_Search_Lucene_Field::UnStored('description', $this->getDescription(), 'utf-8'));
 
         $index->addDocument($doc);
         $index->commit();

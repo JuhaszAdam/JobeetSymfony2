@@ -2,17 +2,21 @@
 
 namespace MyBundle\Manager;
 
+use Doctrine\ORM\NonUniqueResultException;
+use MyBundle\Entity\Job;
+
 class JobManager extends Manager implements ManagerInterface
 {
     /**
-     * @param null $category_id
-     * @param null $max
-     * @param null $offset
-     * @param null $affiliate_id
-     * @return array
+     * @param int|null        $category_id
+     * @param int|null        $max
+     * @param int|null        $offset
+     * @param int|string|null $affiliate_id
+     * @return Job[]
      */
     public function getActiveJobs($category_id = null, $max = null, $offset = null, $affiliate_id = null)
     {
+
         return $this->repository->getActiveJobs($category_id, $max, $offset, $affiliate_id);
     }
 
@@ -28,7 +32,7 @@ class JobManager extends Manager implements ManagerInterface
     /**
      * @param $id
      * @return mixed|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getActiveJob($id)
     {
@@ -37,7 +41,7 @@ class JobManager extends Manager implements ManagerInterface
 
     /**
      * @return mixed|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getLatestPost()
     {

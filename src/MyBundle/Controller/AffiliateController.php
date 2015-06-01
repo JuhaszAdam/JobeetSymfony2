@@ -32,17 +32,21 @@ class AffiliateController extends Controller
     private $templating;
 
     /**
-     * @var \Symfony\Bundle\FrameworkBundle\Routing\Router
+     * @var Router
      */
     private $router;
 
     /**
-     * @param Manager $manager
-     * @param FormFactory $formFactory
+     * @param Manager         $manager
+     * @param FormFactory     $formFactory
      * @param EngineInterface $templating
-     * @param Router $router
+     * @param Router          $router
      */
-    public function __construct($manager, $formFactory, $templating, $router)
+    public function __construct(
+        Manager $manager,
+        FormFactory $formFactory,
+        EngineInterface $templating,
+        Router $router)
     {
         $this->manager = $manager;
         $this->formFactory = $formFactory;
@@ -58,10 +62,10 @@ class AffiliateController extends Controller
         $entity = new Affiliate();
         $form = $this->formFactory->create(new AffiliateType(), $entity);
 
-        return new Response($this->templating->render('MyBundle:Affiliate:affiliate_new.html.twig', array(
+        return new Response($this->templating->render('MyBundle:Affiliate:affiliate_new.html.twig', [
             'entity' => $entity,
-            'form' => $form->createView(),
-        )));
+            'form'   => $form->createView(),
+        ]));
     }
 
     /**
@@ -83,14 +87,14 @@ class AffiliateController extends Controller
             return $this->redirect($this->router->generate('ens_affiliate_wait'));
         }
 
-        return new Response($this->templating->render('MyBundle:Affiliate:affiliate_new.html.twig', array(
+        return new Response($this->templating->render('MyBundle:Affiliate:affiliate_new.html.twig', [
             'entity' => $affiliate,
-            'form' => $form->createView(),
-        )));
+            'form'   => $form->createView(),
+        ]));
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function waitAction()
     {

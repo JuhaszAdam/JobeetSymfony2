@@ -15,18 +15,17 @@ class CategoryAffiliate
     private $id;
 
     /**
-     * @var \MyBundle\Entity\Category
+     * @var Category
      */
     private $category;
 
     /**
-     * @var \MyBundle\Entity\Affiliate
+     * @var Affiliate
      */
     private $affiliate;
 
-
     /**
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -34,10 +33,10 @@ class CategoryAffiliate
     }
 
     /**
-     * @param \MyBundle\Entity\Category $category
+     * @param Category $category
      * @return CategoryAffiliate
      */
-    public function setCategory(\MyBundle\Entity\Category $category = null)
+    public function setCategory(Category $category = null)
     {
         $this->category = $category;
 
@@ -45,7 +44,7 @@ class CategoryAffiliate
     }
 
     /**
-     * @return \MyBundle\Entity\Category 
+     * @return Category
      */
     public function getCategory()
     {
@@ -53,10 +52,10 @@ class CategoryAffiliate
     }
 
     /**
-     * @param \MyBundle\Entity\Affiliate $affiliate
+     * @param Affiliate $affiliate
      * @return CategoryAffiliate
      */
-    public function setAffiliate(\MyBundle\Entity\Affiliate $affiliate = null)
+    public function setAffiliate(Affiliate $affiliate = null)
     {
         $this->affiliate = $affiliate;
 
@@ -64,7 +63,7 @@ class CategoryAffiliate
     }
 
     /**
-     * @return \MyBundle\Entity\Affiliate 
+     * @return Affiliate
      */
     public function getAffiliate()
     {

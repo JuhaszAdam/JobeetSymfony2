@@ -2,17 +2,19 @@
 
 namespace MyBundle\Model;
 
+use DateTime;
+use MyBundle\Entity\Job;
 use Symfony\Component\HttpFoundation\Request;
 
 class ElasticJobSearch
 {
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $dateFrom;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $dateTo;
 
@@ -28,21 +30,21 @@ class ElasticJobSearch
 
     public function __construct()
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $month = new \DateInterval('P1Y');
         $date->sub($month);
         $date->setTime('00', '00', '00');
 
         $this->dateFrom = $date;
-        $this->dateTo = new \DateTime();
+        $this->dateTo = new DateTime();
         $this->dateTo->setTime('23', '59', '59');
     }
 
     /**
-     * @param \DateTime $dateFrom
+     * @param DateTime $dateFrom
      * @return $this
      */
-    public function setDateFrom(\DateTime $dateFrom)
+    public function setDateFrom(DateTime $dateFrom)
     {
         if ($dateFrom != "") {
             $dateFrom->setTime('00', '00', '00');
@@ -53,7 +55,7 @@ class ElasticJobSearch
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateFrom()
     {
@@ -61,10 +63,10 @@ class ElasticJobSearch
     }
 
     /**
-     * @param \DateTime $dateTo
+     * @param DateTime $dateTo
      * @return $this
      */
-    public function setDateTo(\DateTime $dateTo)
+    public function setDateTo(DateTime $dateTo)
     {
         if ($dateTo != "") {
             $dateTo->setTime('23', '59', '59');
@@ -81,7 +83,7 @@ class ElasticJobSearch
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateTo()
     {

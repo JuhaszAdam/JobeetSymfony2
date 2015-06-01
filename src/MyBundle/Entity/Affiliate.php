@@ -2,7 +2,11 @@
 
 namespace MyBundle\Entity;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use MyBundle\Entity\CategoryAffiliate;
 
 /**
  * Affiliate
@@ -30,12 +34,12 @@ class Affiliate
     private $token;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     private $created_at;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     private $category_affiliates;
 
@@ -49,7 +53,7 @@ class Affiliate
      */
     public function __construct()
     {
-        $this->category_affiliates = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->category_affiliates = new ArrayCollection();
     }
 
     /**
@@ -107,7 +111,7 @@ class Affiliate
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      * @return Affiliate
      */
     public function setCreatedAt($createdAt)
@@ -118,7 +122,7 @@ class Affiliate
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -126,10 +130,10 @@ class Affiliate
     }
 
     /**
-     * @param \MyBundle\Entity\CategoryAffiliate $categoryAffiliates
+     * @param CategoryAffiliate $categoryAffiliates
      * @return Affiliate
      */
-    public function addCategoryAffiliate(\MyBundle\Entity\CategoryAffiliate $categoryAffiliates)
+    public function addCategoryAffiliate(CategoryAffiliate $categoryAffiliates)
     {
         $this->category_affiliates[] = $categoryAffiliates;
 
@@ -137,15 +141,15 @@ class Affiliate
     }
 
     /**
-     * @param \MyBundle\Entity\CategoryAffiliate $categoryAffiliates
+     * @param CategoryAffiliate $categoryAffiliates
      */
-    public function removeCategoryAffiliate(\MyBundle\Entity\CategoryAffiliate $categoryAffiliates)
+    public function removeCategoryAffiliate(CategoryAffiliate $categoryAffiliates)
     {
         $this->category_affiliates->removeElement($categoryAffiliates);
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getCategoryAffiliates()
     {
@@ -198,7 +202,7 @@ class Affiliate
     }
 
     /**
-     * @param $a
+     * @param bool $isActive
      */
     public function setIsActive($isActive)
     {
@@ -206,10 +210,10 @@ class Affiliate
     }
 
     /**
-     * @param $c
+     * @param Category[] $categories
      */
-    public function setCategories($c)
+    public function setCategories(array $categories)
     {
-        $this->category_affiliates->add($c);
+        $this->category_affiliates->add($categories);
     }
 }

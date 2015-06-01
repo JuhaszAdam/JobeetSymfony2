@@ -3,7 +3,9 @@
 namespace MyBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use MyBundle\Entity\Category;
 use MyBundle\Entity\Job;
 
 class JobRepository extends EntityRepository
@@ -13,7 +15,7 @@ class JobRepository extends EntityRepository
      * @param null $max
      * @param null $offset
      * @param null $affiliate_id
-     * @return array
+     * @return Category[]
      */
     public function getActiveJobs($category_id = null, $max = null, $offset = null, $affiliate_id = null)
     {
@@ -75,7 +77,7 @@ class JobRepository extends EntityRepository
     /**
      * @param $id
      * @return mixed|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getActiveJob($id)
     {
@@ -115,7 +117,7 @@ class JobRepository extends EntityRepository
 
     /**
      * @return mixed|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getLatestPost()
     {
@@ -145,13 +147,13 @@ class JobRepository extends EntityRepository
     {
         $hits = Job::getLuceneIndex()->find($query);
 
-        $pks = array();
+        $pks = [];
         foreach ($hits as $hit) {
             $pks[] = $hit->pk;
         }
 
         if (empty($pks)) {
-            return array();
+            return [];
         }
 
         $q = $this->createQueryBuilder('j')

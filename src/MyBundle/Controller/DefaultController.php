@@ -4,6 +4,7 @@ namespace MyBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Templating\EngineInterface;
 
@@ -20,26 +21,36 @@ class DefaultController extends Controller
     private $requestStack;
 
     /**
-     * @param EngineInterface $templating
-     * @param RequestStack $requestStack
+     * @var int
      */
-    public function __construct($templating, $requestStack)
+    private $jobsPerCategory;
+
+    /**
+     * @param EngineInterface $templating
+     * @param RequestStack    $requestStack
+     * @param int             $jobsPerCategory
+     */
+    public function __construct(
+        EngineInterface $templating,
+        RequestStack $requestStack,
+        $jobsPerCategory)
     {
         $this->templating = $templating;
         $this->requestStack = $requestStack;
+        $this->jobsPerCategory = $jobsPerCategory;
     }
 
     /**
-     * @param $name
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param string $name
+     * @return Response
      */
     public function indexAction($name)
     {
-        return new Response($this->templating->render('MyBundle:Default:index.html.twig', array('name' => $name)));
+        return new Response($this->templating->render('MyBundle:Default:index.html.twig', ['name' => $name]));
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function loginAction()
     {
@@ -53,9 +64,9 @@ class DefaultController extends Controller
             $session->remove(SecurityContext::AUTHENTICATION_ERROR);
         }
 
-        return $this->render('MyBundle:Default:login.html.twig', array(
+        return $this->render('MyBundle:Default:login.html.twig', [
             'last_username' => $session->get(SecurityContext::LAST_USERNAME),
-            'error' => $error,
-        ));
+            'error'         => $error,
+        ]);
     }
 }
