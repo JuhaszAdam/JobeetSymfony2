@@ -2,6 +2,9 @@
 
 namespace MyBundle\Provider;
 
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+
 class CategoryAffiliateProvider extends AbstractProvider implements ProviderInterface
 {
     /**
@@ -15,8 +18,8 @@ class CategoryAffiliateProvider extends AbstractProvider implements ProviderInte
     /**
      * @param $token
      * @return mixed|null
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     public function getForToken($token)
     {

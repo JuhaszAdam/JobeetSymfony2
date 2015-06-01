@@ -4,6 +4,7 @@ namespace MyBundle\Admin;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Validator;
 use Sonata\AdminBundle\Form\FormMapper;
 use MyBundle\Entity\Job;
@@ -14,10 +15,10 @@ class JobAdmin extends Admin
     /**
      * @var array
      */
-    protected $datagridValues = array(
+    protected $datagridValues = [
         '_sort_order' => 'DESC',
-        '_sort_by' => 'created_at'
-    );
+        '_sort_by'    => 'created_at'
+    ];
 
     /**
      * @param FormMapper $formMapper
@@ -26,9 +27,9 @@ class JobAdmin extends Admin
     {
         $formMapper
             ->add('category')
-            ->add('type', 'choice', array('choices' => Job::getTypes(), 'expanded' => true))
+            ->add('type', 'choice', ['choices' => Job::getTypes(), 'expanded' => true])
             ->add('company')
-            ->add('file', 'file', array('label' => 'Company logo', 'required' => false))
+            ->add('file', 'file', ['label' => 'Company logo', 'required' => false])
             ->add('url')
             ->add('position')
             ->add('location')
@@ -69,13 +70,13 @@ class JobAdmin extends Admin
             ->add('email')
             ->add('category')
             ->add('expires_at')
-            ->add('_action', 'actions', array(
-                'actions' => array(
-                    'view' => array(),
-                    'edit' => array(),
-                    'delete' => array(),
-                )
-            ));
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'view'   => [],
+                    'edit'   => [],
+                    'delete' => [],
+                ]
+            ]);
     }
 
     /**
@@ -87,7 +88,7 @@ class JobAdmin extends Admin
             ->add('category')
             ->add('type')
             ->add('company')
-            ->add('webPath', 'string', array('template' => 'MyBundle:JobAdmin:list_image.html.twig'))
+            ->add('webPath', 'string', ['template' => 'MyBundle:JobAdmin:list_image.html.twig'])
             ->add('url')
             ->add('position')
             ->add('location')
@@ -112,15 +113,15 @@ class JobAdmin extends Admin
             $this->hasRoute('delete') &&
             $this->isGranted('DELETE')
         ) {
-            $actions['extend'] = array(
-                'label' => 'Extend',
+            $actions['extend'] = [
+                'label'            => 'Extend',
                 'ask_confirmation' => true
-            );
+            ];
 
-            $actions['deleteNeverActivated'] = array(
-                'label' => 'Delete never activated jobs',
+            $actions['deleteNeverActivated'] = [
+                'label'            => 'Delete never activated jobs',
                 'ask_confirmation' => true
-            );
+            ];
         }
 
         return $actions;

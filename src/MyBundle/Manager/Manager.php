@@ -2,9 +2,11 @@
 
 namespace MyBundle\Manager;
 
+use Doctrine\DBAL\ConnectionException;
 use Doctrine\Entity;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Exception;
 use MyBundle\CacheDriver\AbstractCacheDriver;
 
 class Manager implements ManagerInterface
@@ -40,10 +42,10 @@ class Manager implements ManagerInterface
     private $entityClassName;
 
     /**
-     * @param EntityManager $entityManager
+     * @param EntityManager       $entityManager
      * @param AbstractCacheDriver $cacheDriver
-     * @param String $classPath
-     * @param String $repositoryPath
+     * @param String              $classPath
+     * @param String              $repositoryPath
      */
     public function __construct(EntityManager $entityManager, AbstractCacheDriver $cacheDriver, $classPath, $repositoryPath)
     {
@@ -51,7 +53,6 @@ class Manager implements ManagerInterface
         $this->repository = $entityManager->getRepository($repositoryPath);
         $this->entityClassPath = $classPath;
         $this->cacheDriver = $cacheDriver;
-        // $this->entityClassName = array_pop(explode("\\", $classPath));
     }
 
     /**
@@ -90,7 +91,7 @@ class Manager implements ManagerInterface
             $this->entityManager->getConnection()->commit();
 
             $this->toCacheMultiple($saveList);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->entityManager->getConnection()->rollBack();
             throw $e;
         }
@@ -107,7 +108,7 @@ class Manager implements ManagerInterface
             $this->entityManager->persist($entity);
             $this->entityManager->flush();
             $this->entityManager->getConnection()->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->entityManager->getConnection()->rollBack();
             throw $e;
         }
@@ -115,8 +116,8 @@ class Manager implements ManagerInterface
 
     /**
      * @param array $saveList
-     * @param int $ttl
-     * @throws \Exception
+     * @param int   $ttl
+     * @throws Exception
      */
     private function toCacheMultiple($saveList, $ttl = 600)
     {
@@ -124,24 +125,24 @@ class Manager implements ManagerInterface
             foreach ($saveList as $entityToSave) {
                 $this->toCache($entityToSave, $ttl);
             }
-        } catch (\Exception $e) {
-            throw new \Exception("Exception thrown by the Cache Driver ( " . get_class($this->cacheDriver) . " )"
+        } catch (Exception $e) {
+            throw new Exception("Exception thrown by the Cache Driver ( " . get_class($this->cacheDriver) . " )"
                 . PHP_EOL . "Message: " . $e->getMessage() . PHP_EOL);
         }
     }
 
     /**
      * @param Entity $saveEntity
-     * @param int $ttl
-     * @throws \Exception
+     * @param int    $ttl
+     * @throws Exception
      */
     private function toCache($saveEntity, $ttl = 600)
     {
         try {
             /**@var Entity $saveEntity */
             $this->cacheDriver->set($this->generateKey($this->entityClassName, $saveEntity->getId()), serialize($saveEntity), $ttl);
-        } catch (\Exception $e) {
-            throw new \Exception("Exception thrown by the Cache Driver ( " . get_class($this->cacheDriver) . " )"
+        } catch (Exception $e) {
+            throw new Exception("Exception thrown by the Cache Driver ( " . get_class($this->cacheDriver) . " )"
                 . PHP_EOL . "Message: " . $e->getMessage() . PHP_EOL);
         }
     }
@@ -149,15 +150,15 @@ class Manager implements ManagerInterface
     /**
      * @param int $id
      * @return null|Entity
-     * @throws \Exception
+     * @throws Exception
      */
     private function fromCache($id)
     {
         $result = null;
         try {
             $result = $this->cacheDriver->get($this->generateKey($this->entityClassName, $id));
-        } catch (\Exception $e) {
-            throw new \Exception("Exception thrown by the Cache Driver ( " . get_class($this->cacheDriver) . " )"
+        } catch (Exception $e) {
+            throw new Exception("Exception thrown by the Cache Driver ( " . get_class($this->cacheDriver) . " )"
                 . PHP_EOL . "Message: " . $e->getMessage() . PHP_EOL);
         }
 
@@ -212,11 +213,11 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * @param $entity
-     * @throws \Doctrine\DBAL\ConnectionException
-     * @throws \Exception
+     * @param Entity $entity
+     * @throws ConnectionException
+     * @throws Exception
      */
-    public function remove($entity)
+    public function remove(Entity $entity)
     {
         $this->entityManager->getConnection()->beginTransaction();
 
@@ -226,16 +227,16 @@ class Manager implements ManagerInterface
             $this->entityManager->getConnection()->commit();
 
             $this->removeFromCache($entity);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->entityManager->getConnection()->rollBack();
             throw $e;
         }
     }
 
     /**
-     * @param $entity
+     * @param Entity $entity
      */
-    private function removeFromCache($entity)
+    private function removeFromCache(Entity $entity)
     {
         $this->cacheDriver->delete($this->generateKey($this->entityClassName, $entity->getId()));
     }

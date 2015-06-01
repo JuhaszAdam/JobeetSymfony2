@@ -3,6 +3,8 @@
 namespace MyBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 class AffiliateRepository extends EntityRepository
 {
@@ -21,8 +23,8 @@ class AffiliateRepository extends EntityRepository
     /**
      * @param $token
      * @return mixed|null
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     public function getForToken($token)
     {
@@ -35,7 +37,7 @@ class AffiliateRepository extends EntityRepository
 
         try {
             $affiliate = $qb->getQuery()->getSingleResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (NoResultException $e) {
             $affiliate = null;
         }
 

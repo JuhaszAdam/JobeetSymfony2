@@ -42,16 +42,21 @@ class CategoryController extends Controller
      */
     private $jobsPerCategory;
 
-
     /**
-     * @param EngineInterface $templating
-     * @param RequestStack $requestStack
-     * @param JobProvider $jobProvider
+     * @param EngineInterface  $templating
+     * @param RequestStack     $requestStack
+     * @param JobProvider      $jobProvider
      * @param CategoryProvider $categoryProvider
-     * @param Router $router
-     * @param int $jobsPerCategory
+     * @param Router           $router
+     * @param int              $jobsPerCategory
      */
-    public function __construct($templating, $requestStack, $jobProvider, $categoryProvider, $router, $jobsPerCategory)
+    public function __construct(
+        EngineInterface $templating,
+        RequestStack $requestStack,
+        JobProvider $jobProvider,
+        CategoryProvider $categoryProvider,
+        Router $router,
+        $jobsPerCategory)
     {
         $this->templating = $templating;
         $this->requestStack = $requestStack;
@@ -62,9 +67,9 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param $slug
-     * @param $page
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param string $slug
+     * @param int    $page
+     * @return Response
      */
     public function showAction($slug, $page)
     {
@@ -85,15 +90,15 @@ class CategoryController extends Controller
 
         $format = $this->requestStack->getCurrentRequest()->getRequestFormat();
 
-        return new Response($this->templating->render('MyBundle:Category:show.' . $format . '.twig', array(
-            'category' => $category,
-            'last_page' => $last_page,
+        return new Response($this->templating->render('MyBundle:Category:show.' . $format . '.twig', [
+            'category'      => $category,
+            'last_page'     => $last_page,
             'previous_page' => $previous_page,
-            'current_page' => $page,
-            'next_page' => $next_page,
-            'total_jobs' => $total_jobs,
-            'feedId' => sha1($this->router->generate('EnsJobeetBundle_category',
-                array('slug' => $category->getSlug(), '_format' => 'atom'), true)),
-        )));
+            'current_page'  => $page,
+            'next_page'     => $next_page,
+            'total_jobs'    => $total_jobs,
+            'feedId'        => sha1($this->router->generate('EnsJobeetBundle_category',
+                ['slug' => $category->getSlug(), '_format' => 'atom'], true)),
+        ]));
     }
 }

@@ -5,6 +5,7 @@ namespace MyBundle\Tests\Provider;
 use MyBundle\Entity\Category;
 use MyBundle\Entity\Job;
 use MyBundle\Manager\Manager;
+use MyBundle\Provider\JobProvider;
 use MyBundle\Provider\Provider;
 
 class ProviderTest extends \PHPUnit_Framework_TestCase
@@ -58,7 +59,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($genericJobs));
 
         /** @var Manager $databaseManager */
-        $dataProvider = new Provider($databaseManager);
+        $dataProvider = new JobProvider($databaseManager);
         $jobs = iterator_to_array($dataProvider->provide());
 
         /** @var job[] $jobs */

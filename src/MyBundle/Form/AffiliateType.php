@@ -10,7 +10,7 @@ class AffiliateType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -25,10 +25,10 @@ class AffiliateType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'MyBundle\Entity\Affiliate',
+        $resolver->setDefaults([
+            'data_class'      => 'MyBundle\Entity\Affiliate',
             'csrf_protection' => false,
-        ));
+        ]);
     }
 
     /**

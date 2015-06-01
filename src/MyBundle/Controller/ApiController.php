@@ -37,11 +37,15 @@ class ApiController extends Controller
 
     /**
      * @param CategoryAffiliateProvider $affiliateProvider
-     * @param JobProvider $jobProvider
-     * @param Router $router
-     * @param EngineInterface $templating
+     * @param JobProvider               $jobProvider
+     * @param Router                    $router
+     * @param EngineInterface           $templating
      */
-    public function __construct($affiliateProvider, $jobProvider, $router, $templating)
+    public function __construct(
+        CategoryAffiliateProvider $affiliateProvider,
+        JobProvider $jobProvider,
+        Router $router,
+        EngineInterface $templating)
     {
         $this->affiliateProvider = $affiliateProvider;
         $this->jobProvider = $jobProvider;
@@ -51,12 +55,12 @@ class ApiController extends Controller
 
     /**
      * @param Request $request
-     * @param $token
+     * @param         $token
      * @return Response
      */
     public function listAction(Request $request, $token)
     {
-        $jobs = array();
+        $jobs = [];
 
         $affiliate = $this->affiliateProvider->getForToken($token);
         if (!$affiliate) {
@@ -68,21 +72,22 @@ class ApiController extends Controller
         /** @var Job $job */
         foreach ($active_jobs as $job) {
             $jobs[$this->router->generate('ens_job_show',
-                array('company' => $job->getCompanySlug(),
-                    'location' => $job->getLocationSlug(),
-                    'id' => $job->getId(),
-                    'position' => $job->getPositionSlug()),
+                ['company'  => $job->getCompanySlug(),
+                 'location' => $job->getLocationSlug(),
+                 'id'       => $job->getId(),
+                 'position' => $job->getPositionSlug()],
                 true)] = $job->asArray($request->getHost());
         }
         $format = $request->getRequestFormat();
         $jsonData = json_encode($jobs);
         if ($format == "json") {
-            $headers = array('Content-Type' => 'application/json');
+            $headers = ['Content-Type' => 'application/json'];
             $response = new Response($jsonData, 200, $headers);
+
             return $response;
         }
 
         return new Response($this->templating->render(
-            'MyBundle:Api:jobs.' . $format . '.twig', array('jobs' => $jobs)));
+            'MyBundle:Api:jobs.' . $format . '.twig', ['jobs' => $jobs]));
     }
 }

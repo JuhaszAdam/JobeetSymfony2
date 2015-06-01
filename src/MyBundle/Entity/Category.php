@@ -2,6 +2,8 @@
 
 namespace MyBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use MyBundle\Utils\Jobeet;
 
@@ -92,12 +94,12 @@ class Category
     private $name;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     private $jobs;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     private $category_affiliates;
 
@@ -106,8 +108,8 @@ class Category
      */
     public function __construct()
     {
-        $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->category_affiliates = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->jobs = new ArrayCollection();
+        $this->category_affiliates = new ArrayCollection();
     }
 
     /**
@@ -159,7 +161,7 @@ class Category
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getJobs()
     {
@@ -186,7 +188,7 @@ class Category
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getCategoryAffiliates()
     {

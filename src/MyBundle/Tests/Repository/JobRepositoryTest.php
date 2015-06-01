@@ -75,7 +75,6 @@ class JobRepositoryTest extends WebTestCase
         if ($connection->isConnected()) {
             $connection->close();
         }
-
     }
 
     /**

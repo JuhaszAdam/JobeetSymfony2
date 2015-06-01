@@ -2,6 +2,8 @@
 
 namespace MyBundle\Provider;
 
+use Doctrine\ORM\NonUniqueResultException;
+
 class JobProvider extends AbstractProvider implements ProviderInterface
 {
     /**
@@ -28,7 +30,7 @@ class JobProvider extends AbstractProvider implements ProviderInterface
     /**
      * @param $id
      * @return mixed|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getActiveJob($id)
     {
@@ -37,7 +39,7 @@ class JobProvider extends AbstractProvider implements ProviderInterface
 
     /**
      * @return mixed|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getLatestPost()
     {

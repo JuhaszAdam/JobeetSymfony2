@@ -11,20 +11,20 @@ class JobType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('category');
-        $builder->add('type', 'choice', array('choices' => Job::getTypes(), 'expanded' => true));
+        $builder->add('type', 'choice', ['choices' => Job::getTypes(), 'expanded' => true]);
         $builder->add('company');
-        $builder->add('file', 'file', array('label' => 'Company logo', 'required' => false));
+        $builder->add('file', 'file', ['label' => 'Company logo', 'required' => false]);
         $builder->add('url');
         $builder->add('position');
         $builder->add('location');
         $builder->add('description');
-        $builder->add('how_to_apply', null, array('label' => 'How to apply?'));
-        $builder->add('is_public', null, array('label' => 'Public?'));
+        $builder->add('how_to_apply', null, ['label' => 'How to apply?']);
+        $builder->add('is_public', null, ['label' => 'Public?']);
         $builder->add('email');
     }
 
@@ -41,8 +41,8 @@ class JobType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'MyBundle\Entity\Job'
-        ));
+        ]);
     }
 }

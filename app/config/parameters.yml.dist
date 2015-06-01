@@ -16,5 +16,8 @@ parameters:
 
     locale:            en
 
+    elastic_host : localhost
+    elastic_port : 9200
+
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt

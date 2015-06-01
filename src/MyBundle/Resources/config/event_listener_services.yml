@@ -1,0 +1,8 @@
+parameters:
+  mybundle.event_listener.notice_listener.class: MyBundle\EventListener\NoticePagerListener
+
+services:
+  mybundle.controller.affiliate_controller:
+    class: %mybundle.event_listener.notice_listener.class%
+    tags:
+      - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
