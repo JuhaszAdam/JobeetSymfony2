@@ -54,7 +54,7 @@ fos_elastica:
                         nullable: true
                     persistence:
                         driver: orm
-                        model: MyBundle\Entity\Job
+                        model: ShepardBundle\Entity\Job
                         finder: ~
                         provider: ~
                         listener: ~

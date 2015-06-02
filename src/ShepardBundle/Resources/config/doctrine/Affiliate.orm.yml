@@ -1,0 +1,29 @@
+ShepardBundle\Entity\Affiliate:
+  type: entity
+  repositoryClass: ShepardBundle\Repository\AffiliateRepository
+  table: affiliate
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    url:
+      type: string
+      length: 255
+    email:
+      type: string
+      length: 255
+      unique: true
+    token:
+      type: string
+      length: 255
+    created_at:
+      type: datetime
+    is_active:
+      type: boolean
+  oneToMany:
+    category_affiliates:
+      targetEntity: CategoryAffiliate
+      mappedBy: affiliate
+  lifecycleCallbacks:
+      prePersist: [ setCreatedAtValue, setTokenValue ]
