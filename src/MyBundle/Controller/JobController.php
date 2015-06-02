@@ -106,11 +106,11 @@ class JobController extends Controller
         return new Response($this->templating->render('MyBundle:Job:index.' . $format . '.twig', [
             'categories' => $categories,
             'lastUpdated' => $this->jobManager->getLatestPost()->getCreatedAt()->format(DATE_ATOM),
-            'feedId' => sha1($this->router->generate('ens_job', ['_format' => 'atom'], true)),
+            'feedId' => sha1($this->router->generate('ShepardBundle_job', ['_format' => 'atom'], true)),
         ]));
     }
 
-    /**
+    /**s
      * @param Request $request
      * @return RedirectResponse|Response
      * @throws \Exception
@@ -127,7 +127,7 @@ class JobController extends Controller
 
             /** @var Job $entity */
 
-            return $this->redirect($this->router->generate('ens_job_preview', [
+            return $this->redirect($this->router->generate('ShepardBundle_job_preview', [
                 'company' => $entity->getCompanySlug(),
                 'location' => $entity->getLocationSlug(),
                 'token' => $entity->getToken(),
@@ -243,7 +243,7 @@ class JobController extends Controller
 
             /** @var Job $entity */
 
-            return $this->redirect($this->router->generate('ens_job_preview', [
+            return $this->redirect($this->router->generate('ShepardBundle_job_preview', [
                 'company' => $entity->getCompanySlug(),
                 'location' => $entity->getLocationSlug(),
                 'token' => $entity->getToken(),
@@ -251,7 +251,7 @@ class JobController extends Controller
             ]));
         }
 
-        return $this->redirect($this->router->generate('ens_job_preview', [
+        return $this->redirect($this->router->generate('ShepardBundle_job_preview', [
             'company' => $entity->getCompanySlug(),
             'location' => $entity->getLocationSlug(),
             'token' => $entity->getToken(),
@@ -281,7 +281,7 @@ class JobController extends Controller
             $this->jobManager->remove($entity);
         }
 
-        return $this->redirect($this->router->generate('ens_job'));
+        return $this->redirect($this->router->generate('ShepardBundle_job'));
     }
 
     /**
@@ -344,7 +344,7 @@ class JobController extends Controller
             $this->jobManager->save($entity);
         }
 
-        return $this->redirect($this->router->generate('ens_job_preview', [
+        return $this->redirect($this->router->generate('ShepardBundle_job_preview', [
             'company' => $entity->getCompanySlug(),
             'location' => $entity->getLocationSlug(),
             'token' => $entity->getToken(),
@@ -380,7 +380,7 @@ class JobController extends Controller
         }
         $entity = null;
 
-        return $this->redirect($this->router->generate('ens_job_preview', [
+        return $this->redirect($this->router->generate('ShepardBundle_job_preview', [
             'company' => $entity->getCompanySlug(),
             'location' => $entity->getLocationSlug(),
             'token' => $entity->getToken(),
@@ -403,7 +403,7 @@ class JobController extends Controller
                 new JobSearchType(),
                 $jobSearch,
                 [
-                    'action' => $this->router->generate('my_job_search'),
+                    'action' => $this->router->generate('ShepardBundle_job_search'),
                     'method' => 'GET'
                 ]
             );

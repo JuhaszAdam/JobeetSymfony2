@@ -91,7 +91,7 @@ class CategoryController extends Controller
             'current_page' => $page,
             'next_page' => $next_page,
             'total_jobs' => $total_jobs,
-            'feedId' => sha1($this->router->generate('EnsJobeetBundle_category',
+            'feedId' => sha1($this->router->generate('ShepardBundle_category',
                 ['slug' => $category->getSlug(), '_format' => 'atom'], true)),
         ]));
     }

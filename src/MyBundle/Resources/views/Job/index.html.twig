@@ -12,14 +12,14 @@
                 <div class="category">
                     <div class="category_{{ category.slug }}"></div>
                     <div class="feed">
-                        <a href="{{ path('EnsJobeetBundle_category', { 'slug': category.slug, '_format': 'atom' }) }}">Feed</a>
+                        <a href="{{ path('ShepardBundle_category', { 'slug': category.slug, '_format': 'atom' }) }}">Feed</a>
                     </div>
-                    <h1><a href="{{ path('EnsJobeetBundle_category', { 'slug': category.slug }) }}">{{ category.name }}</a></h1>
+                    <h1><a href="{{ path('ShepardBundle_category', { 'slug': category.slug }) }}">{{ category.name }}</a></h1>
                 </div>
                 {% include 'MyBundle:Job:list.html.twig' with {'jobs': category.activejobs} %}
                 {% if category.morejobs %}
                     <div class="more_jobs">
-                        and <a href="{{ path('EnsJobeetBundle_category', { 'slug': category.slug }) }}">{{ category.morejobs }}</a>
+                        and <a href="{{ path('ShepardBundle_category', { 'slug': category.slug }) }}">{{ category.morejobs }}</a>
                         more...
                     </div>
                 {% endif %}

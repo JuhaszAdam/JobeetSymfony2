@@ -2,8 +2,8 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Jobeet ({{ category.name }})</title>
     <subtitle>Latest Jobs</subtitle>
-    <link href="{{ url('EnsJobeetBundle_category', { 'slug': category.slug, '_format': 'atom' }) }}" rel="self"/>
-    <link href="{{ url('EnsJobeetBundle_category', { 'slug': category.slug }) }}"/>
+    <link href="{{ url('ShepardBundle_category', { 'slug': category.slug, '_format': 'atom' }) }}" rel="self"/>
+    <link href="{{ url('ShepardBundle_category', { 'slug': category.slug }) }}"/>
     <updated>{{ category.activejobs[0].createdAt.format(constant('DATE_ATOM')) }}</updated>
     <author>
         <name>Jobeet</name>
@@ -13,7 +13,7 @@
     {% for entity in category.activejobs %}
         <entry>
             <title>{{ entity.position }} ({{ entity.location }})</title>
-            <link href="{{ url('ens_job_show', { 'id': entity.id, 'company': entity.companyslug, 'location': entity.locationslug, 'position': entity.positionslug }) }}"/>
+            <link href="{{ url('ShepardBundle_job_show', { 'id': entity.id, 'company': entity.companyslug, 'location': entity.locationslug, 'position': entity.positionslug }) }}"/>
             <id>{{ entity.id }}</id>
             <updated>{{ entity.createdAt.format(constant('DATE_ATOM')) }}</updated>
             <summary type="xhtml">

@@ -71,7 +71,7 @@ class ApiController extends Controller
         $active_jobs = $this->jobProvider->getActiveJobs(null, null, null, $affiliate->getId());
         /** @var Job $job */
         foreach ($active_jobs as $job) {
-            $jobs[$this->router->generate('ens_job_show',
+            $jobs[$this->router->generate('ShepardBundle_job_show',
                 ['company' => $job->getCompanySlug(),
                     'location' => $job->getLocationSlug(),
                     'id' => $job->getId(),

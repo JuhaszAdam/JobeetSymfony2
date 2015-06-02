@@ -84,7 +84,7 @@ class AffiliateController extends Controller
             $affiliate->setEmail($formData['email']);
             $affiliate->setIsActive(false);
 
-            return $this->redirect($this->router->generate('ens_affiliate_wait'));
+            return $this->redirect($this->router->generate('ShepardBundle_affiliate_wait'));
         }
 
         return new Response($this->templating->render('MyBundle:Affiliate:affiliate_new.html.twig', [

@@ -21,7 +21,7 @@
  
 {% block content %}
     <h1>Job edit</h1>
-    <form action="{{ path('ens_job_update', { 'token': entity.token }) }}" method="post" {{ form_enctype(edit_form) }}>
+    <form action="{{ path('ShepardBundle_job_update', { 'token': entity.token }) }}" method="post" {{ form_enctype(edit_form) }}>
         <table id="job_form">
             <tfoot>
             <tr>
