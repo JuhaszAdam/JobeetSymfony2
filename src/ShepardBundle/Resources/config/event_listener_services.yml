@@ -1,0 +1,8 @@
+parameters:
+  ShepardBundle.event_listener.notice_listener.class: ShepardBundle\EventListener\NoticePagerListener
+
+services:
+  ShepardBundle.controller.notice_listener:
+    class: %ShepardBundle.event_listener.notice_listener.class%
+    tags:
+      - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }

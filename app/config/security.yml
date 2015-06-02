@@ -15,7 +15,7 @@ security:
 
     providers:
         main:
-            entity: { class: MyBundle\Entity\User, property: username }
+            entity: { class: ShepardBundle\Entity\User, property: username }
 
     encoders:
-        MyBundle\Entity\User: sha512
+        ShepardBundle\Entity\User: sha512

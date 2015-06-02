@@ -1,0 +1,35 @@
+parameters:
+  ShepardBundle.manager.manager.class: ShepardBundle\Manager\Manager
+  ShepardBundle.manager.job_manager.class: ShepardBundle\Manager\JobManager
+  ShepardBundle.manager.category_manager.class: ShepardBundle\Manager\CategoryManager
+  ShepardBundle.manager.job.class: ShepardBundle\Entity\Job
+  ShepardBundle.manager.job_repository.path: ShepardBundle:Job
+  ShepardBundle.manager.affiliate.class: ShepardBundle\Entity\Affiliate
+  ShepardBundle.manager.affiliate_repository.path: ShepardBundle:Affiliate
+  ShepardBundle.manager.category.class: ShepardBundle\Entity\Category
+  ShepardBundle.manager.category_repository.path: ShepardBundle:Category
+
+services:
+  ShepardBundle.manager.job_manager:
+    class: %ShepardBundle.manager.job_manager.class%
+    arguments:
+      - @doctrine.orm.entity_manager
+      - @ShepardBundle.cache_driver.driver
+      - %ShepardBundle.manager.job.class%
+      - %ShepardBundle.manager.job_repository.path%
+
+  ShepardBundle.manager.affiliate_manager:
+    class: %ShepardBundle.manager.category_manager.class%
+    arguments:
+      - @doctrine.orm.entity_manager
+      - @ShepardBundle.cache_driver.driver
+      - %ShepardBundle.manager.affiliate.class%
+      - %ShepardBundle.manager.affiliate_repository.path%
+
+  ShepardBundle.manager.category_manager:
+    class: %ShepardBundle.manager.category_manager.class%
+    arguments:
+      - @doctrine.orm.entity_manager
+      - @ShepardBundle.cache_driver.driver
+      - %ShepardBundle.manager.category.class%
+      - %ShepardBundle.manager.category_repository.path%

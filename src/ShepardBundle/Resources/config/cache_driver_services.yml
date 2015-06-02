@@ -1,0 +1,16 @@
+parameters:
+  ShepardBundle.cache_driver.driver.class: ShepardBundle\CacheDriver\CacheDriverRedis
+  ShepardBundle.cache_driver.cache.class: Redis
+  ShepardBundle.cache_driver.driver.config:
+    host: localhost
+    port: 6379
+
+services:
+    ShepardBundle.cache_driver.cache:
+        class: %ShepardBundle.cache_driver.cache.class%
+
+    ShepardBundle.cache_driver.driver:
+        class: %ShepardBundle.cache_driver.driver.class%
+        arguments:
+          - @ShepardBundle.cache_driver.cache
+          - %ShepardBundle.cache_driver.driver.config%

@@ -1,0 +1,47 @@
+parameters:
+  ShepardBundle.controller.affiliate_controller.class: ShepardBundle\Controller\AffiliateController
+  ShepardBundle.controller.api_controller.class: ShepardBundle\Controller\ApiController
+  ShepardBundle.controller.category_controller.class: ShepardBundle\Controller\CategoryController
+  ShepardBundle.controller.default_controller.class: ShepardBundle\Controller\DefaultController
+  ShepardBundle.controller.job_controller.class: ShepardBundle\Controller\JobController
+
+services:
+  ShepardBundle.controller.affiliate_controller:
+    class: %ShepardBundle.controller.affiliate_controller.class%
+    arguments:
+      - @ShepardBundle.manager.affiliate_manager
+      - @form.factory
+      - @templating
+      - @router
+
+  ShepardBundle.controller.api_controller:
+    class: %ShepardBundle.controller.api_controller.class%
+    arguments:
+      - @ShepardBundle.provider.affiliate_provider
+      - @ShepardBundle.provider.job_provider
+
+  ShepardBundle.controller.category_controller:
+    class: %ShepardBundle.controller.category_controller.class%
+    arguments:
+      - @templating
+      - @ShepardBundle.provider.job_provider
+      - @ShepardBundle.provider.category_provider
+      - @router
+      - %max_jobs_on_category%
+
+  ShepardBundle.controller.default_controller:
+    class: %ShepardBundle.controller.default_controller.class%
+    arguments:
+      - @templating
+      - %max_jobs_on_category%
+
+  ShepardBundle.controller.job_controller:
+    class: %ShepardBundle.controller.job_controller.class%
+    arguments:
+      - @ShepardBundle.manager.job_manager
+      - @ShepardBundle.provider.category_provider
+      - @form.factory
+      - @templating
+      - @router
+      - %max_jobs_on_homepage%
+      - %max_jobs_on_category%

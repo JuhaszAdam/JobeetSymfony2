@@ -1,0 +1,12 @@
+services:
+    ens.admin.category:
+        class: ShepardBundle\Admin\CategoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: jobeet, label: Categories }
+        arguments: [null, ShepardBundle\Entity\Category, ShepardBundle:CategoryAdmin]
+ 
+    ens.admin.job:
+        class:  ShepardBundle\Admin\JobAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: jobeet, label: Jobs }
+        arguments: [null,  ShepardBundle\Entity\Job, ShepardBundle:JobAdmin]

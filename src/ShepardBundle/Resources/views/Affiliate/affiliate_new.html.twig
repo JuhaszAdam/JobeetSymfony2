@@ -1,0 +1,59 @@
+{% extends 'ShepardBundle::layout.html.twig' %}
+
+{% set form_themes = _self %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            <ul class="error_list">
+                {% for error in errors %}
+                    <li>{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/shepard/css/job.css') }}" type="text/css" media="all"/>
+{% endblock %}
+
+{% block content %}
+    <h1>Become an affiliate</h1>
+    <form action="{{ path('ShepardBundle_affiliate_create') }}" method="post" {{ form_enctype(form) }}>
+        <table id="job_form">
+            <tfoot>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="Submit"/>
+                </td>
+            </tr>
+            </tfoot>
+            <tbody>
+            <tr>
+                <th>{{ form_label(form.url) }}</th>
+                <td>
+                    {{ form_errors(form.url) }}
+                    {{ form_widget(form.url) }}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ form_label(form.email) }}</th>
+                <td>
+                    {{ form_errors(form.email) }}
+                    {{ form_widget(form.email) }}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ form_label(form.categories) }}</th>
+                <td>
+                    {{ form_errors(form.categories) }}
+                    {{ form_widget(form.categories) }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+    {{ form_end(form) }}
+{% endblock %}

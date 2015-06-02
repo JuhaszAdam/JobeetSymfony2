@@ -1,5 +1,5 @@
 my:
-    resource: "@MyBundle/Resources/config/routing.yml"
+    resource: "@ShepardBundle/Resources/config/routing.yml"
     prefix:   /
 
 admin:

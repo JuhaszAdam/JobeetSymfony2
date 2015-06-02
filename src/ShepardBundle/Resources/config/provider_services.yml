@@ -1,0 +1,20 @@
+parameters:
+  ShepardBundle.provider.job_provider.class: ShepardBundle\Provider\JobProvider
+  ShepardBundle.provider.affiliate_provider.class: ShepardBundle\Provider\AffiliateProvider
+  ShepardBundle.provider.category_provider.class: ShepardBundle\Provider\CategoryProvider
+
+services:
+  ShepardBundle.provider.job_provider:
+    class: %ShepardBundle.provider.job_provider.class%
+    arguments:
+      - @ShepardBundle.manager.job_manager
+
+  ShepardBundle.provider.affiliate_provider:
+    class: %ShepardBundle.provider.affiliate_provider.class%
+    arguments:
+      - @ShepardBundle.manager.affiliate_manager
+
+  ShepardBundle.provider.category_provider:
+    class: %ShepardBundle.provider.category_provider.class%
+    arguments:
+      - @ShepardBundle.manager.category_manager

@@ -1,0 +1,52 @@
+ShepardBundle_job:
+    path:     /
+    defaults: { _controller: ShepardBundle.controller.job_controller:indexAction }
+
+ShepardBundle_job_show:
+    pattern:  /{company}/{location}/{id}/{position}
+    defaults: { _controller: ShepardBundle.controller.job_controller:showAction }
+    requirements:
+        id:  \d+
+
+ShepardBundle_job_new:
+    path:     /new
+    defaults: { _controller: ShepardBundle.controller.job_controller:newAction }
+
+ShepardBundle_job_create:
+    path:     /create
+    defaults: { _controller: ShepardBundle.controller.job_controller:createAction }
+    methods:  POST
+
+ShepardBundle_job_edit:
+    path:     /{token}/edit
+    defaults: { _controller: ShepardBundle.controller.job_controller:editAction }
+
+ShepardBundle_job_update:
+    path:     /{token}/update
+    defaults: { _controller: ShepardBundle.controller.job_controller:updateAction }
+    methods:  [POST, PUT]
+
+ShepardBundle_job_delete:
+    path:     /{token}/delete
+    defaults: { _controller: ShepardBundle.controller.job_controller:deleteAction }
+    methods:  [POST, DELETE]
+
+ShepardBundle_job_preview:
+    pattern:  /{company}/{location}/{token}/{position}
+    defaults: { _controller: ShepardBundle.controller.job_controller:previewAction }
+    requirements:
+        token: \w+
+
+ShepardBundle_job_publish:
+    pattern:  /{token}/publish
+    defaults: { _controller: ShepardBundle.controller.job_controller:publishAction }
+    requirements: { _method: post }
+
+ShepardBundle_job_extend:
+    pattern:  /{token}/extend
+    defaults: { _controller: ShepardBundle.controller.job_controller:extendAction }
+    requirements: { _method: post }
+
+ShepardBundle_job_search:
+    pattern: /search
+    defaults: {_controller ShepardBundle.controller.job_controller:searchAction}
