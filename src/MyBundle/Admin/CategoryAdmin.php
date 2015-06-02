@@ -13,10 +13,10 @@ class CategoryAdmin extends Admin
     /**
      * @var array
      */
-    protected $datagridValues = array(
+    protected $datagridValues = [
         '_sort_order' => 'ASC',
         '_sort_by' => 'name'
-    );
+    ];
 
     /**
      * @param FormMapper $formMapper

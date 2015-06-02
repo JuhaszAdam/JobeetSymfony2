@@ -6,16 +6,16 @@ use Sonata\AdminBundle\Controller\CRUDController as Controller;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery as ProxyQueryInterface;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class JobAdminController extends Controller
 {
-    public function batchActionExtend(ProxyQueryInterface $selectedModelQuery)
+    public function batchActionExtend(ProxyQueryInterface $selectedModelQuery, Request $request)
     {
         if ($this->admin->isGranted('EDIT') === false || $this->admin->isGranted('DELETE') === false) {
             throw new AccessDeniedException();
         }
 
-        $request = $this->get('request');
         $modelManager = $this->admin->getModelManager();
 
         $selectedModels = $selectedModelQuery->execute();

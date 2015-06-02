@@ -24,7 +24,6 @@ services:
     class: %mybundle.controller.category_controller.class%
     arguments:
       - @templating
-      - @request_stack
       - @mybundle.provider.job_provider
       - @mybundle.provider.category_provider
       - @router
@@ -34,7 +33,6 @@ services:
     class: %mybundle.controller.default_controller.class%
     arguments:
       - @templating
-      - @request_stack
       - %max_jobs_on_category%
 
   mybundle.controller.job_controller:
@@ -45,6 +43,5 @@ services:
       - @form.factory
       - @templating
       - @router
-      - @request_stack
       - %max_jobs_on_homepage%
       - %max_jobs_on_category%

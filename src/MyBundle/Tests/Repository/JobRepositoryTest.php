@@ -66,10 +66,10 @@ class JobRepositoryTest extends WebTestCase
     {
         $command = new DropDatabaseDoctrineCommand();
         $this->application->add($command);
-        $input = new ArrayInput(array(
+        $input = new ArrayInput([
             'command' => 'doctrine:database:drop',
             '--force' => true
-        ));
+        ]);
         $command->run($input, new NullOutput());
         $connection = $this->application->getKernel()->getContainer()->get('doctrine')->getConnection();
         if ($connection->isConnected()) {
@@ -84,9 +84,9 @@ class JobRepositoryTest extends WebTestCase
     {
         $command = new CreateDatabaseDoctrineCommand();
         $this->application->add($command);
-        $input = new ArrayInput(array(
+        $input = new ArrayInput([
             'command' => 'doctrine:database:create',
-        ));
+        ]);
         $command->run($input, new NullOutput());
     }
 
@@ -97,9 +97,9 @@ class JobRepositoryTest extends WebTestCase
     {
         $command = new CreateSchemaDoctrineCommand();
         $this->application->add($command);
-        $input = new ArrayInput(array(
+        $input = new ArrayInput([
             'command' => 'doctrine:schema:create',
-        ));
+        ]);
         $command->run($input, new NullOutput());
     }
 

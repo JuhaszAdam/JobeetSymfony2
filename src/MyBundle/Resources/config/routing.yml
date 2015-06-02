@@ -1,57 +1,32 @@
-my_ens_job:
+ShepardBundle_affiliate:
+    resource: "@MyBundle/Resources/config/routing/affiliate.yml"
+    prefix:   /affiliate
+
+ShepardBundle_job:
     resource: "@MyBundle/Resources/config/routing/job.yml"
-    prefix:   /ens_job
+    prefix:   /job
 
-my_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: MyBundle:Default:index }
-
-EnsJobeetBundle_job:
-    resource: "@MyBundle/Resources/config/routing/job.yml"
-    prefix: /job
-
-EnsJobeetBundle_homepage:
+ShepardBundle_homepage:
     pattern:  /
     defaults: { _controller: mybundle.controller.job_controller:indexAction }
 
-EnsJobeetBundle_category:
+ShepardBundle_category:
     pattern: /category/{slug}/{page}
-    defaults: { _controller: mybundle.controller.category_controller:showAction, page: 1  }
+    defaults: { _controller: mybundle.controller.category_controller:showAction, page: 1 }
+    requirements: { _method: get }
 
-ens_job_edit:
-    pattern:  /{token}/edit
-    defaults: { _controller: mybundle.controller.job_controller:editAction }
-
-ens_job_update:
-    pattern:  /{token}/update
-    defaults: { _controller: mybundle.controller.job_controller:updateAction }
-    requirements: { _method: post }
-
-ens_job_delete:
-    pattern:  /{token}/delete
-    defaults: { _controller: mybundle.controller.job_controller:deleteAction }
-    requirements: { _method: post }
-
-login:
+ShepardBundle_login:
     pattern:   /login
     defaults:  { _controller: MyBundle:Default:login }
 
-login_check:
+ShepardBundle_login_check:
     pattern:   /login_check
 
-logout:
+ShepardBundle_logout:
     pattern:   /logout
 
-ens_api:
+ShepardBundle_api:
     pattern: /api/{token}/jobs.{_format}
     defaults: {_controller: MyBundle:Api:list}
     requirements:
         _format: xml|json|yaml
-
-MyBundle_affiliate:
-    resource: "@MyBundle/Resources/config/routing/affiliate.yml"
-    prefix:   /affiliate
-
-my_job_search:
-    pattern: /search
-    defaults: {_controller mybundle.controller.job_controller:searchAction}

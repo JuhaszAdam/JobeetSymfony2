@@ -3,8 +3,8 @@
 
     <title>Jobeet</title>
     <subtitle>Latest Jobs</subtitle>
-    <link href="{{ url('ens_job', {'_format': 'atom'}) }}" rel="self"/>
-    <link href="{{ url('EnsJobeetBundle_homepage') }}"/>
+    <link href="{{ url('ShepardBundle_job', {'_format': 'atom'}) }}" rel="self"/>
+    <link href="{{ url('ShepardBundle_homepage') }}"/>
     <updated>{{ lastUpdated }}</updated>
     <author>
         <name>Jobeet</name>
@@ -26,7 +26,7 @@
         {% for entity in category.activejobs %}
             <entry>
                 <title>{{ entity.position }} ({{ entity.location }})</title>
-                <link href="{{ url('ens_job_show', { 'id': entity.id, 'company': entity.companyslug, 'location': entity.locationslug, 'position': entity.positionslug }) }}"/>
+                <link href="{{ url('ShepardBundle_job_show', { 'id': entity.id, 'company': entity.companyslug, 'location': entity.locationslug, 'position': entity.positionslug }) }}"/>
                 <id>{{ entity.id }}</id>
                 <updated>{{ entity.createdAt.format(constant('DATE_ATOM')) }}</updated>
                 <summary type="xhtml">
