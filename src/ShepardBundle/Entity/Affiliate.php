@@ -156,6 +156,9 @@ class Affiliate
         return $this->category_affiliates;
     }
 
+    /**
+     * @return ArrayCollection|Collection
+     */
     public function getCategories()
     {
         return $this->category_affiliates;
