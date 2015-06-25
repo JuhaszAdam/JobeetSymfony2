@@ -43,5 +43,6 @@ services:
       - @form.factory
       - @templating
       - @router
+      - @fos_elastica.finder.jobeet_bundle.job
       - %max_jobs_on_homepage%
       - %max_jobs_on_category%

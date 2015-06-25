@@ -3,7 +3,7 @@
 namespace ShepardBundle\Controller;
 
 use Doctrine\Entity;
-use Monolog\Handler\ElasticSearchHandler;
+use FOS\ElasticaBundle\Finder\TransformedFinder;
 use ShepardBundle\Entity\Category;
 use ShepardBundle\Form\JobSearchType;
 use ShepardBundle\Model\ElasticJobSearch;
@@ -57,15 +57,20 @@ class JobController extends Controller
      * @var int
      */
     private $maxCategoriesOnPage;
+    /**
+     * @var TransformedFinder
+     */
+    private $finder;
 
     /**
-     * @param JobManager       $jobManager
+     * @param JobManager $jobManager
      * @param CategoryProvider $categoryProvider
-     * @param FormFactory      $formFactory
-     * @param EngineInterface  $templating
-     * @param Router           $router
-     * @param int              $maxJobsOnPage
-     * @param int              $maxCategoriesOnPage
+     * @param FormFactory $formFactory
+     * @param EngineInterface $templating
+     * @param Router $router
+     * @param TransformedFinder $finder
+     * @param int $maxJobsOnPage
+     * @param int $maxCategoriesOnPage
      */
     public function __construct(
         JobManager $jobManager,
@@ -73,6 +78,7 @@ class JobController extends Controller
         FormFactory $formFactory,
         EngineInterface $templating,
         Router $router,
+        TransformedFinder $finder,
         $maxJobsOnPage,
         $maxCategoriesOnPage
     )
@@ -82,6 +88,7 @@ class JobController extends Controller
         $this->formFactory = $formFactory;
         $this->templating = $templating;
         $this->router = $router;
+        $this->finder = $finder;
         $this->maxJobsOnPage = $maxJobsOnPage;
         $this->maxCategoriesOnPage = $maxCategoriesOnPage;
     }
@@ -157,7 +164,7 @@ class JobController extends Controller
     }
 
     /**
-     * @param Request    $request
+     * @param Request $request
      * @param int|string $id
      * @return Response
      */
@@ -220,7 +227,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @param string  $token
+     * @param string $token
      * @return RedirectResponse|Response
      * @throws \Exception
      */
@@ -261,7 +268,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @param string  $token
+     * @param string $token
      * @return RedirectResponse
      * @throws \Exception
      */
@@ -321,7 +328,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @param string  $token
+     * @param string $token
      * @return RedirectResponse
      * @throws \Exception
      */
@@ -354,7 +361,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @param string  $token
+     * @param string $token
      * @return RedirectResponse
      * @throws \Exception
      */
@@ -392,35 +399,13 @@ class JobController extends Controller
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function searchAction(Request $request, Request $request)
+    public function searchAction(Request $request)
     {
-        $jobSearch = new ElasticJobSearch;
         $query = $request->get('query');
-
-        $jobSearchForm = $this->formFactory
-            ->createNamed(
-                '',
-                new JobSearchType(),
-                $jobSearch,
-                [
-                    'action' => $this->router->generate('ShepardBundle_job_search'),
-                    'method' => 'GET'
-                ]
-            );
-        $jobSearchForm->handleRequest($request);
-        $jobSearch = $jobSearchForm->getData();
-
-        //TODO: returns void result ??
-        //var_dump($jobSearch);
-
-        /** @var ElasticJobSearch $jobSearch */
-        $jobs = $this->jobManager->findBy([
-            "company" => $jobSearch->getCompany(),
-            "is_activated" => $jobSearch->isActivated()
-        ]);
+        $jobs = $this->finder->find($query);
 
         if ('*' == $query || !$jobs || $query == '') {
-            return new Response('No results.');
+            return new Response($this->templating->render('ShepardBundle:Job:list.html.twig', ['jobs' => $jobs]));
         }
 
         return new Response($this->templating->render('ShepardBundle:Job:list.html.twig', ['jobs' => $jobs]));
