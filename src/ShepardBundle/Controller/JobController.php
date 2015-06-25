@@ -404,8 +404,36 @@ class JobController extends Controller
         $query = $request->get('query');
         $jobs = $this->finder->find($query);
 
-        if ('*' == $query || !$jobs || $query == '') {
+        $categories = new Category();
+        $categories->setName("Search Results");
+        $categories->setActiveJobs($jobs);
+        $categories->setSlugValue();
+
+        $format = $request->getRequestFormat();
+
+        if (!$jobs) {
+            if ($request->getMethod() === "GET") {
+                $categories->setActiveJobs(null);
+                return new Response($this->templating->render('ShepardBundle:Job:index.' . $format . '.twig', [
+                    'categories' => [$categories],
+                    'lastUpdated' => $this->jobManager->getLatestPost()->getCreatedAt()->format(DATE_ATOM),
+                    'feedId' => sha1($this->router->generate('ShepardBundle_job', ['_format' => 'atom'], true)),
+                ]));
+            }
+            return new Response('No results.');
+        }
+        if ('*' == $query || $query == '') {
+            if ($request->getMethod() === "GET") {
+                return new RedirectResponse($this->router->generate('ShepardBundle_homepage'));
+            }
             return new Response($this->templating->render('ShepardBundle:Job:list.html.twig', ['jobs' => $jobs]));
+        }
+        if ($request->getMethod() === "GET") {
+            return new Response($this->templating->render('ShepardBundle:Job:index.' . $format . '.twig', [
+                'categories' => [$categories],
+                'lastUpdated' => $this->jobManager->getLatestPost()->getCreatedAt()->format(DATE_ATOM),
+                'feedId' => sha1($this->router->generate('ShepardBundle_job', ['_format' => 'atom'], true)),
+            ]));
         }
 
         return new Response($this->templating->render('ShepardBundle:Job:list.html.twig', ['jobs' => $jobs]));
