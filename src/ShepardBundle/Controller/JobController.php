@@ -129,7 +129,8 @@ class JobController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            /** @var Entity $entity */
+            /** @var Job $entity */
+            $entity->setCreatedAt(new \DateTime);
             $this->jobManager->save($entity);
 
             /** @var Job $entity */
@@ -210,7 +211,6 @@ class JobController extends Controller
             throw $this->createNotFoundException('Unable to find Job entity.');
         }
 
-
         if ($entity->getIsActivated()) {
             throw $this->createNotFoundException('Job is activated and cannot be edited.');
         }
@@ -284,7 +284,7 @@ class JobController extends Controller
                 throw $this->createNotFoundException('Unable to find Job entity.');
             }
 
-            /** @var Entity $entity */
+            /** @var Job $entity */
             $this->jobManager->remove($entity);
         }
 

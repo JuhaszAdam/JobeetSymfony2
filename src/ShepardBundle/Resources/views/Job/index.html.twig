@@ -17,7 +17,7 @@
                     <h1><a href="{{ path('ShepardBundle_category', { 'slug': category.slug }) }}">{{ category.name }}</a></h1>
                 </div>
                 {% include 'ShepardBundle:Job:list.html.twig' with {'jobs': category.activejobs} %}
-                {% if category.morejobs %}
+                {% if category.morejobs > 0%}
                     <div class="more_jobs">
                         and <a href="{{ path('ShepardBundle_category', { 'slug': category.slug }) }}">{{ category.morejobs }}</a>
                         more...

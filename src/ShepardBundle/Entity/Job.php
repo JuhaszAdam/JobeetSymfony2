@@ -8,7 +8,6 @@ use ShepardBundle\Utils;
 use ShepardBundle\Utils\Jobeet;
 
 use FOS\ElasticaBundle\Configuration\Search;
-use Zend_Search_Lucene_Field;
 
 /**
  * @Search(repositoryClass="ShepardBundle\Repository\JobRepository")
@@ -611,60 +610,5 @@ class Job
             'how_to_apply' => $this->getHowToApply(),
             'expires_at' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
         ];
-    }
-
-    /**
-     * @return mixed
-     */
-    public static function getLuceneIndex()
-    {
-        if (file_exists($index = self::getLuceneIndexFile())) {
-            return \Zend_Search_Lucene::open($index);
-        }
-
-        return \Zend_Search_Lucene::create($index);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getLuceneIndexFile()
-    {
-        return __DIR__ . '/../../../../web/data/job.index';
-    }
-
-    /**
-     * @ORM\PostPersist
-     */
-    public function updateLuceneIndex()
-    {
-        $index = self::getLuceneIndex();
-
-        $this->deleteLuceneIndex();
-
-        if ($this->isExpired() || !$this->getIsActivated()) {
-            return;
-        }
-
-        $doc = new \Zend_Search_Lucene_Document();
-
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', $this->getId()));
-
-        $doc->addField(Zend_Search_Lucene_Field::UnStored('position', $this->getPosition(), 'utf-8'));
-        $doc->addField(Zend_Search_Lucene_Field::UnStored('company', $this->getCompany(), 'utf-8'));
-        $doc->addField(Zend_Search_Lucene_Field::UnStored('location', $this->getLocation(), 'utf-8'));
-        $doc->addField(Zend_Search_Lucene_Field::UnStored('description', $this->getDescription(), 'utf-8'));
-
-        $index->addDocument($doc);
-        $index->commit();
-    }
-
-    public function deleteLuceneIndex()
-    {
-        $index = self::getLuceneIndex();
-
-        foreach ($index->find('pk:' . $this->getId()) as $hit) {
-            $index->delete($hit->id);
-        }
     }
 }

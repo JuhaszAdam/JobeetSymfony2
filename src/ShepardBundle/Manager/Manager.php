@@ -42,10 +42,10 @@ class Manager implements ManagerInterface
     private $entityClassName;
 
     /**
-     * @param EntityManager       $entityManager
+     * @param EntityManager $entityManager
      * @param AbstractCacheDriver $cacheDriver
-     * @param String              $classPath
-     * @param String              $repositoryPath
+     * @param String $classPath
+     * @param String $repositoryPath
      */
     public function __construct(EntityManager $entityManager, AbstractCacheDriver $cacheDriver, $classPath, $repositoryPath)
     {
@@ -116,7 +116,7 @@ class Manager implements ManagerInterface
 
     /**
      * @param array $saveList
-     * @param int   $ttl
+     * @param int $ttl
      * @throws Exception
      */
     private function toCacheMultiple($saveList, $ttl = 600)
@@ -133,7 +133,7 @@ class Manager implements ManagerInterface
 
     /**
      * @param Entity $saveEntity
-     * @param int    $ttl
+     * @param int $ttl
      * @throws Exception
      */
     private function toCache($saveEntity, $ttl = 600)
@@ -213,11 +213,11 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * @param Entity $entity
+     * @param $entity
      * @throws ConnectionException
      * @throws Exception
      */
-    public function remove(Entity $entity)
+    public function remove($entity)
     {
         $this->entityManager->getConnection()->beginTransaction();
 
