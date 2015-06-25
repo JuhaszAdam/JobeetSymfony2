@@ -58,15 +58,6 @@ class JobManager extends Manager implements ManagerInterface
     }
 
     /**
-     * @param $query
-     * @return array
-     */
-    public function getForLuceneQuery($query)
-    {
-        return $this->repository->getForLuceneQuery($query);
-    }
-
-    /**
      * @param $days
      * @return mixed
      */

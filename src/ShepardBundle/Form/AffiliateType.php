@@ -2,6 +2,7 @@
 
 namespace ShepardBundle\Form;
 
+use ShepardBundle\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -17,7 +18,7 @@ class AffiliateType extends AbstractType
         $builder
             ->add('url')
             ->add('email')
-            ->add('categories', null);
+            ->add('categories');
     }
 
     /**

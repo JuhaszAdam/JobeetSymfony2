@@ -3,7 +3,7 @@
 namespace ShepardBundle\Controller;
 
 use Doctrine\Entity;
-use Monolog\Handler\ElasticSearchHandler;
+use FOS\ElasticaBundle\Finder\TransformedFinder;
 use ShepardBundle\Entity\Category;
 use ShepardBundle\Form\JobSearchType;
 use ShepardBundle\Model\ElasticJobSearch;
@@ -57,15 +57,20 @@ class JobController extends Controller
      * @var int
      */
     private $maxCategoriesOnPage;
+    /**
+     * @var TransformedFinder
+     */
+    private $finder;
 
     /**
-     * @param JobManager       $jobManager
+     * @param JobManager $jobManager
      * @param CategoryProvider $categoryProvider
-     * @param FormFactory      $formFactory
-     * @param EngineInterface  $templating
-     * @param Router           $router
-     * @param int              $maxJobsOnPage
-     * @param int              $maxCategoriesOnPage
+     * @param FormFactory $formFactory
+     * @param EngineInterface $templating
+     * @param Router $router
+     * @param TransformedFinder $finder
+     * @param int $maxJobsOnPage
+     * @param int $maxCategoriesOnPage
      */
     public function __construct(
         JobManager $jobManager,
@@ -73,6 +78,7 @@ class JobController extends Controller
         FormFactory $formFactory,
         EngineInterface $templating,
         Router $router,
+        TransformedFinder $finder,
         $maxJobsOnPage,
         $maxCategoriesOnPage
     )
@@ -82,6 +88,7 @@ class JobController extends Controller
         $this->formFactory = $formFactory;
         $this->templating = $templating;
         $this->router = $router;
+        $this->finder = $finder;
         $this->maxJobsOnPage = $maxJobsOnPage;
         $this->maxCategoriesOnPage = $maxCategoriesOnPage;
     }
@@ -122,7 +129,8 @@ class JobController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            /** @var Entity $entity */
+            /** @var Job $entity */
+            $entity->setCreatedAt(new \DateTime);
             $this->jobManager->save($entity);
 
             /** @var Job $entity */
@@ -157,7 +165,7 @@ class JobController extends Controller
     }
 
     /**
-     * @param Request    $request
+     * @param Request $request
      * @param int|string $id
      * @return Response
      */
@@ -203,7 +211,6 @@ class JobController extends Controller
             throw $this->createNotFoundException('Unable to find Job entity.');
         }
 
-
         if ($entity->getIsActivated()) {
             throw $this->createNotFoundException('Job is activated and cannot be edited.');
         }
@@ -220,7 +227,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @param string  $token
+     * @param string $token
      * @return RedirectResponse|Response
      * @throws \Exception
      */
@@ -261,7 +268,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @param string  $token
+     * @param string $token
      * @return RedirectResponse
      * @throws \Exception
      */
@@ -277,7 +284,7 @@ class JobController extends Controller
                 throw $this->createNotFoundException('Unable to find Job entity.');
             }
 
-            /** @var Entity $entity */
+            /** @var Job $entity */
             $this->jobManager->remove($entity);
         }
 
@@ -321,7 +328,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @param string  $token
+     * @param string $token
      * @return RedirectResponse
      * @throws \Exception
      */
@@ -354,7 +361,7 @@ class JobController extends Controller
 
     /**
      * @param Request $request
-     * @param string  $token
+     * @param string $token
      * @return RedirectResponse
      * @throws \Exception
      */
@@ -392,35 +399,41 @@ class JobController extends Controller
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function searchAction(Request $request, Request $request)
+    public function searchAction(Request $request)
     {
-        $jobSearch = new ElasticJobSearch;
         $query = $request->get('query');
+        $jobs = $this->finder->find($query);
 
-        $jobSearchForm = $this->formFactory
-            ->createNamed(
-                '',
-                new JobSearchType(),
-                $jobSearch,
-                [
-                    'action' => $this->router->generate('ShepardBundle_job_search'),
-                    'method' => 'GET'
-                ]
-            );
-        $jobSearchForm->handleRequest($request);
-        $jobSearch = $jobSearchForm->getData();
+        $categories = new Category();
+        $categories->setName("Search Results");
+        $categories->setActiveJobs($jobs);
+        $categories->setSlugValue();
 
-        //TODO: returns void result ??
-        //var_dump($jobSearch);
+        $format = $request->getRequestFormat();
 
-        /** @var ElasticJobSearch $jobSearch */
-        $jobs = $this->jobManager->findBy([
-            "company" => $jobSearch->getCompany(),
-            "is_activated" => $jobSearch->isActivated()
-        ]);
-
-        if ('*' == $query || !$jobs || $query == '') {
+        if (!$jobs) {
+            if ($request->getMethod() === "GET") {
+                $categories->setActiveJobs(null);
+                return new Response($this->templating->render('ShepardBundle:Job:index.' . $format . '.twig', [
+                    'categories' => [$categories],
+                    'lastUpdated' => $this->jobManager->getLatestPost()->getCreatedAt()->format(DATE_ATOM),
+                    'feedId' => sha1($this->router->generate('ShepardBundle_job', ['_format' => 'atom'], true)),
+                ]));
+            }
             return new Response('No results.');
+        }
+        if ('*' == $query || $query == '') {
+            if ($request->getMethod() === "GET") {
+                return new RedirectResponse($this->router->generate('ShepardBundle_homepage'));
+            }
+            return new Response($this->templating->render('ShepardBundle:Job:list.html.twig', ['jobs' => $jobs]));
+        }
+        if ($request->getMethod() === "GET") {
+            return new Response($this->templating->render('ShepardBundle:Job:index.' . $format . '.twig', [
+                'categories' => [$categories],
+                'lastUpdated' => $this->jobManager->getLatestPost()->getCreatedAt()->format(DATE_ATOM),
+                'feedId' => sha1($this->router->generate('ShepardBundle_job', ['_format' => 'atom'], true)),
+            ]));
         }
 
         return new Response($this->templating->render('ShepardBundle:Job:list.html.twig', ['jobs' => $jobs]));

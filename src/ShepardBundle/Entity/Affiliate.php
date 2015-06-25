@@ -215,7 +215,7 @@ class Affiliate
     /**
      * @param Category[] $categories
      */
-    public function setCategories(array $categories)
+    public function setCategories($categories)
     {
         $this->category_affiliates->add($categories);
     }

@@ -113,42 +113,6 @@ class JobRepositoryTest extends WebTestCase
         $executor->execute($loader->getFixtures());
     }
 
-    public function testGetForLuceneQuery()
-    {
-        $event = $this->stopwatch->start('testGetForLuceneQuery');
-
-        $job = $this->createJob('FOO6');
-        $job->setIsActivated(false);
-
-        $this->em->persist($job);
-        $this->em->flush();
-
-        $jobs = $this->em->getRepository('ShepardBundle:Job')->getForLuceneQuery('FOO6');
-        $this->assertEquals(count($jobs), 0);
-
-        $job = $this->createJob('FOO7');
-        $job->setIsActivated(true);
-
-        $this->em->persist($job);
-        $this->em->flush();
-
-        $jobs = $this->em->getRepository('ShepardBundle:Job')->getForLuceneQuery('position:FOO7');
-        $this->assertEquals(count($jobs), 1);
-        foreach ($jobs as $job_rep) {
-            $this->assertEquals($job_rep->getId(), $job->getId());
-        }
-
-        $this->em->remove($job);
-        $this->em->flush();
-
-        $jobs = $this->em->getRepository('ShepardBundle:Job')->getForLuceneQuery('position:FOO7');
-
-        $this->assertEquals(count($jobs), 0);
-
-        $event->stop();
-        echo "testGetForLuceneQuery : " . $event->getDuration() . " ms" . PHP_EOL;
-    }
-
     /**
      * @param $position
      * @return Job

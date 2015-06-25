@@ -28,7 +28,6 @@ class JobeetCleanupCommand extends ContainerAwareCommand
     {
         $days = $input->getArgument('days');
         $em = $this->getContainer()->get('doctrine')->getManager();
-        $index = Job::getLuceneIndex();
 
         /** @var EntityManager $em $q */
         $q = $em->getRepository('ShepardBundle:Job')->createQueryBuilder('j')
